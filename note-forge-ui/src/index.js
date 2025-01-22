@@ -13,6 +13,7 @@ root.render(
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Registration />} /> 
       </Routes>
     </Router>

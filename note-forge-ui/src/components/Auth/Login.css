@@ -57,7 +57,7 @@ body {
 
 box-icon {
     position: absolute;
-    top: 10px;
+    top: 11px;
     transform: translateX(-200%);
     fill: #fff;
     margin-left: 4px;
@@ -107,7 +107,6 @@ box-icon {
 
 .register-link p a {
     color: #fff;
-    margin-bottom: 3px;
     text-decoration: none;
     font-weight: 600;
 }
