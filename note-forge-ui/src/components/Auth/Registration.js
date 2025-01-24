@@ -23,13 +23,15 @@ function Registration() {
                 <box-icon type='solid' name='envelope' class="i"></box-icon>
             </div>
             <div class="input-box">
-                <input type="text" placeholder="Rol" required></input>
-                <box-icon type='solid' name='envelope' class="i"></box-icon>
+                    <select required>
+                        <option value="" disabled selected>Selecciona tu rol</option>
+                        <option value="student">Estudiante</option>
+                        <option value="teacher">Profesor</option>
+                        <option value="assistant">Ayudante</option>
+                    </select>
+                    <box-icon type='solid' name='envelope' className="i"></box-icon>
             </div>
-            <div class="remember-forgot">
-                <label><input type="checkbox"></input>Recordarme</label>
-            </div>
-            
+    
             <button type="submit" class="btn">Crear cuenta</button>
 
             <div class="register-link">
