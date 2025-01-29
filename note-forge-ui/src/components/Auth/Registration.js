@@ -56,23 +56,23 @@ function Registration() {
 
             <div class="input-box">
                 <input type="text" name="username" placeholder="Nombre" required onChange={handleChange}></input>
-                {errors.username && <p class="error">{errors.username}</p>}
                 <box-icon name='user-circle'></box-icon>
+                {errors.username && <p class="error">{errors.username}</p>}
             </div>
             <div class="input-box">
                 <input type="text" name="email" placeholder="Correo electrónico" required onChange={handleChange}></input>
-                {errors.email && <p classe="error">{errors.email}</p>}
                 <box-icon type='solid' name='envelope' class="i"></box-icon>
+                {errors.email && <p class="error">{errors.email}</p>}
             </div>
             <div class="input-box">
                 <input type="password" name="password" placeholder='Contraseña' required onChange={handleChange}></input>
-                {errors.password && <p class="error">{errors.password}</p>}
                 <box-icon name='lock-alt' type='solid' class="i"></box-icon>
+                {errors.password && <p class="error">{errors.password}</p>}
             </div>
             <div class="input-box">
                 <input type="text" name="country" placeholder="País" required onChange={handleChange}></input>
-                {errors.country && <p class="error">{errors.country}</p>}
                 <box-icon name='flag-alt' type='solid' ></box-icon>
+                {errors.country && <p class="error">{errors.country}</p>}
             </div>
             <div class="input-box">
                     <select name="role" required onChange={handleChange}>

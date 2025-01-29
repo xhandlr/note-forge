@@ -15,7 +15,7 @@ function Login() {
                 <box-icon name='lock-alt' type='solid' class="i"></box-icon>
             </div>
             <div class="remember-forgot">
-                <label><input type="checkbox"></input>Recordarme</label>
+                <label><input type="checkbox"></input>Mantener sesión iniciada</label>
             </div>
             
             <button type="submit" class="btn">Ingresar</button>

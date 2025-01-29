@@ -164,3 +164,11 @@ option:checked {
     background-color: rgb(81, 0, 202);
     color: white;
 }
+
+.error {
+    font-size: 14px;
+    text-align: left;
+    margin-top: 3px;
+    margin-left: 2%;
+    color: rgb(255, 193, 5);
+}
