@@ -157,10 +157,10 @@ option {
 
 option:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    color: rgb(226, 0, 226) 
+    color: rgb(201, 143, 255) 
 }
 
 option:checked {
-    background-color: rgb(236, 149, 255); 
-    color: rgb(33, 22, 69);
+    background-color: rgb(81, 0, 202);
+    color: white;
 }
