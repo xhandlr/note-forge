@@ -1,50 +1,15 @@
 const express = require('express');
 const cors = require('cors');
-const pool = require('./config/db');
+const authRoutes = require('./routes/authRoutes');
 require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Ruta para probar la conexión a la base de datos
-app.get('/api/test-connection', async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT 1 + 1 AS result');
-    res.status(200).json({ success: true, message: 'Conexión exitosa', result: rows[0].result });
-  } catch (error) {
-    console.error('Error en la conexión:', error);
-    res.status(500).json({ success: false, message: 'Error en la conexión' });
-  }
-});
-
-
-app.post('/register', async (req, res) => {
-  const { username, email, password, country, role } = req.body;
-
-  if (!username || !email || !password || !country || !role) {
-      return res.status(400).json({ message: 'All fields are required' });
-  }
-
-  try {
-      const [existingUser] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
-      
-      if (existingUser.length > 0) {
-          return res.status(400).json({ message: 'Email is already registered' });
-      }
-
-      const query = 'INSERT INTO users (username, email, password, country, role) VALUES (?, ?, ?, ?, ?)';
-      await pool.query(query, [username, email, password, country, role]);
-
-      res.status(201).json({ message: 'User registered successfully' });
-  } catch (error) {
-      console.error('Error registering user:', error);
-      res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
+app.use('/', authRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
