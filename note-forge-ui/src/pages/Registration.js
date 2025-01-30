@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './Login.css';
-import validateRegistration from './RegistrationValidation'
+import '../styles/Login.css';
+import { registerUser } from '../services/RegistrationService';
 
 function Registration() {
     const [formData, setFormData] = useState({
@@ -22,33 +22,21 @@ function Registration() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const validationErrors = validateRegistration(formData);
-        if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors);
-            return;
-        }
-
+    
         try {
-            const response = await fetch('http://localhost:5000/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-
-            const data = await response.json();
-            if (response.ok) {
+            const data = await registerUser(formData); // Llama a la función correctamente
+            if (data.message) {
                 alert('Registro exitoso');
             } else {
                 alert(`Error: ${data.message}`);
             }
         } catch (error) {
+            setErrors(error); // Actualiza los errores si hay problemas de validación o en el backend
             console.error('Error en el registro:', error);
         }
-    }
-
+    };
+    
+    
     return (
         <div class="wrapper">
             <form onSubmit={handleSubmit}>
