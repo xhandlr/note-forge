@@ -13,8 +13,28 @@ const registerUser = async (username, email, password, country, role) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const userId = await User.create(username, email, password, country, role);
+    const userId = await User.create(username, email, hashedPassword, country, role);
     return { message: 'Usuario registrado con éxito', userId };
 }
 
-module.exports = { registerUser };
+const loginUser = async (email, password) => {
+    if (!email || !password) {
+        throw new Error('Todos los campos son obligatorios');
+    } 
+
+    const user = await User.findByEmail(email);
+
+    if (!user) {
+        throw new Error('Correo electrónico no encontrado');
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordCorrect) {
+        throw new Error('Contraseña incorrecta');
+    }
+
+    return { message: 'Inicio de sesión exitoso' }
+}
+
+module.exports = { registerUser, loginUser };
