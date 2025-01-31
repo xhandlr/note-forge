@@ -22,15 +22,16 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await loginUser(formData);
-            if (response.message) {
-                alert("Login exitoso");
+            const data = await loginUser(formData); 
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+                alert('Login exitoso');
             } else {
-                alert(`Error: ${response.message}`)
+                alert(`Error: ${data.message}`);
             }
         } catch (error) {
             setErrors(error);
-            console.error('Error en el inicio de sesión', error)
+            console.error('Error en el login:', error);
         }
     };
 
