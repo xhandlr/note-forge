@@ -41,10 +41,12 @@ function Login() {
             <div className="input-box">
                 <input type="text" placeholder="Correo electrónico" name="email" required onChange={handleChange}></input>
                 <box-icon type='solid' name='envelope' className="i"></box-icon>
+                {errors.email && <p className="error">{errors.email}</p>}
             </div>
             <div className="input-box">
                 <input type="password" placeholder='Contraseña' name="password" required onChange={handleChange}></input>
                 <box-icon name='lock-alt' type='solid' className="i"></box-icon>
+                {errors.password && <p className='error'>{errors.password}</p>}
             </div>
             <div className="remember-forgot">
                 <label><input type="checkbox"></input>Mantener sesión iniciada</label>
