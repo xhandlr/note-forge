@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const bcrypt = require('bcrypt');
 
 const registerUser = async (username, email, password, country, role) => {
     if (!username || !email || !password || !country || !role) {
@@ -9,6 +10,8 @@ const registerUser = async (username, email, password, country, role) => {
     if (existingUser) {
         throw new Error('El correo ya está registrado');
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const userId = await User.create(username, email, password, country, role);
     return { message: 'Usuario registrado con éxito', userId };
