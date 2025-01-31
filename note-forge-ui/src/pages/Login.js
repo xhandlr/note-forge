@@ -3,7 +3,6 @@ import '../styles/Login.css';
 import { loginUser } from '../services/LoginService';
 
 
-
 function Login() {
 
     const [ formData, setFormData ] = useState({
@@ -21,8 +20,9 @@ function Login() {
     };
 
     const handleSubmit = async (e) => {
+        e.preventDefault();
         try {
-            const response = await loginUser(response);
+            const response = await loginUser(formData);
             if (response.message) {
                 alert("Login exitoso");
             } else {

@@ -23,6 +23,8 @@ function Registration() { // Declara un componente funcional
     }
 
     const handleSubmit = async (e) => {
+        e.preventDefault();
+        
         try {
             const data = await registerUser(formData); // Llama a la función externa y espera que llegue la respuesta del servidor
             if (data.message) {

@@ -10,13 +10,13 @@ const validateRegistration = (formData) => {
     return errors;
 };
 
-const registerUser = async (formData) => {
+const registerUser = async (formData) => { // Async significa asincrónico, lo que permite utilizar await
     const validationErrors = validateRegistration(formData);
     if (Object.keys(validationErrors).length > 0) {
-        throw validationErrors; // Lanza los errores para que el componente los maneje
+        throw validationErrors;
     }
 
-    const response = await fetch('http://localhost:5000/register', {
+    const response = await fetch('http://localhost:5000/register', { // fetch realiza una petición HTTP
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
