@@ -5,12 +5,12 @@
     font-family: "Poppins", sans-serif;
 }
 
-body {
+.login-page {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url('/src/assets/login-background.jpg') no-repeat;
+    background: url('/src/assets/login-2-background.jpg');
     background-size: cover;
     background-position: center;
 }
@@ -20,7 +20,7 @@ body {
     background: transparent;
     border: 2px solid rgba(255, 255, 255, .2);
     backdrop-filter: blur(20px);
-    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     color: #fff;
     border-radius: 10px;
     padding: 30px 40px;

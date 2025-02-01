@@ -1,5 +1,8 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const SECRET_KEY = process.env.JWT_SECRET;
 
 const registerUser = async (username, email, password, country, role) => {
     if (!username || !email || !password || !country || !role) {
@@ -34,7 +37,14 @@ const loginUser = async (email, password) => {
         throw new Error('Contraseña incorrecta');
     }
 
-    return { message: 'Inicio de sesión exitoso' }
+    // Crear el token JWT
+    const token = jwt.sign(
+        { id: user.id, email: user.email, role: user.role },
+        SECRET_KEY,
+        { expiresIn: '2h' }
+    );
+
+    return { token }
 }
 
 module.exports = { registerUser, loginUser };

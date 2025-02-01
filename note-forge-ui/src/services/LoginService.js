@@ -14,18 +14,27 @@ const loginUser = async (formData) => { // Constante que almacena una función f
         throw validationErrors; // Lanza una excepción
     }
 
-    const response = await fetch('http://localhost:5000/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json'},
-        body: JSON.stringify(formData)
-    })
-
-    const data = await response.json();
-    if (!response.ok) {
-        throw new Error(data.message || 'Error en el registro');
-    }
-
-    return data;
-}
+    try {
+        const response = await fetch('http://localhost:5000/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+    
+        const data = await response.json();
+    
+        // Verificar si el servidor devuelve un token
+        if (data.token) {
+          return data;
+        } else {
+          throw new Error('No se recibió un token. Error: ' + data.message || 'Desconocido');
+        }
+      } catch (error) {
+        console.error('Error al intentar hacer login', error);
+        throw new Error('Error en el login: ' + error.message);
+      }
+    };
 
 export { loginUser, validateLogin };

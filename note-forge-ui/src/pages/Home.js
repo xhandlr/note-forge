@@ -3,7 +3,9 @@ import '../styles/Home.css'; // Importa un archivo .css de la carpeta styles
 
 function Home() { // Define una función llamada Home
     return ( 
-        <p>Bienvenido</p> // La función retorna una interfaz visual
+        <div className="home-page">
+            <p>Bienvenido</p> 
+        </div>
     );
 }
 // Este tipo de funciones se llaman componentes funcionales

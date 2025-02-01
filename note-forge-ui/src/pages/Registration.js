@@ -24,7 +24,7 @@ function Registration() { // Declara un componente funcional
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
             const data = await registerUser(formData); // Llama a la función externa y espera que llegue la respuesta del servidor
             if (data.message) {
@@ -40,48 +40,50 @@ function Registration() { // Declara un componente funcional
     /* Se llama a la función handleSubmit cuando se dispara el evento onSubmit */
     
     return (
-        <div class="wrapper">
-            <form onSubmit={handleSubmit}> 
-            <h1>Registrarse</h1>
+        <div className='login-page'>
+            <div className="wrapper">
+                <form onSubmit={handleSubmit}> 
+                <h1>Registrarse</h1>
 
-            <div className="input-box">
-                <input type="text" name="username" placeholder="Nombre" required onChange={handleChange}></input>
-                <box-icon name='user-circle'></box-icon>
-                {errors.username && <p className="error">{errors.username}</p>}
-            </div>
-            <div className="input-box">
-                <input type="text" name="email" placeholder="Correo electrónico" required onChange={handleChange}></input>
-                <box-icon type='solid' name='envelope' class="i"></box-icon>
-                {errors.email && <p className="error">{errors.email}</p>}
-            </div>
-            <div className="input-box">
-                <input type="password" name="password" placeholder='Contraseña' required onChange={handleChange}></input>
-                <box-icon name='lock-alt' type='solid' class="i"></box-icon>
-                {errors.password && <p className="error">{errors.password}</p>}
-            </div>
-            <div className="input-box">
-                <input type="text" name="country" placeholder="País" required onChange={handleChange}></input>
-                <box-icon name='flag-alt' type='solid' ></box-icon>
-                {errors.country && <p className="error">{errors.country}</p>}
-            </div>
-            <div className="input-box">
-                    <select name="role" required onChange={handleChange}>
-                        <option value="" disabled selected>Selecciona tu rol</option>
-                        <option value="student">Estudiante</option>
-                        <option value="teacher">Profesor</option>
-                        <option value="assistant">Ayudante</option>
-                    </select>
-                    {errors.role && <p className="error">{errors.role}</p>}
-                    <box-icon type='solid' name='face'></box-icon>
-            </div>
-    
-            <button type="submit" className="btn">Crear cuenta</button>
-
-            <div class="register-link">
-                <p>¿Ya tienes una cuenta? <a href="http://localhost:3000/login">Iniciar Sesión</a>
-                </p>
+                <div className="input-box">
+                    <input type="text" name="username" placeholder="Nombre" required onChange={handleChange}></input>
+                    <box-icon name='user-circle'></box-icon>
+                    {errors.username && <p className="error">{errors.username}</p>}
                 </div>
-            </form>
+                <div className="input-box">
+                    <input type="text" name="email" placeholder="Correo electrónico" required onChange={handleChange}></input>
+                    <box-icon type='solid' name='envelope' class="i"></box-icon>
+                    {errors.email && <p className="error">{errors.email}</p>}
+                </div>
+                <div className="input-box">
+                    <input type="password" name="password" placeholder='Contraseña' required onChange={handleChange}></input>
+                    <box-icon name='lock-alt' type='solid' class="i"></box-icon>
+                    {errors.password && <p className="error">{errors.password}</p>}
+                </div>
+                <div className="input-box">
+                    <input type="text" name="country" placeholder="País" required onChange={handleChange}></input>
+                    <box-icon name='flag-alt' type='solid' ></box-icon>
+                    {errors.country && <p className="error">{errors.country}</p>}
+                </div>
+                <div className="input-box">
+                        <select name="role" required onChange={handleChange}>
+                            <option value="" disabled selected>Selecciona tu rol</option>
+                            <option value="student">Estudiante</option>
+                            <option value="teacher">Profesor</option>
+                            <option value="assistant">Ayudante</option>
+                        </select>
+                        {errors.role && <p className="error">{errors.role}</p>}
+                        <box-icon type='solid' name='face'></box-icon>
+                </div>
+        
+                <button type="submit" className="btn">Crear cuenta</button>
+
+                <div class="register-link">
+                    <p>¿Ya tienes una cuenta? <a href="http://localhost:3000/login">Iniciar Sesión</a>
+                    </p>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }
