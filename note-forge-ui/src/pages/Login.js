@@ -61,7 +61,7 @@ function Login() {
                     <button type="submit" className="btn">Ingresar</button>
     
                     <div className="register-link">
-                        <p>¿No tienes una cuenta? <a href="http://localhost:3000/register">Registrarse</a></p>
+                        <p>¿No tienes una cuenta? <a href="http://localhost:3000/register" className='auth-link'>Registrarse</a></p>
                     </div>
                 </form>
             </div>

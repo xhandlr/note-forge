@@ -8,7 +8,6 @@
     background-position: center;
 }
 
-/* Header */
 .header {
     position: fixed;
     top: 0;
@@ -19,10 +18,8 @@
     justify-content: space-between;
     align-items: center;
     z-index: 100;
-    background: transparent;  /* Fondo sutil para el header */
 }
 
-/* Pseudo-elemento ::before para darle un filtro de fondo */
 .header::before {
     content: '';
     position: absolute;
@@ -30,12 +27,11 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, .1);  /* Fondo sutil */
-    backdrop-filter: blur(10px);  /* Efecto blur más suave */
+    background: rgba(0, 0, 0, .1);
+    backdrop-filter: blur(50px);
     z-index: -1;
 }
 
-/* Pseudo-elemento ::after para efecto de gradiente */
 .header::after {
     content: '';
     position: absolute;
@@ -43,50 +39,30 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: transparent;
-    z-index: -1;
-    animation: none;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .4), transparent);
 }
 
-/* Animación de deslizamiento de brillo */
-@keyframes slide-brightness {
-    0% {
-        left: -100%; /* Fuera de la vista al inicio */
-    }
-    50% {
-        left: 0%; /* En su posición original */
-    }
-    100% {
-        left: 100%; /* Se mueve completamente hacia la derecha */
-    }
-}
-
-.header:hover::after {
-    background: linear-gradient(90deg, rgba(255, 0, 0, 0.186), rgba(60, 0, 255, 0.152), rgba(255, 19, 153, 0.153));
-    animation: slide-brightness 1s forwards;  /* Activar animación de deslizamiento */
+.header::hover::after {
+    left: 100%;
 }
 
 .logo {
     font-size: 2rem;
     color: #fff;
     text-decoration: none;
-    font-weight: 700
-}
-
-.navbar {
-    display: flex;
-    gap: 2rem;;
+    font-weight: 700;;
 }
 
 .navbar a {
     font-size: 1.15rem;
     color: #fff;
-    text-decoration: none;
+    text-decoration: 500;
     font-weight: 500;
     margin-left: 2.5rem;
 }
 
 #check {
+    size: 40px;
     display: none;
 }
 
@@ -129,29 +105,30 @@
         left: 0;
         width: 100%;
         height: 0;
-        flex-direction: column;
-        background: transparent;
-        backdrop-filter: blur(5px);
+        background: rgba(0, 0, 0, .1);
+        backdrop-filter: blur(50px);
+        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+        transition: .3s ease;
+
     }
 
     #check:checked~.navbar {
-        min-height: 50vh;
+        height: 17.7rem;
     }
 
     .navbar a {
-        display: block;  /* Los enlaces deben ser bloques para apilarse */
+        display: block;
         font-size: 1.1rem;
-        margin: 0.5rem 0;
+        margin: 1.5rem 0;
         text-align: center;
         opacity: 0;
         transform: translateY(-50px);
-        transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
     #check:checked~.navbar a {
         transform: translateY(0);
         opacity: 1;
-        transition-delay: calc(.15s * var(--i));  /* Puedes definir esta variable si es necesario */
+        transition-delay: calc(.15s * var(--i));
     }
 }
 
@@ -161,4 +138,11 @@
 
 .home-subtitle {
     color:#fff
+}
+
+.home-link {
+    font-size: 1.5rem;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;;
 }

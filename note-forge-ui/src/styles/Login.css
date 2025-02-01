@@ -10,7 +10,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url('/src/assets/login-2-background.jpg');
+    background: url('/src/assets/login-2-background.jpg') no-repeat;
     background-size: cover;
     background-position: center;
 }
@@ -81,12 +81,12 @@ box-icon {
     margin-right: 3px;
 }
 
-.remember-forgot a {
+.remember-forgot .register-link {
     color: #fff;
     text-decoration: none;
 }
 
-.remember-forgot a:hover {
+.remember-forgot .register-link:hover {
     text-decoration: underline;
 }
 

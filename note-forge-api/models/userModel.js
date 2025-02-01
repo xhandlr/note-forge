@@ -10,7 +10,7 @@ const User = {
         const query = 'INSERT INTO users (username, email, password, country, role) VALUES (?, ?, ?, ?, ?)';
         const [result] = await pool.query(query, [username, email, password, country, role]);
         return result.insertId;
-    }
+    }  
 };
 
 module.exports = User;

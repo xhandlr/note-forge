@@ -14,7 +14,7 @@ async function login(req, res) { // req es el objeto que contiene la informació
     try {
         const { email, password } = req.body;
         const result = await authService.loginUser(email, password);
-        res.status(201).json(result);
+        res.status(200).json(result);
     } catch (error) {
         res.status(400).json({ message: error.message }); // res es el objeto que se utiliza para enviar la respuesta al cliente
     }

@@ -79,7 +79,7 @@ function Registration() { // Declara un componente funcional
                 <button type="submit" className="btn">Crear cuenta</button>
 
                 <div class="register-link">
-                    <p>¿Ya tienes una cuenta? <a href="http://localhost:3000/login">Iniciar Sesión</a>
+                    <p>¿Ya tienes una cuenta? <a href="http://localhost:3000/login" className='auth-link'>Iniciar Sesión</a>
                     </p>
                     </div>
                 </form>
