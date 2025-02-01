@@ -5,9 +5,9 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'boxicons';
 
-import Login from './components/Auth/Login';
-import Registration from './components/Auth/Registration';
-import Home from './components/Exercises/Home';
+import Login from './pages/Login';
+import Registration from './pages/Registration';
+import Home from './pages/Home';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
