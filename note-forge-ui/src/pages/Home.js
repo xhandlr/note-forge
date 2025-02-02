@@ -47,7 +47,13 @@ function Home() {
                     <a href="/cuenta" className="home-link" onClick={playMenuSound}>Cuenta</a>
                 </nav>
             </header>
-            <div className="home-body">
+            <body className="home-body">
+            <div className="recently-exercises">
+                <div className="title-recently">
+                <h1>Ejercicios recientes</h1></div>
+                <p>No hay ejercicios agregados recientemente.</p>
+            </div>
+            <div className="menu">
                 <div className="button-group">
                     <div className="top-buttons">
                         <button className="create-button" onMouseEnter={playSound} onClick={playMenuSound}>Crear Ejercicio</button>
@@ -58,9 +64,9 @@ function Home() {
                         <button className="edit-button" onMouseEnter={playSound} onClick={playMenuSound}>Editar Ejercicios</button>
                     </div>
                 </div>
-
                 <button className="export-button" onMouseEnter={playSound} onClick={playMenuSound}>Exportar a LaTeX</button>
             </div>
+            </body>
         </div>
     );
 }

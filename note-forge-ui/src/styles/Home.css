@@ -47,13 +47,13 @@
 
 @keyframes slide-brightness {
     0% {
-        left: -100%; /* Fuera de la vista al inicio */
+        left: -100%;
     }
     50% {
-        left: 0%; /* En su posición original */
+        left: 0%;
     }
     100% {
-        left: 100%; /* Se mueve completamente hacia la derecha */
+        left: 100%; 
     }
 }
 
@@ -128,7 +128,7 @@
         width: 100%;
         height: 0;
         flex-direction: column;
-        background: transparent;
+        background: rgb(24, 0, 44);
         backdrop-filter: blur(5px);
     }
 
@@ -151,14 +151,19 @@
         opacity: 1;
         transition-delay: calc(.15s * var(--i)); 
     }
+
+    .recently-exercises {
+        display: none;
+        opacity: 0;
+    }
 }
 
-.home-body {
+.menu {
     display: flex;
-    flex-direction: column;
-    align-items: center;  /* Centra los botones en el eje horizontal */
-    justify-content: center;  /* Asegura que los botones estén centrados verticalmente */
-    gap: 10px;  /* Espaciado entre los botones */
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 10px;  
 }
 
 .button-group {
@@ -193,7 +198,7 @@
     animation: none;
 }
 
-.home-body button {
+.menu button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -209,7 +214,7 @@
     animation: none;
 }
 
-.home-body button:hover {
+.menu button:hover {
     animation: change-size 0.5s forwards;
     background-color: rgb(0, 255, 0);
     color: black;
@@ -225,4 +230,43 @@
         width: 32vh;
         height: 12vh;
     }
+}
+
+.home-body {
+    display: flex;
+    flex-direction: row;
+    gap: 10vh;
+}
+
+.recently-exercises {
+    backdrop-filter: blur(5px);
+    width: 60vh;
+    height: 70vh;
+    padding: 20px;  
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    border-radius: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    position: absolute;
+    top: 15vh;
+    left: 5vh;
+    background-color: #fff;
+}
+
+.recently-exercises .title-recently {
+    font-size: 12px;
+    width: 100%;
+    height: 5vh;
+    color: #000000;
+    font-weight: 600;
+    display: flex;
+    align-items: center; 
+    padding-left: 20px; 
+}
+
+.recently-exercises p {
+    margin-top: 2vh;
+    margin-left: 3vh;
 }
