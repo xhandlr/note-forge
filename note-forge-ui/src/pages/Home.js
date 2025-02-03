@@ -56,7 +56,8 @@ function Home() {
             <div className="menu">
                 <div className="button-group">
                     <div className="top-buttons">
-                        <button className="create-button" onMouseEnter={playSound} onClick={playMenuSound}>Crear Ejercicio</button>
+                        <a href="/home/create">
+                        <button className="create-button" onMouseEnter={playSound} onClick={playMenuSound}>Crear Ejercicio</button></a>
                         <button className="read-button" onMouseEnter={playSound} onClick={playMenuSound}>Ver Ejercicios</button>
                     </div>
                     <div className="bottom-buttons">

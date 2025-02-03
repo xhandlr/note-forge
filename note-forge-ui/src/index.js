@@ -8,6 +8,7 @@ import 'boxicons';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
 import Home from './pages/Home';
+import CreateExercise from './pages/CreateExercise';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -18,6 +19,7 @@ root.render(
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Registration />} /> 
         <Route path="/home" element={<Home />} />
+        <Route path="/home/create" element={<CreateExercise />} />
       </Routes>
     </Router>
   </React.StrictMode>
