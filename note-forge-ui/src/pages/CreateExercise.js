@@ -1,7 +1,7 @@
 import React, { useActionState, useState } from 'react';
 import '../styles/NewExercise.css'; 
 import { useNavigate } from 'react-router-dom';
-import { createExercise } from '../services/ExerciseService';
+import { addExercise } from '../services/ExerciseService';
 
 function NewExercise() {
 
@@ -31,7 +31,7 @@ function NewExercise() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await createExercise(exerciseData);
+            const response = await addExercise(exerciseData);
             if (response.message) {
                 alert(`Ejercicio almacenado con éxito! ID: ${response.exerciseId}`); // Muestra el ID del ejercicio si la respuesta es exitosa
             } else {

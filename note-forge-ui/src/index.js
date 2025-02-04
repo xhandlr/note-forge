@@ -8,7 +8,7 @@ import 'boxicons';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
 import Home from './pages/Home';
-import CreateExercise from './pages/NewExercise';
+import CreateExercise from './pages/CreateExercise';
 import Exercises from './pages/Exercises';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

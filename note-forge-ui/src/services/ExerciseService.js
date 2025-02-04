@@ -2,7 +2,7 @@ const validateExercise = async (exerciseData) => {
 
 }
 
-const createExercise = async (exerciseData) => {
+const addExercise = async (exerciseData) => {
     const token = localStorage.getItem('token');
 
     const response = await fetch('http://localhost:5000/create-exercise', {
@@ -22,4 +22,4 @@ const createExercise = async (exerciseData) => {
     return data;
 };
 
-export { validateExercise, createExercise };
+export { validateExercise, addExercise };
