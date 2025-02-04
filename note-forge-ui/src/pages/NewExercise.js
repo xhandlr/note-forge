@@ -1,9 +1,9 @@
 import React, { useActionState, useState } from 'react';
-import '../styles/CreateExercise.css'; 
+import '../styles/NewExercise.css'; 
 import { useNavigate } from 'react-router-dom';
 import { createExercise } from '../services/ExerciseService';
 
-function CreateExercise() {
+function NewExercise() {
 
     const [exerciseData, setExerciseData] = useState({
         title: '',
@@ -75,11 +75,11 @@ function CreateExercise() {
                 <label>Detalles</label>
                 <textarea className='details' type='text' name='details' />
 
-                <button type='submit' className='save-button'>Guardar</button>
+                <button className="save-button" type="submit">Guardar</button>
             </form>
         </div>
         </div>
     );
 }
 
-export default CreateExercise;
+export default NewExercise;

@@ -2,7 +2,6 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow-y: auto;
 }
 
 /* Fondo fijo */
@@ -15,7 +14,8 @@ body {
     background: url('/src/assets/home-background.jpg') no-repeat center center;
     background-size: cover;
     background-attachment: fixed;
-    z-index: -1; 
+    z-index: -1;
+    overflow-y: auto;
 }
 
 /* Página de contenido */
@@ -42,7 +42,7 @@ body {
     flex-direction: column;
     gap: 10px;
     overflow-y: auto; 
-    max-height: 80vh; 
+    min-height: 3000px;
     margin-top: 20px; 
 }
 
@@ -61,4 +61,32 @@ body {
     resize: none;
     box-sizing: border-box;
     field-sizing: content;
+}
+
+.save-button {
+    background-color: rgb(23, 200, 0);
+    color: white;
+    width: 200px;  /* Aumenta el ancho */
+    height: 50px;  /* Aumenta la altura */
+    min-height: 50px;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px; 
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    align-self: center;
+}
+
+.save-button:hover {
+    background-color: rgb(0, 180, 0);
+    transform: scale(1.05);
+}
+
+.save-button:active {
+    transform: scale(0.95);
 }
