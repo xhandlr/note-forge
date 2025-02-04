@@ -3,7 +3,7 @@ import '../styles/NewExercise.css';
 import { useNavigate } from 'react-router-dom';
 import { addExercise } from '../services/ExerciseService';
 
-function NewExercise() {
+function CreateExercise() {
 
     const [exerciseData, setExerciseData] = useState({
         title: '',
@@ -82,4 +82,4 @@ function NewExercise() {
     );
 }
 
-export default NewExercise;
+export default CreateExercise;

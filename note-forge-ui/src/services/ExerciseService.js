@@ -1,25 +1,24 @@
-const validateExercise = async (exerciseData) => {
-
-}
+import { sendRequest } from "./AppService";
 
 const addExercise = async (exerciseData) => {
-    const token = localStorage.getItem('token');
-
-    const response = await fetch('http://localhost:5000/create-exercise', {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-         },
-        body: JSON.stringify(exerciseData)
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-        throw new Error(data.message || 'Error al guardar ejercicio');
-    }
-
-    return data;
+    return sendRequest('http://localhost:5000/create-exercise', 'POST', exerciseData);
 };
+
+const updateExercise = async (exerciseData) => {
+    return sendRequest('http://localhost:5000/update-exercise', 'POST', exerciseData);
+};
+
+const deleteExercise = async (exerciseData) => {
+    return sendRequest('http://localhost:5000/delete-exercise', 'DELETE', exerciseData);
+}
+
+const getExerciseById = async (exerciseData) => {
+    return sendRequest('http://localhost:5000/get-exercise', 'GET', exerciseData);
+}
+
+const getExercises = async (exerciseData) => {
+    return sendRequest('http://localhost:5000/get-exercises', 'GET', exerciseData);
+}
+
 
 export { validateExercise, addExercise };
