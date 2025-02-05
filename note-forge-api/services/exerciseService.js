@@ -9,6 +9,10 @@ const getExerciseById = async (exerciseId) => {
     return await Exercise.findById(exerciseId);
 };
 
+const getExercises = async () => {
+    return await Exercise.findAll(); 
+};
+
 const updateExercise = async (exerciseId, title, description, difficult, collection, reference, answer, duration, tags, details) => {
     return await Exercise.update(exerciseId, title, description, difficult, collection, reference, answer, duration, tags, details);
 };
@@ -17,4 +21,4 @@ const deleteExercise = async (exerciseId) => {
     return await Exercise.delete(exerciseId);
 };
 
-module.exports = { createExercise, getExerciseById, updateExercise, deleteExercise };
+module.exports = { createExercise, getExerciseById, getExercises, updateExercise, deleteExercise };

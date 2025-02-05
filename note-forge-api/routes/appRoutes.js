@@ -13,7 +13,8 @@ router.post('/login', authController.login);
 router.post('/create-exercise', authMiddleware, exerciseController.createExerciseRequest);
 
 // Rutas para obtener, actualizar y eliminar ejercicios (requieren un id)
-router.get('/get-exercise/:id', authMiddleware, exerciseController.getExerciseByIdRequest);
+router.get('/exercise/:id', authMiddleware, exerciseController.getExerciseByIdRequest);
+router.get('/exercises', authMiddleware, exerciseController.getExercisesRequest);
 router.put('/update-exercise/:id', authMiddleware, exerciseController.updateExerciseRequest);
 router.delete('/delete-exercise/:id', authMiddleware, exerciseController.deleteExerciseRequest);
 

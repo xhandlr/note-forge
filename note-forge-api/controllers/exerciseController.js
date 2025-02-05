@@ -29,6 +29,15 @@ async function getExerciseByIdRequest(req, res) {
     }
 }
 
+async function getExercisesRequest(req, res) {
+    try {
+        const exercises = await exerciseService.getExercises();
+        res.status(200).json(exercises);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+
 async function updateExerciseRequest(req, res) {
     try {
         const exerciseId = req.params.id;  // Obtener el id del ejercicio desde los parámetros de la ruta
@@ -58,4 +67,4 @@ async function deleteExerciseRequest(req, res) {
     }
 }
 
-module.exports = { createExerciseRequest, getExerciseByIdRequest, updateExerciseRequest, deleteExerciseRequest };
+module.exports = { createExerciseRequest, getExerciseByIdRequest, getExercisesRequest, updateExerciseRequest, deleteExerciseRequest };
