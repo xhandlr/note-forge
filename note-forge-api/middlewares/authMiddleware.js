@@ -11,7 +11,7 @@ const authMiddleware = (req, res, next) => {
 
     try {
         const verified = jwt.verify(token.replace('Bearer ', ''), SECRET_KEY);
-        req.user = verified;
+        req.user = verified; 
         next();
     } catch (error) {
         res.status(403).json({ message: 'Token inválido' });
