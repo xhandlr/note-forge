@@ -8,7 +8,7 @@ function CreateExercise() {
     const [exerciseData, setExerciseData] = useState({
         title: '',
         description: '',
-        difficult: '',
+        difficulty: '',
         collection: '',
         reference: '',
         answer: '',
@@ -48,32 +48,41 @@ function CreateExercise() {
         <div className='create-page'>
             <form className='create-exercise-form' onSubmit={handleSubmit}>
                 <label>Título del ejercicio</label>
-                <textarea className='title-exercise' type='text' name='title' required />
+                <textarea className='title-exercise' type='text' name='title' onChange={handleChange} required />
+                {errors.title && <p className="error">{errors.title}</p>}
 
                 <label>Descripción</label>
-                <textarea className='description-exercise' name='description' required />
+                <textarea className='description-exercise' name='description' onChange={handleChange} required />
+                {errors.description && <p className='error'>{errors.description}</p>}
 
                 <label>Dificultad</label>
-                <textarea className='difficult-exercise' type='text' name='difficulty' required />
+                <textarea className='difficulty-exercise' type='text' name='difficulty' onChange={handleChange} required />
+                {errors.difficulty && <p className='error'>{errors.dificulty}</p>}
 
-                <label>Colección</label>
-                <textarea className='collection-exercise' type='text' name='collection' required />
+                <label>Categoría</label>
+                <textarea className='category-exercise' type='text' name='category' onChange={handleChange} required />
+                {errors.category && <p className='error'>{errors.category}</p>}
 
                 {/* Campos opcionales */}
                 <label>Referencia (Libro/Link)</label>
-                <textarea className='reference-exercise' type='text' name='reference' />
+                <textarea className='reference-exercise' type='text' name='reference' onChange={handleChange} />
+                {errors.reference && <p className='error'>{errors.reference}</p>}
 
                 <label>Respuesta</label>
-                <textarea className='answer-exercise' type='text' name='answer' />
+                <textarea className='answer-exercise' type='text' name='answer' onChange={handleChange} />
+                {errors.answer && <p className='error'>{errors.answer}</p>}
 
                 <label>Duración Estimada</label>
-                <textarea className='duration-exercise' type='text' name='duration' />
+                <textarea className='duration-exercise' type='text' name='duration' onChange={handleChange} />
+                {errors.duration && <p className='error'>{errors.duration}</p>}
 
                 <label>Etiquetas</label>
-                <textarea className='tags-exercise' type='text' name='tags' />
+                <textarea className='tags-exercise' type='text' name='tags' onChange={handleChange} />
+                {errors.tags && <p className='error'>{errors.tags}</p>}
 
                 <label>Detalles</label>
-                <textarea className='details' type='text' name='details' />
+                <textarea className='details' type='text' name='details' onChange={handleChange} />
+                {errors.details && <p className='error'>{errors.details}</p>}
 
                 <button className="save-button" type="submit">Guardar</button>
             </form>

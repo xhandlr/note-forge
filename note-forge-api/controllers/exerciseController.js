@@ -4,9 +4,9 @@ async function createExerciseRequest(req, res) {
     try {
         const userId = req.user.id; // Obtener el id del usuario desde el token
         
-        const { title, description, difficult, collection, reference, answer, duration, tags, details } = req.body;
+        const { title, description, difficulty, collection, reference, answer, duration, tags, details } = req.body;
 
-        const result = await exerciseService.createExercise(title, description, difficult, collection, reference, answer, duration, tags, details, userId);
+        const result = await exerciseService.createExercise(title, description, difficulty, collection, reference, answer, duration, tags, details, userId);
 
         res.status(201).json(result); 
     } catch (error) {
@@ -41,9 +41,9 @@ async function getExercisesRequest(req, res) {
 async function updateExerciseRequest(req, res) {
     try {
         const exerciseId = req.params.id;  // Obtener el id del ejercicio desde los parámetros de la ruta
-        const { title, description, difficult, collection, reference, answer, duration, tags, details } = req.body;
+        const { title, description, difficulty, collection, reference, answer, duration, tags, details } = req.body;
         
-        const updatedExercise = await exerciseService.updateExercise(exerciseId, title, description, difficult, collection, reference, answer, duration, tags, details);
+        const updatedExercise = await exerciseService.updateExercise(exerciseId, title, description, difficulty, collection, reference, answer, duration, tags, details);
         
         res.status(200).json(updatedExercise);
     } catch (error) {

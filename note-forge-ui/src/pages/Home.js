@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import '../styles/Home.css'; 
 import hoverSound from "../assets/hover-sound.wav"; 
 import menuSound from "../assets/click-sound.wav"; 
+import Navbar from "../components/Navbar";
+
 
 function Home() { 
     const [soundEnabled, setSoundEnabled] = useState(false);  // Estado para controlar si los sonidos pueden reproducirse
@@ -36,23 +38,7 @@ function Home() {
 
     return ( 
         <div className="home-page" onClick={enableSounds}>  {/* Permitir sonidos al hacer clic en cualquier parte de la página */}
-            <header className="header">
-                <a href="/" className="logo">Note Forge</a>
-
-                <input type="checkbox" id="check" />
-                <label htmlFor="check" className="icons">
-                    <box-icon name="menu" id="menu-icon" size="40px"></box-icon>
-                    <box-icon name="x" id="close-icon" size="40px"></box-icon>
-                </label>
-
-                <nav className="navbar">
-                    <a href="/home" className="home-link" onClick={playMenuSound}>Inicio</a>
-                    <a href="/biblioteca" className="home-link" onClick={playMenuSound}>Biblioteca</a>
-                    <a href="/exportar" className="home-link" onClick={playMenuSound}>Exportar</a>
-                    <a href="/ayuda" className="home-link" onClick={playMenuSound}>Ayuda</a>
-                    <a href="/cuenta" className="home-link" onClick={playMenuSound}>Cuenta</a>
-                </nav>
-            </header>
+            <Navbar playMenuSound={playMenuSound} />
             <body className="home-body">
                 <div className="recently-exercises">
                     <div className="title-recently">

@@ -1,7 +1,7 @@
 const Exercise = require('../models/exerciseModel');
 
-const createExercise = async (title, description, difficult, collection, reference, answer, duration, tags, details, userId) => {
-    const exerciseId = await Exercise.create(title, description, difficult, collection, reference, answer, duration, tags, details, userId);
+const createExercise = async (title, description, difficulty, collection, reference, answer, duration, tags, details, userId) => {
+    const exerciseId = await Exercise.create(title, description, difficulty, reference, answer, duration, tags, details, userId);
     return { message: 'Ejercicio registrado con éxito', exerciseId };
 };
 
@@ -13,8 +13,8 @@ const getExercises = async () => {
     return await Exercise.findAll(); 
 };
 
-const updateExercise = async (exerciseId, title, description, difficult, collection, reference, answer, duration, tags, details) => {
-    return await Exercise.update(exerciseId, title, description, difficult, collection, reference, answer, duration, tags, details);
+const updateExercise = async (exerciseId, title, description, difficulty, collection, reference, answer, duration, tags, details) => {
+    return await Exercise.update(exerciseId, title, description, difficulty, collection, reference, answer, duration, tags, details);
 };
 
 const deleteExercise = async (exerciseId) => {
