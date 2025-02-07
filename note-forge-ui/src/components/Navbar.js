@@ -1,11 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../styles/Home.css";
+import "../styles/Dashboard.css";
 
 function Navbar({ playMenuSound }) {
     return (
         <header className="header">
+                <div className="wrapper-logo">
                 <a href="/" className="logo">Note Forge</a>
+                </div>
 
                 <input type="checkbox" id="check" />
                 <label htmlFor="check" className="icons">
@@ -14,10 +16,10 @@ function Navbar({ playMenuSound }) {
                 </label>
 
                 <nav className="navbar">
-                    <a href="/home" className="home-link" onClick={playMenuSound}>Inicio</a>
+                    <a href="/dashboard" className="home-link" onClick={playMenuSound}>Dashboard</a>
                     <a href="/biblioteca" className="home-link" onClick={playMenuSound}>Biblioteca</a>
                     <a href="/exportar" className="home-link" onClick={playMenuSound}>Exportar</a>
-                    <a href="/ayuda" className="home-link" onClick={playMenuSound}>Ayuda</a>
+                    <a href="/ayuda" className="home-link" onClick={playMenuSound}>Buscar</a>
                     <a href="/cuenta" className="home-link" onClick={playMenuSound}>Cuenta</a>
                 </nav>
             </header>

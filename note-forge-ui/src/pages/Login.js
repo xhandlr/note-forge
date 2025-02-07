@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import '../styles/Login.css';
 import { loginUser } from '../services/LoginService';
 import { useNavigate } from 'react-router-dom';
+import Logotype from '../components/Logotype';
+import Icon from '../components/Icon';
 
 
 function Login() {
@@ -40,6 +42,9 @@ function Login() {
 
     return (
         <div className="login-page">
+            <div className="gray-background">
+                <Icon></Icon>
+                <Logotype></Logotype>
             <div className="wrapper">
                 <form onSubmit={handleSubmit}>
                     <h1>Iniciar Sesión</h1>
@@ -63,6 +68,7 @@ function Login() {
                         <p>¿No tienes una cuenta? <a href="http://localhost:3000/register" className='auth-link'>Registrarse</a></p>
                     </div>
                 </form>
+            </div>
             </div>
         </div>
     );
