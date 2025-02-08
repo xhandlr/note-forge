@@ -32,7 +32,7 @@
     align-items: center;
     gap: 5px;
     text-align: center;
-    font-size: 20px;
+    font-size: 15px;
 }
 
 .note {
@@ -40,13 +40,14 @@
 }
 
 .forge {
-    color: #EF0E5E; 
+    color: #ff2a74; 
 }
 
 .note-forge-icon {
     margin-top: 3%;
-    width: 100px;
-    height: 100px;
+    margin-bottom: 7px;
+    width: 70px;
+    height: 70px;
     border-radius: 100%;
     background: url('/src/assets/note-forge-icon.jpg') no-repeat;
     background-size: cover;
@@ -66,7 +67,7 @@
 }
 
 .wrapper h1 {
-    font-size: 36px;
+    font-size: 30px;
     text-align: center;
 }
 

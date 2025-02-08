@@ -39,22 +39,14 @@ function Dashboard() {
     const [selectedPanel, setSelectedPanel] = useState("categorias");
 
     return (
-        <div className="home-page" onClick={enableSounds}>
+        <div>
             <Navbar />
-            <div className="dashboard-body">
+            <div onClick={enableSounds}>
                 <h1>¡Bienvenido!</h1>
-                <div className="purple-wrapper">
-                    <nav className='panel-navbar'>
-                        <button onClick={() => setSelectedPanel("categorias")}>Categorías</button>
-                        <button onClick={() => setSelectedPanel("ejercicios")}>Ejercicios Recientes</button>
-                        <button onClick={() => setSelectedPanel("guias")}>Guías</button>
-                    </nav>
-                    <div className="panel-wrapper">
-                        {selectedPanel === "categorias" && <div className="categories"></div>}
-                        {selectedPanel === "ejercicios" && <p>Contenido de Ejercicios Recientes</p>}
-                        {selectedPanel === "guias" && <p>Contenido de Guías</p>}
-                        
-                    </div>
+                <div className="feature-navbar">
+                    <button>Categorías</button>
+                    <button>Ejercicios</button>
+                    <button>Guías</button>
                 </div>
             </div>
         </div>
