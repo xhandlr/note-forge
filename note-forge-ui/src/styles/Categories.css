@@ -13,12 +13,22 @@
     margin-right: 30px;
 }
 
-.categories-wrapper .category-option {
-    background-color: #EC0E59;
+.category-option {
+    background-color: #1a1a1a;
     width: 140px;
     height: 140px;
     border-radius: 20px;
     margin: 25px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+}
+
+.category-option:hover {
+    background-color: #1E1E1E;
+    border: 2px solid #b6b6b6;
 }
 
 .categories-wrapper button {

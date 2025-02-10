@@ -1,6 +1,7 @@
 const express = require('express');
 const authController = require('../controllers/authController');
 const exerciseController = require('../controllers/exerciseController');
+const categoryController = require('../controllers/categoryController');
 const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = express.Router();
@@ -9,13 +10,18 @@ const router = express.Router();
 router.post('/register', authController.register);
 router.post('/login', authController.login);
 
-// Ruta para crear un ejercicio (sin id, se obtiene del token del usuario)
+// Ruta para ejercicios
 router.post('/create-exercise', authMiddleware, exerciseController.createExerciseRequest);
 router.get('/exercise/:id', authMiddleware, exerciseController.getExerciseByIdRequest);
 router.get('/exercises', authMiddleware, exerciseController.getExercisesRequest);
 router.put('/update-exercise/:id', authMiddleware, exerciseController.updateExerciseRequest);
 router.delete('/delete-exercise/:id', authMiddleware, exerciseController.deleteExerciseRequest);
 
-
+// Rutas para categorías
+router.post('/create-category', authMiddleware, categoryController.createCategoryRequest);
+router.get('/category/:id', authMiddleware, categoryController.getCategoryByIdRequest);
+router.get('/categories', authMiddleware, categoryController.getCategoriesRequest);
+router.put('/update-category/:id', authMiddleware, categoryController.updateCategoryRequest);
+router.delete('/delete-category/:id', authMiddleware, categoryController.deleteCategoryRequest);
 
 module.exports = router;
