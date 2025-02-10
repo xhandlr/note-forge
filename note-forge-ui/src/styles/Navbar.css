@@ -33,7 +33,7 @@
 
 .header .logo-note-forge {
     margin-left: 1%;
-    margin-right: 50%;
+    margin-right: 30%;
 }
 
 .navbar {
@@ -45,14 +45,29 @@
     width: 100%;
 }
 
+.navbar .search-bar {
+    margin-top: 1.5%;;
+    margin-right: 1rem;
+    margin-left: 2.5rem;
+    width: 450px;
+}
+
 .navbar a {
     font-size: 1.2rem;
-    background-image: linear-gradient(to right, rgb(255, 255, 255), #999999); /* Gradiente de gris a blanco */
+    background-image: linear-gradient(to right, rgb(255, 255, 255), #b1b1b1); /* Gradiente de gris a blanco */
     -webkit-background-clip: text; /* Aplica el gradiente solo al texto */
     color: transparent; /* Hace que el color de texto sea transparente para mostrar el gradiente */
     text-decoration: none;
     font-weight: 600;
-    margin-left: 2.5rem;
+    margin-left: 2rem;
+}
+
+.user-circle-icon box-icon {
+    fill: #D5D5D5;
+    width: 45px;
+    height: 45px;
+    margin-top: 8px;
+    margin-left: 15px;
 }
 
 

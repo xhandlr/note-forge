@@ -2,6 +2,7 @@ import React from "react";
 import "../styles/Navbar.css";
 import Icon from "./Icon";
 import Logotype from "./Logotype";
+import SearchBar from "./SearchBar";
 
 function Navbar({ playMenuSound }) {
     return (
@@ -15,8 +16,13 @@ function Navbar({ playMenuSound }) {
                 <nav className="navbar">
                     <Icon></Icon>
                     <Logotype></Logotype>
+                    
                     <a href="/dashboard" className="home-link" onClick={playMenuSound}>Inicio</a>
                     <a href="/exportar" className="home-link" onClick={playMenuSound}>Exportar</a>
+                    <SearchBar></SearchBar>
+                    <div className='user-circle-icon'>
+                    <box-icon name='user-circle' type='solid' ></box-icon>
+                    </div>
                 </nav>
         </header>
     );

@@ -3,7 +3,10 @@ import '../styles/Dashboard.css';
 import hoverSound from "../assets/hover-sound.wav"; 
 import menuSound from "../assets/click-sound.wav"; 
 import Navbar from "../components/Navbar";
-
+import Panel from "../components/UserPanel";
+import Categories from "../components/Categories";
+import Statistics from "../components/Statistics";
+import SearchBar from "../components/SearchBar";
 
 function Dashboard() { 
     const [soundEnabled, setSoundEnabled] = useState(false);  // Estado para controlar si los sonidos pueden reproducirse
@@ -41,12 +44,17 @@ function Dashboard() {
     return (
         <div>
             <Navbar />
-            <div onClick={enableSounds}>
-                <h1>¡Bienvenido!</h1>
+            <div className="dashboard" onClick={enableSounds}>
                 <div className="feature-navbar">
                     <button>Categorías</button>
                     <button>Ejercicios</button>
                     <button>Guías</button>
+                </div>
+                <SearchBar></SearchBar>
+                <div className="feature-wrapper">
+                    <Statistics></Statistics>
+                    <Categories></Categories>
+                    <Panel></Panel>
                 </div>
             </div>
         </div>

@@ -1,0 +1,37 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.categories-wrapper {
+    background-color: #3E3E3E;
+    width: 750px;
+    height: 450px;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.categories-wrapper .category-option {
+    background-color: #EC0E59;
+    width: 140px;
+    height: 140px;
+    border-radius: 20px;
+    margin: 25px;
+}
+
+.categories-wrapper button {
+    background-color: #1E1E1E;
+    width: 120px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.option-buttons {
+    position: absolute;
+    top: 600px;
+    left: 35%;
+}
+

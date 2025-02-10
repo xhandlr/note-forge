@@ -15,7 +15,15 @@ body .feature-navbar {
     background-color: #3E3E3E;
     width: 150px;
     height: 70px;
-    margin-top: 8vh;
+    margin-top: 13vh;
+    margin-bottom: 5vh;
     font-size: 15px;
     color: #fff;
+}
+
+.feature-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
