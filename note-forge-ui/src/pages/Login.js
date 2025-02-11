@@ -30,7 +30,7 @@ function Login() {
             if (data.token) {
                 localStorage.setItem('token', data.token);
                 alert('Login exitoso');
-                navigate('/home');
+                navigate('/dashboard');
             } else {
                 alert(`Error: ${data.message}`);
             }

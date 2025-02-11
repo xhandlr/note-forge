@@ -6,6 +6,10 @@
 }
 
 .categories-wrapper {
+    color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
     background-color: #3E3E3E;
     width: 750px;
     height: 450px;

@@ -3,29 +3,28 @@ import '../styles/Dashboard.css';
 import hoverSound from "../assets/hover-sound.wav"; 
 import menuSound from "../assets/click-sound.wav"; 
 import Navbar from "../components/Navbar";
-import Panel from "../components/UserPanel";
 import Categories from "../components/Categories";
 import Statistics from "../components/Statistics";
 import SearchBar from "../components/SearchBar";
+import UserPanel from "../components/UserPanel";
+import Exercises from "../components/Exercises";
 
 function Dashboard() { 
-    const [soundEnabled, setSoundEnabled] = useState(false);  // Estado para controlar si los sonidos pueden reproducirse
+    const [soundEnabled, setSoundEnabled] = useState(false);
     const audioRef = useRef(new Audio(hoverSound));
     const menuRef = useRef(new Audio(menuSound));
+    const [selectedPanel, setSelectedPanel] = useState("categorias");
 
-    // UseEffect para cargar los sonidos al principio sin reproducirlos
     useEffect(() => {
         audioRef.current.load();
         menuRef.current.load();
     }, []);
 
-    const enableSounds = () => {
-        setSoundEnabled(true);  // Permitir la reproducción de sonidos después de la primera interacción
-    };
-
+    const enableSounds = () => setSoundEnabled(true);
+    
     const playSound = () => {
         if (soundEnabled) {
-            audioRef.current.currentTime = 0; // Reinicia el sonido si ya estaba reproduciéndose
+            audioRef.current.currentTime = 0;
             audioRef.current.volume = 0.5;
             audioRef.current.play();
         }
@@ -39,22 +38,21 @@ function Dashboard() {
         }
     };
 
-    const [selectedPanel, setSelectedPanel] = useState("categorias");
-
     return (
         <div>
             <Navbar />
             <div className="dashboard" onClick={enableSounds}>
                 <div className="feature-navbar">
-                    <button>Categorías</button>
-                    <button>Ejercicios</button>
-                    <button>Guías</button>
+                    <button onClick={() => setSelectedPanel("categorias")}>Categorías</button>
+                    <button onClick={() => setSelectedPanel("ejercicios")}>Ejercicios</button>
+                    <button onClick={() => setSelectedPanel("guias")}>Guías</button>
                 </div>
                 <SearchBar></SearchBar>
                 <div className="feature-wrapper">
-                    <Statistics></Statistics>
-                    <Categories></Categories>
-                    <Panel></Panel>
+                    <Statistics />
+                    {selectedPanel === "categorias" && <Categories />}
+                    {selectedPanel === "ejercicios" && <Exercises />}
+                    <UserPanel />
                 </div>
             </div>
         </div>

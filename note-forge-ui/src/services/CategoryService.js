@@ -13,11 +13,11 @@ const deleteCategory = async (id) => {
 }
 
 const getCategoryById = async (id) => {
-    return sendRequest(`http://localhost:5000/get-category/${id}`, 'GET'); 
+    return sendRequest(`http://localhost:5000/category/${id}`, 'GET'); 
 };
 
 const getCategories = async () => {
-    return sendRequest('http://localhost:5000/get-categories', 'GET');  
+    return sendRequest('http://localhost:5000/categories', 'GET');  
 };
 
 export { addCategory, updateCategory, deleteCategory, getCategoryById, getCategories };
