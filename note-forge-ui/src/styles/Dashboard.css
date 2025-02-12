@@ -26,4 +26,34 @@ body .feature-navbar {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    margin-top: 30px;
+}
+
+.feature-menu {
+    background-color: transparent;
+    min-width: 700px;
+    min-height: 400px;
+    color: #fff;
+    font-size: 9px;
+    display: flex;
+    flex-direction: column;
+}
+
+.feature-menu h1 {
+    margin: 20px;
+    font-weight: 500;
+}
+
+.feature-menu button {
+    width: 25%;
+    height: 5%;
+    margin: 10px;
+}
+
+.feature-buttons {
+    display: flex;
+    flex-direction: row;
+    background-color: transparent;
+    align-items: center;
+    justify-content: center;
 }

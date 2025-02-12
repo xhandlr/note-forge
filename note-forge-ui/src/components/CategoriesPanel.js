@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import CategoryOption from "./CategoryOption";
 import { getCategories } from "../services/CategoryService";
 import "../styles/Categories.css";
+import SearchBar from "./SearchBar";
 
-function Categories() {
+function CategoriesPanel() {
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
@@ -16,17 +17,18 @@ function Categories() {
 
     return (
         <div className="categories-wrapper">
+            <div className="categories-title">
+                <h1>Mis categorías</h1>
+                <SearchBar />
+            </div>
             {categories.map(category => (
-                <CategoryOption key={category.id} name={category.name} />
+                <CategoryOption key={category.id} name={category.name} description={category.description} />
             ))}
-            <div className="option-buttons">
-                <button>Crear</button>
-                <button>Editar</button>
-                <button>Ver</button>
-                <button>Eliminar</button>
+            <div className="new-category">
+                <h1>Nueva categoría</h1>
             </div>
         </div>
     );
 }
 
-export default Categories;
+export default CategoriesPanel;

@@ -3,17 +3,24 @@ import '../styles/Dashboard.css';
 import hoverSound from "../assets/hover-sound.wav"; 
 import menuSound from "../assets/click-sound.wav"; 
 import Navbar from "../components/Navbar";
-import Categories from "../components/Categories";
 import Statistics from "../components/Statistics";
-import SearchBar from "../components/SearchBar";
 import UserPanel from "../components/UserPanel";
-import Exercises from "../components/Exercises";
+import FeaturePanel from "../components/FeaturePanel";
 
 function Dashboard() { 
     const [soundEnabled, setSoundEnabled] = useState(false);
     const audioRef = useRef(new Audio(hoverSound));
     const menuRef = useRef(new Audio(menuSound));
-    const [selectedPanel, setSelectedPanel] = useState("categorias");
+
+    /*const [user, setUser] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const data = await getUserById();
+            setUser(data);
+        };
+        fetchCategories();
+    }, []);*/
 
     useEffect(() => {
         audioRef.current.load();
@@ -42,16 +49,9 @@ function Dashboard() {
         <div>
             <Navbar />
             <div className="dashboard" onClick={enableSounds}>
-                <div className="feature-navbar">
-                    <button onClick={() => setSelectedPanel("categorias")}>Categorías</button>
-                    <button onClick={() => setSelectedPanel("ejercicios")}>Ejercicios</button>
-                    <button onClick={() => setSelectedPanel("guias")}>Guías</button>
-                </div>
-                <SearchBar></SearchBar>
                 <div className="feature-wrapper">
                     <Statistics />
-                    {selectedPanel === "categorias" && <Categories />}
-                    {selectedPanel === "ejercicios" && <Exercises />}
+                    <FeaturePanel />
                     <UserPanel />
                 </div>
             </div>

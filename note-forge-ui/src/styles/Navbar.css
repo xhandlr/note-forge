@@ -70,6 +70,10 @@
     margin-left: 15px;
 }
 
+.navbar .search-bar {
+    margin-bottom: 20px;
+}
+
 
 #check {
     position: absolute;

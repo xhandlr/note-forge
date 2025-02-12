@@ -16,7 +16,7 @@
 }
 
 .gray-background {
-    background-color: rgb(16, 16, 16);
+    background-color: #141414;
     position: absolute;
     display: flex;
     flex-direction: column;

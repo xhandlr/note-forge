@@ -1,14 +1,15 @@
 .statistics-background {
     display: flex;
     flex-direction: column;
-    background-color: #26003B;
+    background: linear-gradient(rgb(0, 0, 0), #1E1E1E);
     color: #fff;
     font-size: 9px;
     font-weight: 600;
     width: 250px;
     height: 500px;
     align-items: center;
-    margin-top: -10rem;
+    margin-top: 5rem;
+    margin-right: 3rem;
 }
 
 .statistics-background h1 {
