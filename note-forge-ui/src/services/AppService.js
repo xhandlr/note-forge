@@ -4,13 +4,17 @@ const sendRequest = async (route, method, body = null) => {
     const options = {
         method,
         headers: {
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
     };
 
     if (body) {
-        options.body = JSON.stringify(body);  // Solo agregar el cuerpo si se pasa
+        if (body instanceof FormData) {
+            options.body = body; 
+        } else {
+            options.headers['Content-Type'] = 'application/json';
+            options.body = JSON.stringify(body);
+        }
     }
 
     const response = await fetch(route, options);

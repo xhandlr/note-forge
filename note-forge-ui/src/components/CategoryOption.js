@@ -1,11 +1,14 @@
 import React from "react";
 import "../styles/Categories.css";
 
-function CategoryOption({ name, description }) {
+function CategoryOption({ name, description, imageUrl }) {
     return (
         <div className='category-option'>
-            <h1>{name}</h1>
-            <h2>{description}</h2>
+            <img src={imageUrl} alt={name} className="category-image" />
+            <div className="category-text">
+                <h1>{name}</h1>
+                <h2>{description}</h2>
+            </div>
         </div>
     );
 }

@@ -1,9 +1,9 @@
 const pool = require('../config/db');
 
 const Category = {
-    async create(name, description, userId) {
-        const query = 'INSERT INTO categories (name, description, user_id) VALUES (?, ?, ?)';
-        const [result] = await pool.query(query, [name, description, userId]);
+    async create(name, description, imageUrl, userId) {
+        const query = 'INSERT INTO categories (name, description, user_id, image_url) VALUES (?, ?, ?, ?)';
+        const [result] = await pool.query(query, [name, description, userId, imageUrl]);
         return result.insertId;
     },
 

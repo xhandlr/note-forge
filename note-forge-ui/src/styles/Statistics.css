@@ -1,6 +1,9 @@
 .statistics-background {
     display: flex;
+    top: 2rem;
+    left: 5rem;
     flex-direction: column;
+    position: fixed;
     background: var(--gray-color);
     color: #fff;
     font-size: 9px;

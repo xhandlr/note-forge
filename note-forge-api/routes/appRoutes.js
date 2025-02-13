@@ -3,6 +3,18 @@ const authController = require('../controllers/authController');
 const exerciseController = require('../controllers/exerciseController');
 const categoryController = require('../controllers/categoryController');
 const authMiddleware = require('../middlewares/authMiddleware');
+const multer = require('multer');
+const path = require('path');
+
+// Configurar Multer para guardar imágenes en la carpeta 'uploads'
+const storage = multer.diskStorage({
+    destination: 'uploads/',
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); 
+    }
+});
+
+const upload = multer({ storage });
 
 const router = express.Router();
 
@@ -18,7 +30,7 @@ router.put('/update-exercise/:id', authMiddleware, exerciseController.updateExer
 router.delete('/delete-exercise/:id', authMiddleware, exerciseController.deleteExerciseRequest);
 
 // Rutas para categorías
-router.post('/create-category', authMiddleware, categoryController.createCategoryRequest);
+router.post('/create-category', authMiddleware, upload.single('image'), categoryController.createCategoryRequest);
 router.get('/category/:id', authMiddleware, categoryController.getCategoryByIdRequest);
 router.get('/categories', authMiddleware, categoryController.getCategoriesRequest);
 router.put('/update-category/:id', authMiddleware, categoryController.updateCategoryRequest);

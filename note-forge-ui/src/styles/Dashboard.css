@@ -36,7 +36,8 @@ body .feature-navbar {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin-top: 30px;
+    margin: 5rem;
+    padding-left: 28px;
 }
 
 .feature-menu {

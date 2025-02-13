@@ -24,7 +24,12 @@ function CategoriesPanel() {
                 <SearchBar />
             </div>
             {categories.map(category => (
-                <CategoryOption key={category.id} name={category.name} description={category.description} />
+                <CategoryOption 
+                    key={category.id} 
+                    name={category.name} 
+                    description={category.description} 
+                    imageUrl={category.image_url} 
+                />
             ))}
             <div className="new-category" onClick={() => { navigate("/create-category"); }}>
                 <h1 >Nueva categoría</h1>

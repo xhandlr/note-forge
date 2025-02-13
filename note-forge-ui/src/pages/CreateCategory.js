@@ -10,25 +10,35 @@ function CreateCategory() {
 
     const [categoryData, setCategoryData] = useState({
         name: '',
-        description: ''
+        description: '',
+        image: null
     });
 
     const [errors, setErrors] = useState({}); 
 
     const handleChange = (e) => {
-        setCategoryData({
-            ...categoryData, 
-            [e.target.name]: e.target.value
-        })
+        if (e.target.name === "image") {
+            console.log("Imagen seleccionada:", e.target.files[0]); 
+            setCategoryData({ ...categoryData, image: e.target.files[0] });
+        } else {
+            console.log(`Cambiando ${e.target.name}:`, e.target.value); // ✅ Verifica que los otros campos se actualizan
+            setCategoryData({ ...categoryData, [e.target.name]: e.target.value });
+        }
     };
     
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const formData = new FormData();
+        formData.append("name", categoryData.name);
+        formData.append("description", categoryData.description);
+        formData.append("image", categoryData.image);
+
         try {
-            const response = await addCategory(categoryData);
+            const response = await addCategory(formData);
             if (response.message) {
                 alert(`Categoría almacenada con éxito! ID: ${response.categoryId}`);
+                navigate("/categories");
             } else {
                 alert("Error al crear categoría");
             }
@@ -36,7 +46,7 @@ function CreateCategory() {
             setErrors(error);
             console.log('Error en el registro', error);
         }
-    }
+    };
 
     return (
         <body className='create-category-body'>
@@ -50,7 +60,7 @@ function CreateCategory() {
                         </label>
                         <label for="category-description">Descripción: <textarea id="category-description" name="description" rows="3" cols="50" maxlength="255" className='category-textarea' onChange={handleChange} required></textarea>
                         </label>
-                        <label for="category-profile">Portada: <input id="category-profile" type="file" accept="image/*" />
+                        <label for="category-profile">Portada: <input id="category-profile" name="image" type="file" accept="image/*" onChange={handleChange} />
                         </label>
                     </fieldset>
                     <label for="set-category"><input className="set-checkbox" id="set-category" type="checkbox"/> Fijar esta categoría en la pantalla de Inicio</label>

@@ -1,15 +1,16 @@
 const categoryService = require('../services/categoryService');
 
-async function createCategoryRequest(req, res) {
+async function createCategoryRequest(req, res) { 
     try {
         const userId = req.user.id; // Obtener el id del usuario desde el token
-        
         const { name, description } = req.body;
+        const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : null;
 
-        const result = await categoryService.createCategory(name, description, userId);
+        const result = await categoryService.createCategory(name, description, imageUrl, userId);
 
         res.status(201).json(result); 
     } catch (error) {
+        console.log(error)
         res.status(400).json({ message: error.message });
     }
 }

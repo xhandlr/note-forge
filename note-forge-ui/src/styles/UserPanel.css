@@ -1,5 +1,8 @@
 .background-panel {
     display: flex;
+    top: 2rem;
+    right: 5rem;
+    position: fixed;
     flex-direction: column;
     align-items: center;
     background-color: var(--gray-color);
@@ -8,7 +11,7 @@
     color: #fff;
     margin-top: 5rem;
     margin-left: 2rem;
-}
+} 
 
 .circle-panel {
     background-color: rgb(255, 255, 255);
