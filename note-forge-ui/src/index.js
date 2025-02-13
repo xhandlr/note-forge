@@ -10,7 +10,7 @@ import Registration from './pages/Registration';
 import CreateExercise from './pages/CreateExercise';
 import Dashboard from './pages/Dashboard';
 import Categories from './pages/CategoriesPage';
-import Exercises from './pages/Exercises';
+import Exercises from './pages/ExercisesPage';
 import Guides from './pages/Guides';
 import CreateCategory from './pages/CreateCategory';
 

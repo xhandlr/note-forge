@@ -35,6 +35,10 @@
     font-size: 15px;
 }
 
+.logo-note-forge:hover {
+    cursor: pointer;
+}
+
 .note {
     color: #FFE354; 
 }
@@ -52,6 +56,10 @@
     background: url('/src/assets/note-forge-icon.jpg') no-repeat;
     background-size: cover;
     background-position: center;
+}
+
+.note-forge-icon:hover {
+    cursor: pointer;
 }
 
 .wrapper {

@@ -1,3 +1,13 @@
+:root {
+    --note-color: #FFE354;
+    --forge-color: #ff2a74;
+    --category-color: #36EEFF;
+    --exercises-color: #65FF36;
+    --guides-color: #F2BA52;
+    --forms: #E3E3E3;
+    --gray-color: #1E1E1E;
+}
+
 body {
     background-color: black;
 }
@@ -56,4 +66,34 @@ body .feature-navbar {
     background-color: transparent;
     align-items: center;
     justify-content: center;
+    border: none;
+    width: 45rem;
+    height: 100px;
 }
+
+.feature-buttons button {
+    width: 12rem;
+    height: 4rem;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    border: none;
+}
+
+.feature-buttons button:hover {
+    filter: brightness(1.2);
+    cursor: pointer;
+}
+
+.categories-button {
+    background-color: var(--category-color); 
+}
+
+.exercises-button {
+    background-color: var(--exercises-color);
+}
+
+.guides-button {
+    background-color: var(--guides-color); 
+}
+

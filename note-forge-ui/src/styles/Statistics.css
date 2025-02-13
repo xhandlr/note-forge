@@ -1,7 +1,7 @@
 .statistics-background {
     display: flex;
     flex-direction: column;
-    background: linear-gradient(rgb(0, 0, 0), #1E1E1E);
+    background: var(--gray-color);
     color: #fff;
     font-size: 9px;
     font-weight: 600;

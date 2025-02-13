@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #1E1E1E;
+    background-color: var(--gray-color);
     width: 250px;
     height: 500px;
     color: #fff;
@@ -23,10 +23,14 @@
 
 .background-panel button {
     margin-bottom: 20px;
-    background-color: #D5D5D5;
+    background-color: #fff;
     width: 200px;
     height: 50px;
     font-size: 15px;
     font-weight: 600;
     border-radius: 20px;
+}
+
+.background-panel button:hover {
+    cursor: pointer;
 }

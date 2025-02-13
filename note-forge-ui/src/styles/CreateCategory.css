@@ -14,14 +14,10 @@
     color: #000000;
 }
 
-.create-category body {
-    overflow: hidden;
-}
-
 .category-form {
     display: flex;
     flex-direction: column;
-    background-color: #E3E3E3;
+    background-color: var(--forms);
     width: 85vw;;
     padding-top: 15px;
     padding-left: 30px;
@@ -59,7 +55,7 @@
 }
 
 .category-submit {
-    background-color: #36EEFF;
+    background-color: var(--category-color);
     width: 250px;
     height: 45px;
     color: black;

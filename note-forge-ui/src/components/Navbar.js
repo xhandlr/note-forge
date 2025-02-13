@@ -16,6 +16,7 @@ function Navbar({ playMenuSound }) {
                 <nav className="navbar">
                     <Icon></Icon>
                     <Logotype></Logotype>
+            
                     
                     <a href="/dashboard" className="home-link" onClick={playMenuSound}>Inicio</a>
                     <a href="/exportar" className="home-link" onClick={playMenuSound}>Exportar</a>

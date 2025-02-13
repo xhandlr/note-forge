@@ -1,0 +1,77 @@
+.create-exercise-body {
+    overflow-x: hidden;
+}
+
+.create-exercise-form {
+    width: 85vw; 
+    min-height: 200px; 
+    background-color: var(--forms); 
+    padding: 15px 30px;
+    border-radius: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: visible; 
+    margin-top: 6rem;
+}
+
+.create-exercise {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100vw;
+    min-height: 100vh; /* Asegura que todo el contenedor crezca si es necesario */
+}
+
+.create-exercise-form label {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.create-exercise-form textarea {
+    border: none;
+    background-color: #fff;
+    width: 100%;
+    resize: none;
+    box-sizing: border-box;
+    padding: 5px;
+    font-size: 15px;
+}
+
+.create-exercise-form fieldset {
+    padding: 10px;
+}
+
+.create-exercise-form legend {
+    margin-left: 30px;
+}
+
+.save-button {
+    background-color: var(--exercises-color);
+    color: rgb(0, 0, 0);
+    width: 200px; 
+    height: 50px; 
+    min-height: 50px;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px; 
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    align-self: center;
+}
+
+.save-button:hover {
+    background-color: rgb(23, 241, 23);
+    transform: scale(1.05);
+}
+
+.save-button:active {
+    transform: scale(0.95);
+}
