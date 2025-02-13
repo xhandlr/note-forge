@@ -1,8 +1,8 @@
 import React from "react";
-import "../styles/Categories.css"
-import Navbar from "../components/Navbar";
-import UserPanel from "../components/UserPanel";
-import CategoriesPanel from "../components/CategoriesPanel";
+import "../../styles/Categories/Categories.css"
+import Navbar from "../../components/Dashboard/Navbar";
+import UserPanel from "../../components/Dashboard/UserPanel";
+import CategoriesPanel from "../../components/Categories/CategoriesPanel";
 
 function Categories() {
     return(

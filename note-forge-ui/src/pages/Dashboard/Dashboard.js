@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect } from "react"; 
-import '../styles/Dashboard.css'; 
-import hoverSound from "../assets/hover-sound.wav"; 
-import menuSound from "../assets/click-sound.wav"; 
-import Navbar from "../components/Navbar";
-import Statistics from "../components/Statistics";
-import UserPanel from "../components/UserPanel";
-import FeaturePanel from "../components/FeaturePanel";
+import '../../styles/Dashboard/Dashboard.css'; 
+import hoverSound from "../../assets/hover-sound.wav"; 
+import menuSound from "../../assets/click-sound.wav"; 
+import Navbar from "../../components/Dashboard/Navbar";
+import Statistics from "../../components/Dashboard/Statistics";
+import UserPanel from "../../components/Dashboard/UserPanel";
+import FeaturePanel from "../../components/Dashboard/FeaturePanel";
 
 function Dashboard() { 
     const [soundEnabled, setSoundEnabled] = useState(false);

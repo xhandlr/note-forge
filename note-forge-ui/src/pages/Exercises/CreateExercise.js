@@ -1,8 +1,8 @@
 import React, { useActionState, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addExercise } from '../services/ExerciseService';
-import Navbar from '../components/Navbar';
-import '../styles/CreateExercise.css'; 
+import { addExercise } from '../../services/ExerciseService';
+import Navbar from '../../components/Dashboard/Navbar';
+import '../../styles/Exercises/CreateExercise.css'; 
 
 function CreateExercise() {
 

@@ -1,8 +1,8 @@
 import React from "react";
-import Navbar from "../components/Navbar";
-import UserPanel from "../components/UserPanel";
-import ExercisesPanel from "../components/ExercisesPanel";
-import "../styles/Exercises.css";
+import Navbar from "../../components/Dashboard/Navbar";
+import UserPanel from "../../components/Dashboard/UserPanel";
+import ExercisesPanel from "../../components/Exercises/ExercisesPanel";
+import "../../styles/Exercises/Exercises.css";
 
 function Exercises() {
     return(

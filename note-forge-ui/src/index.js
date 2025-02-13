@@ -5,14 +5,14 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'boxicons';
 
-import Login from './pages/Login';
-import Registration from './pages/Registration';
-import CreateExercise from './pages/CreateExercise';
-import Dashboard from './pages/Dashboard';
-import Categories from './pages/CategoriesPage';
-import Exercises from './pages/ExercisesPage';
-import Guides from './pages/Guides';
-import CreateCategory from './pages/CreateCategory';
+import Login from './pages/Auth/Login';
+import Registration from './pages/Auth/Registration';
+import CreateExercise from './pages/Exercises/CreateExercise';
+import Dashboard from './pages/Dashboard/Dashboard';
+import Categories from './pages/Categories/CategoriesPage';
+import Exercises from './pages/Exercises/ExercisesPage';
+import Guides from './pages/Guides/Guides';
+import CreateCategory from './pages/Categories/CreateCategory';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

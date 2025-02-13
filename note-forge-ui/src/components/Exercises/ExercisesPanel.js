@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getExercises } from "../services/ExerciseService";
-import ExerciseOption from "../components/ExerciseOption";
-import SearchBar from "./SearchBar";
-import "../styles/Exercises.css";
+import { getExercises } from "../../services/ExerciseService";
+import ExerciseOption from "../Exercises/ExerciseOption";
+import SearchBar from "../Dashboard/SearchBar";
+import "../../styles/Exercises/Exercises.css";
 
 function ExercisesPanel() {
     const navigate = useNavigate();

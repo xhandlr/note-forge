@@ -1,5 +1,5 @@
 import React from "react";
-import '../styles/Statistics.css';
+import '../../styles/Dashboard/Statistics.css';
 
 function Statistics() {
     return (

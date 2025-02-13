@@ -1,6 +1,6 @@
 import React, { useState } from 'react'; // Importa useState que es un hook que permite manejar el estado
-import '../styles/Login.css';
-import { registerUser } from '../services/RegistrationService'; // Importa la función registerUser
+import '../../styles/Auth/Login.css';
+import { registerUser } from '../../services/RegistrationService';
 
 function Registration() { // Declara un componente funcional
     const [formData, setFormData] = useState({ // Crea un estado llamado formData que almacena los datos del formulario

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import '../styles/Login.css';
-import { loginUser } from '../services/LoginService';
+import '../../styles/Auth/Login.css';
+import { loginUser } from '../../services/LoginService';
 import { useNavigate } from 'react-router-dom';
-import Logotype from '../components/Logotype';
-import Icon from '../components/Icon';
+import Logotype from '../../components/Dashboard/Logotype';
+import Icon from '../../components/Dashboard/Icon';
 
 
 function Login() {

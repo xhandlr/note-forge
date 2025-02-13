@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/UserPanel.css';
+import '../../styles/Dashboard/UserPanel.css';
 
 function Panel() {
     const navigate = useNavigate();

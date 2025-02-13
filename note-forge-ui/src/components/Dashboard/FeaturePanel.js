@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Dashboard.css";
+import "../../styles/Dashboard/Dashboard.css";
 
 function FeaturePanel({user}) {
     const navigate = useNavigate();

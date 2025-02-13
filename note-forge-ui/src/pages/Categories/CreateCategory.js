@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addCategory } from '../services/CategoryService';
-import '../styles/CreateCategory.css';
-import Navbar from '../components/Navbar';
+import { addCategory } from '../../services/CategoryService';
+import '../../styles/Categories/CreateCategory.css';
+import Navbar from '../../components/Dashboard/Navbar';
 
 function CreateCategory() {
 

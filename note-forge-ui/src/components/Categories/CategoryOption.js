@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/Categories.css";
+import "../../styles/Categories/Categories.css";
 
 function CategoryOption({ name, description, imageUrl }) {
     return (

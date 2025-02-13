@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/Exercises.css";
+import "../../styles/Exercises/Exercises.css";
 
 function ExerciseOption({ title, description, difficulty, reference, duration }) {
     return (
