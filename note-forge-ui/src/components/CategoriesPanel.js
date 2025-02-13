@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import CategoryOption from "./CategoryOption";
 import { getCategories } from "../services/CategoryService";
+import { useNavigate } from 'react-router-dom';
 import "../styles/Categories.css";
 import SearchBar from "./SearchBar";
 
 function CategoriesPanel() {
+    const navigate = useNavigate();
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
@@ -24,8 +26,8 @@ function CategoriesPanel() {
             {categories.map(category => (
                 <CategoryOption key={category.id} name={category.name} description={category.description} />
             ))}
-            <div className="new-category">
-                <h1>Nueva categoría</h1>
+            <div className="new-category" onClick={() => { navigate("/create-category"); }}>
+                <h1 >Nueva categoría</h1>
             </div>
         </div>
     );
