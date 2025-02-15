@@ -13,8 +13,8 @@ const getCategories = async () => {
     return await Category.findAll(); 
 };
 
-const updateCategory = async (categoryId, name, description) => {
-    return await Category.update(categoryId, name, description);
+const updateCategory = async (categoryId, name, description, imageUrl) => {
+    return await Category.update(categoryId, name, description, imageUrl);
 };
 
 const deleteCategory = async (categoryId) => {

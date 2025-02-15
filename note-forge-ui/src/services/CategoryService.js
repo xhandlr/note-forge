@@ -5,7 +5,7 @@ export const addCategory = async (categoryData) => {
 };
 
 export const updateCategory = async (id, categoryData) => {
-    return sendRequest(`http://localhost:5000/update-exercise/${id}`, 'POST', categoryData);
+    return sendRequest(`http://localhost:5000/update-category/${id}`, 'PUT', categoryData);
 };
 
 export const deleteCategory = async (id) => {

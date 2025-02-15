@@ -43,8 +43,9 @@ async function updateCategoryRequest(req, res) {
     try {
         const categoryId = req.params.id;  
         const { name, description } = req.body;
+        const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : null;
         
-        const updatedCategory= await categoryService.updateCategory(categoryId, name, description);
+        const updatedCategory= await categoryService.updateCategory(categoryId, name, description, imageUrl);
         
         res.status(200).json(updatedCategory);
     } catch (error) {

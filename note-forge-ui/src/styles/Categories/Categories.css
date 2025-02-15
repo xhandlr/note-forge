@@ -50,7 +50,17 @@
 
 .category-text {
     display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-grow: initial;
+    width: 100%;
+}
+
+.category-inputs {
+    display: flex;
     flex-direction: column;
+    margin-right: 10rem;
 }
 
 .category-text h1 {
@@ -114,4 +124,28 @@
 .new-category:hover {
     background-color: #4d4d4d52;
     cursor: pointer;
+}
+
+.category-box-icon {
+    display: flex;
+    flex-direction: row;
+}
+
+.category-box-icon box-icon {
+    fill: #fff;
+    width: 30px;
+    height: 100%;
+}
+
+.category-box-icon box-icon:hover {
+    transform: scale(1.2);
+    filter: brightness(1.5);
+}
+
+box-icon[name="edit-alt"] {
+    fill: var(--note-color);
+}
+
+box-icon[name="trash"] {
+    fill: var(--forge-color);
 }

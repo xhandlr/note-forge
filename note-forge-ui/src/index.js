@@ -13,6 +13,7 @@ import Categories from './pages/Categories/CategoriesPage';
 import Exercises from './pages/Exercises/ExercisesPage';
 import Guides from './pages/Guides/Guides';
 import CreateCategory from './pages/Categories/CreateCategory';
+import EditCategory from './pages/Categories/EditCategory';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -25,6 +26,7 @@ root.render(
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create-exercise" element={<CreateExercise />} />
         <Route path="/create-category" element={<CreateCategory />} />
+        <Route path="/edit-category/:id" element={<EditCategory />} /> 
         <Route path="/categories" element={<Categories />} />
         <Route path="/exercises" element={<Exercises />} />
         <Route path="/guides" element={<Guides />} />

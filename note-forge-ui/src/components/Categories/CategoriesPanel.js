@@ -17,6 +17,10 @@ function CategoriesPanel() {
         fetchCategories();
     }, []);
 
+    const handleDeleteCategory = (id) => {
+        setCategories(categories.filter(category => category.id !== id));
+    };
+
     return (
         <div className="categories-wrapper">
             <div className="categories-title">
@@ -26,9 +30,11 @@ function CategoriesPanel() {
             {categories.map(category => (
                 <CategoryOption 
                     key={category.id} 
+                    id={category.id}
                     name={category.name} 
                     description={category.description} 
                     imageUrl={category.image_url} 
+                    onDelete={handleDeleteCategory}
                 />
             ))}
             <div className="new-category" onClick={() => { navigate("/create-category"); }}>

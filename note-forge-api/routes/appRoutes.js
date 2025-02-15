@@ -33,7 +33,7 @@ router.delete('/delete-exercise/:id', authMiddleware, exerciseController.deleteE
 router.post('/create-category', authMiddleware, upload.single('image'), categoryController.createCategoryRequest);
 router.get('/category/:id', authMiddleware, categoryController.getCategoryByIdRequest);
 router.get('/categories', authMiddleware, categoryController.getCategoriesRequest);
-router.put('/update-category/:id', authMiddleware, categoryController.updateCategoryRequest);
+router.put('/update-category/:id', authMiddleware, upload.single('image'), categoryController.updateCategoryRequest);
 router.delete('/delete-category/:id', authMiddleware, categoryController.deleteCategoryRequest);
 
 module.exports = router;

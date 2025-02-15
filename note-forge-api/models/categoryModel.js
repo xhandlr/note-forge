@@ -19,9 +19,9 @@ const Category = {
         return rows;  // Retorna todos los ejercicios en un array
     },
 
-    async update(categoryId, name, description) {
-        const query = 'UPDATE categories SET name = ?, description = ? WHERE id = ?';
-        const [result] = await pool.query(query, [name, description, categoryId]);
+    async update(categoryId, name, description, imageUrl) {
+        const query = 'UPDATE categories SET name = ?, description = ?, image_url = ? WHERE id = ?';
+        const [result] = await pool.query(query, [name, description, imageUrl, categoryId]);
         return result.affectedRows > 0;  // Retorna true si se actualizó el ejercicio
     },
 
