@@ -13,39 +13,63 @@
     flex-direction: column;
     align-items: flex-start;
     background-color: transparent;
+    min-height: 600px;
     width: 73.3vw;
-    height: 600px;
     margin-top: 55px;
 }
 
-.exercise-option {
-    background-color: #d9d9d9bd;
+.exercises-panel {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    align-self: center;
+    justify-content: space-around;
     width: 85%;
-    height: 20%;
-    color: black;
+    margin: 30px;
+}
+
+.exercise-option {
+    background-color: #ededed;
+    width: 28rem;
+    min-height: 100px;
+    color: rgb(0, 0, 0);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    font-size: 10px;
-    margin-top: 25px;
-    margin-left: 10%;
+    margin-left: 15px;
 }
 
 .exercise-option h1 {
+    font-size: 18px;
+    font-weight: 600;
     margin-top: 15px;
     margin-left: 30px;
 }
 
-.exercise-option h2 {
+.exercise-option p {
+    font-size: 12px;
+    font-weight: 500;
     margin-top: 5px;
     margin-left: 30px;
 }
 
 .exercise-option:hover {
-    background-color: #c4c4c4;
+    background-color: rgb(255, 255, 194);
     border: 2px solid #202020;
     cursor: pointer;
+}
+
+.exercise-box-icon {
+    display: flex;
+    align-self: flex-end;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.exercise-box-icon box-icon {
+    width: 30px;
+    height: 100%;
 }
 
 .exercises-wrapper button {
@@ -74,6 +98,8 @@
 }
 
 .exercises-title h1 {
+    font-size: 25px;
+    font-weight: 600;
     margin-left: 10%;
     margin-right: 30%;
 }
@@ -99,4 +125,57 @@
 .new-exercise:hover {
     background-color: #4d4d4d52;
     cursor: pointer;
+}
+
+/* Elementos de ExerciseOption */
+
+.difficulty {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.difficulty p {
+    font-size: 15px;
+}
+
+.difficulty-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    background-color: rgb(25, 0, 255);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Estilos para la duración estimada */
+
+.duration {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 8px 5px 0 0;
+    width: 100%;
+}
+
+.duration p {
+    font-size: 13px;
+    margin-left: 3px;
+}
+
+box-icon[name="watch"] {
+    fill:rgb(48, 48, 48);
+    margin-left: 1.5rem;
+}
+
+/* Estilo para tags */
+
+.exercise-box-icon p {
+    color: var(--forge-color);
 }

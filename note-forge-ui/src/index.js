@@ -14,6 +14,7 @@ import Exercises from './pages/Exercises/ExercisesPage';
 import Guides from './pages/Guides/Guides';
 import CreateCategory from './pages/Categories/CreateCategory';
 import EditCategory from './pages/Categories/EditCategory';
+import EditExercise from './pages/Exercises/EditExercise';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -23,12 +24,17 @@ root.render(
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Registration />} /> 
+
         <Route path="/dashboard" element={<Dashboard />} />
+
         <Route path="/create-exercise" element={<CreateExercise />} />
+        <Route path="/edit-exercise/:id" element={<EditExercise />} />
+        <Route path="/exercises" element={<Exercises />} />
+
         <Route path="/create-category" element={<CreateCategory />} />
         <Route path="/edit-category/:id" element={<EditCategory />} /> 
         <Route path="/categories" element={<Categories />} />
-        <Route path="/exercises" element={<Exercises />} />
+
         <Route path="/guides" element={<Guides />} />
       </Routes>
     </Router>

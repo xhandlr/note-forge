@@ -17,15 +17,31 @@ function ExercisesPanel() {
         fetchExercises();
     }, []);
 
+    const handleDeleteExercise = (id) => {
+        setExercises(exercises.filter(exercise => exercise.id != id));
+    }
+
     return (
         <div className="exercises-wrapper">
-            <div className="categories-title">
+            <div className="exercises-title">
                 <h1>Mis ejercicios</h1>
                 <SearchBar />
             </div>
+            <div className="exercises-panel">
             {exercises.map(exercises => (
-                <ExerciseOption key={exercises.id} title={exercises.title} description={exercises.description} difficulty={exercises.difficulty} reference={exercises.reference} duration={exercises.duration} /> 
+                <ExerciseOption 
+                    key={exercises.id} 
+                    id={exercises.id}
+                    title={exercises.title} 
+                    description={exercises.description} 
+                    difficulty={exercises.difficulty} 
+                    reference={exercises.reference} 
+                    duration={exercises.duration} 
+                    tags={exercises.tags} 
+                    onDelete={handleDeleteExercise}
+                /> 
             ))}
+            </div>
             <div className="new-exercise" onClick={() => { navigate("/create-exercise"); }}>
                 <h1>Crear nuevo ejercicio</h1>
             </div>
