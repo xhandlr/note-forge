@@ -9,6 +9,7 @@ function Exercises() {
         <div>
             <Navbar />
             <div className="exercises-page">
+                <div className="exercise-viewer"></div>
                 <div className="feature-wrapper">
                     <ExercisesPanel />
                     <UserPanel />

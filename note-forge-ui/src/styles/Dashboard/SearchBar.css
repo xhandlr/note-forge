@@ -7,6 +7,7 @@
     align-items: center;
     position: relative;
     background-color: #3E3E3E; 
+    color:#fff;
 }
 
 
@@ -42,4 +43,15 @@
     border-radius: 19px;
     background: #262626; /* Color de fondo de la barra */
     z-index: 0;
+}
+
+.query {
+    border: none;
+    background-color: transparent;
+    color: #fff;
+    z-index: 1000;
+}
+
+.query:focus {
+    outline: none;
 }
