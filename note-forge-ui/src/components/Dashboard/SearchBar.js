@@ -12,7 +12,7 @@ function SearchBar({ onSearch }) {
     return (
         <div className="search-bar">
             <box-icon name="search"></box-icon>
-            <input 
+            <input  
                 type="text" 
                 value={query}
                 onChange={handleChange}

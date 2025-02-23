@@ -13,7 +13,7 @@ function FeaturePanel({user}) {
                 <button className="exercises-button" onClick={() => navigate("/exercises")}>Mis ejercicios</button>
                 <button className="guides-button" onClick={() => navigate("/guides")}>Guías</button>
             </div>
-            <h1>Fijados</h1>
+            <h1>Categorías fijadas</h1>
         </div>
     );
 }

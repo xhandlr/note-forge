@@ -2,7 +2,8 @@ import React from "react";
 import "../../styles/Dashboard/Navbar.css";
 import Icon from "./Icon";
 import Logotype from "./Logotype";
-import SearchBar from "./SearchBar";
+import SearchModal from "./SearchModal";
+
 
 function Navbar({ playMenuSound }) {
     return (
@@ -14,15 +15,19 @@ function Navbar({ playMenuSound }) {
                 </label>
 
                 <nav className="navbar">
-                    <Icon></Icon>
-                    <Logotype></Logotype>
-            
-                    
-                    <a href="/dashboard" className="home-link" onClick={playMenuSound}>Inicio</a>
-                    <a href="/exportar" className="home-link" onClick={playMenuSound}>Exportar</a>
-                    <SearchBar></SearchBar>
-                    <div className='user-circle-icon'>
-                    <box-icon name='user-circle' type='solid' ></box-icon>
+                    <div className="note-forge-div">
+                        <Icon></Icon>
+                        <Logotype></Logotype>
+                    </div>
+               
+                    <div className="nav-options">
+                        <a href="/dashboard" className="home-link" onClick={playMenuSound}>Inicio</a>
+                        <a href="/exportar" className="home-link" onClick={playMenuSound}>Exportar</a>
+                        <a href="/library" className="home-link">Mi Biblioteca</a>
+                        <SearchModal />
+                        <div className='user-circle-icon'>
+                            <box-icon name='user-circle' type='solid' ></box-icon>
+                        </div>
                     </div>
                 </nav>
         </header>

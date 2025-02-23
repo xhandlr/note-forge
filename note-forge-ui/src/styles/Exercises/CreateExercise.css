@@ -3,23 +3,29 @@
 }
 
 .create-exercise-form {
-    width: 85vw; 
+    width: 100vw; 
     min-height: 200px; 
     background-color: var(--forms); 
     padding: 15px 30px;
     border-radius: 0;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
     gap: 10px;
     overflow: visible; 
     margin-top: 6rem;
 }
 
+.lateral-panel {
+    max-width: 20vw;
+}
+
 .create-exercise {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
     width: 100vw;
     min-height: 100vh; /* Asegura que todo el contenedor crezca si es necesario */
@@ -74,4 +80,56 @@
 
 .save-button:active {
     transform: scale(0.95);
+}
+
+.description-exercise {
+    min-width: 50vw;
+    min-height: 50vh;
+}
+
+.description-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.description-editor {
+    width: 50%;
+}
+
+.latex-preview {
+    width: 30vw;
+    min-height: 50vh;
+    background: #f7f7f7;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.latex-preview h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.preview-box {
+    padding: 10px;
+    background: white;
+    min-height: 40vh;
+    border-radius: 5px;
+    font-size: 1.2rem;
+}
+
+.latex-preview .preview-box {
+    padding: 15px;
+    border: 1px solid #ccc;
+    min-height: 150px;
+    background: white;
+    overflow: auto;
+}
+
+.katex {
+    font-size: 1.1em !important;
+    margin: 5px 0;
 }
