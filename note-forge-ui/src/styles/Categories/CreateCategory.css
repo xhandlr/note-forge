@@ -79,7 +79,7 @@
     align-items: center;
     justify-content: space-between; /* Distribuye elementos en los extremos */
 }
-
+ 
 .navigation-buttons button {
     background-color: transparent;
     width: 200px;

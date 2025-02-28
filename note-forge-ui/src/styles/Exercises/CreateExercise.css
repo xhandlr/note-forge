@@ -1,57 +1,120 @@
 .create-exercise-body {
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .create-exercise-form {
-    width: 100vw; 
-    min-height: 200px; 
-    background-color: var(--forms); 
-    padding: 15px 30px;
-    border-radius: 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 12vh;
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 10px;
-    overflow: visible; 
-    margin-top: 6rem;
+    flex-direction: column; /* Para que los elementos se ajusten */
+    align-self: center;
+    align-items: stretch; /* Se adapta al contenido */
+    justify-content: center;
+    width: 70vw;
+    color: var(--forms);
+    background-color: rgb(35, 35, 35);
 }
 
-.lateral-panel {
-    max-width: 20vw;
+.create-exercise-form h1 {
+    margin: 20px auto;
+    color: #fff;
 }
 
-.create-exercise {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    width: 100vw;
-    min-height: 100vh; /* Asegura que todo el contenedor crezca si es necesario */
-}
 
 .create-exercise-form label {
     font-size: 16px;
     font-weight: bold;
+    box-sizing: border-box;
+    margin: 10px 0;
+}
+
+.create-exercise-form input {
+    height: 35px;
+    width: 100%;
+    font-size: 16px;
+    padding-left: 10px;
 }
 
 .create-exercise-form textarea {
+    max-width: 100%; 
+    height: 35px;
+    font-size: 16px;
+    padding-left: 10px;
+    overflow-wrap: break-word;
+    background-color: rgb(77, 77, 77);
     border: none;
-    background-color: #fff;
-    width: 100%;
-    resize: none;
-    box-sizing: border-box;
-    padding: 5px;
-    font-size: 15px;
+    color: #fff;
+    resize: vertical;
 }
+
 
 .create-exercise-form fieldset {
+    width: 65vw;
     padding: 10px;
+    border: none;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
 }
 
-.create-exercise-form legend {
-    margin-left: 30px;
+.create-exercise-form select {
+    margin-bottom: 1.5rem;
+}
+
+.title-exercise {
+    width: 80%;
+    resize: none;
+    background-color: rgb(77, 77, 77);
+    color: #fff;
+    border: none;
+}
+
+.difficulty-container {
+    display: flex;
+    gap: 10px;
+}
+
+.difficulty-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--gray-color);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease-in-out;
+}
+
+.difficulty-option input {
+    display: none; /* Oculta el radio button */
+}
+
+.difficulty-option:hover {
+    background-color: #4CAF50;
+}
+
+.difficulty-option input:checked + span {
+    background-color: #28a745; /* Verde */
+    color: white;
+    border-color: #1e7e34;
+    padding: 8px 15px;
+    display: block;
+    border-radius: 5px;
+}
+
+.category-exercise {
+    width: max-content;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 .save-button {
@@ -83,8 +146,12 @@
 }
 
 .description-exercise {
-    min-width: 50vw;
+    min-width: 30vw;
     min-height: 50vh;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 500;
+    padding: 5px 0.5rem;
 }
 
 .description-container {
@@ -92,6 +159,7 @@
     width: 100%;
     justify-content: space-between;
     gap: 20px;
+    color: #fff;
 }
 
 .description-editor {
@@ -101,10 +169,11 @@
 .latex-preview {
     width: 30vw;
     min-height: 50vh;
-    background: #f7f7f7;
+    background: var(--forms);
     border-radius: 8px;
     padding: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: black;
 }
 
 .latex-preview h3 {
@@ -125,6 +194,7 @@
     padding: 15px;
     border: 1px solid #ccc;
     min-height: 150px;
+    height: 45vh;
     background: white;
     overflow: auto;
 }

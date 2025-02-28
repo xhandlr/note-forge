@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addExercise } from '../../services/ExerciseService';
+import { getCategories } from '../../services/CategoryService';
 import Navbar from '../../components/Dashboard/Navbar';
+import ImageUploader from '../../components/Dashboard/ImageUploader';
 import '../../styles/Exercises/CreateExercise.css';
 import katex from 'katex';
 import 'katex/dist/katex.min.css'; // Importa el CSS de KaTeX
@@ -20,8 +22,17 @@ function CreateExercise() {
     });
 
     const [errors, setErrors] = useState({});
+    const [categories, setCategories] = useState([]);
     const [latexPreview, setLatexPreview] = useState('');
     const navigate = useNavigate();
+
+    useEffect(() => {
+            const fetchCategories = async () => {
+                const data = await getCategories();
+                setCategories(data);
+            };
+            fetchCategories();
+        }, []);
 
     const handleChange = (e) => {
         setExerciseData({
@@ -90,27 +101,73 @@ function CreateExercise() {
     return (
         <div className="create-exercise-body">
             <Navbar />
-            <div className='create-exercise'>
-                <Navbar />
                 <form className='create-exercise-form' onSubmit={handleSubmit}>
-                    <div className='lateral-panel'>
                         <h1>Nuevo ejercicio</h1>
                             <fieldset>
-                                <legend>Crear un  nuevo ejercicio</legend>
-                                <label>Título del ejercicio: <textarea className='title-exercise' type='text' name='title' onChange={handleChange} required /></label>
+                                <label>Título del ejercicio </label>
+                                <input className='title-exercise' type='text' name='title' onChange={handleChange} required />
                                 {errors.title && <p className="error">{errors.title}</p>}
 
                                 <label>Dificultad</label>
-                                <textarea className='difficulty-exercise' type='text' name='difficulty' onChange={handleChange} required />
-                                {errors.difficulty && <p className='error'>{errors.dificulty}</p>}
+                                <div className="difficulty-container">
+                                    {[1, 2, 3, 4, 5].map((num) => (
+                                        <label key={num} className="difficulty-option">
+                                            <input 
+                                                type="radio" 
+                                                name="difficulty" 
+                                                value={num} 
+                                                onChange={handleChange} 
+                                                required
+                                            />
+                                            <span>{num}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                                {errors.difficulty && <p className='error'>{errors.difficulty}</p>}
 
                                 <label>Categoría</label>
-                                <textarea className='category-exercise' type='text' name='category' onChange={handleChange} required />
-                                {errors.category && <p className='error'>{errors.category}</p>}
+                                <select 
+                                    className="category-exercise" 
+                                    name="category" 
+                                    onChange={handleChange} 
+                                    required
+                                >
+                                    <option value="">Selecciona una categoría</option>
+                                    {categories.map((category) => (
+                                        <option key={category.id} value={category.name}>
+                                            {category.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                {errors.category && <p className="error">{errors.category}</p>}
+
+                                {/* Área de Descripción y Vista Previa */}
+                                <div className="description-container">
+                                    <div className="description-editor">
+                                        <label>Descripción</label>
+                                        <textarea
+                                            className='description-exercise'
+                                            name='description'
+                                            rows="5"
+                                            cols="50"
+                                            onChange={handleChange}
+                                            placeholder="Escribe aquí en formato LaTeX (usa \( ... \) para matemáticas en línea o \[ ... \] para ecuaciones en bloque)"
+                                            required
+                                        />
+                                        {errors.description && <p className="error">{errors.description}</p>}
+                                    </div>
+
+                                    {/* Vista Previa en Tiempo Real */}
+                                    <div className="latex-preview">
+                                        <h3>Vista Previa:</h3>
+                                        <div className="preview-box" dangerouslySetInnerHTML={{ __html: latexPreview }} />
+                                    </div>
+                                </div>
+                                <ImageUploader />
                             </fieldset>
                         
                             <fieldset>
-                                <legend>Información adicional</legend>
+                                <legend>Información opcional</legend>
                                 <label>Referencia (Libro/Link)</label>
                                 <textarea className='reference-exercise' type='text' name='reference' onChange={handleChange} />
                                 {errors.reference && <p className='error'>{errors.reference}</p>}
@@ -132,30 +189,6 @@ function CreateExercise() {
                                 {errors.details && <p className='error'>{errors.details}</p>}
                             </fieldset>
                         <button className="save-button" type="submit">Guardar</button>
-                    </div>
-
-                    {/* Área de Descripción y Vista Previa */}
-                    <div className="description-container">
-                        <div className="description-editor">
-                            <label>Descripción:</label>
-                            <textarea
-                                className='description-exercise'
-                                name='description'
-                                rows="5"
-                                cols="50"
-                                onChange={handleChange}
-                                placeholder="Escribe aquí en formato LaTeX (usa \( ... \) para matemáticas en línea o \[ ... \] para ecuaciones en bloque)"
-                                required
-                            />
-                            {errors.description && <p className="error">{errors.description}</p>}
-                        </div>
-
-                        {/* Vista Previa en Tiempo Real */}
-                        <div className="latex-preview">
-                            <h3>Vista Previa:</h3>
-                            <div className="preview-box" dangerouslySetInnerHTML={{ __html: latexPreview }} />
-                        </div>
-                    </div>
                 </form>
 
                 <div className='navigation-buttons'>
@@ -163,7 +196,6 @@ function CreateExercise() {
                     <button onClick={() => navigate("/dashboard")}>Volver al Inicio</button>
                 </div>
             </div>
-        </div>
     );
 }
 
