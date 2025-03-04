@@ -92,3 +92,33 @@
     background-color: #a1a1a153;
     cursor: pointer;
 }
+
+
+.duration-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.duration-options {
+    display: flex;
+    gap: 10px;
+}
+
+.duration-option {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.duration-option:hover {
+    background-color: #0056b3;
+}
+
+.duration-option:focus {
+    outline: none;
+    background-color: #004085;
+}

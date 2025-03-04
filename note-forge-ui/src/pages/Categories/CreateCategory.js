@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { addCategory } from '../../services/CategoryService';
 import '../../styles/Categories/CreateCategory.css';
 import Navbar from '../../components/Dashboard/Navbar';
-import ImageUploader from '../../components/Dashboard/ImageUploader';
 
 function CreateCategory() {
 
