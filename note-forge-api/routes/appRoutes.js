@@ -23,7 +23,7 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 
 // Ruta para ejercicios
-router.post('/create-exercise', authMiddleware, exerciseController.createExerciseRequest);
+router.post('/create-exercise', authMiddleware, upload.single('image'), exerciseController.createExerciseRequest);
 router.get('/exercise/:id', authMiddleware, exerciseController.getExerciseByIdRequest);
 router.get('/exercises', authMiddleware, exerciseController.getExercisesRequest);
 router.put('/update-exercise/:id', authMiddleware, exerciseController.updateExerciseRequest);

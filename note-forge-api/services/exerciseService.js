@@ -1,7 +1,7 @@
 const Exercise = require('../models/exerciseModel');
 
-const createExercise = async (title, description, difficulty, collection, reference, answer, duration, tags, details, userId) => {
-    const exerciseId = await Exercise.create(title, description, difficulty, reference, answer, duration, tags, details, userId);
+const createExercise = async (title, description, difficulty, reference, answer, duration, tags, details, imageUrl, userId) => {
+    const exerciseId = await Exercise.create(title, description, difficulty, reference, answer, duration, tags, details, imageUrl, userId);
     return { message: 'Ejercicio registrado con éxito', exerciseId };
 };
 

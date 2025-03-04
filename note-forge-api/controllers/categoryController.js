@@ -5,9 +5,7 @@ async function createCategoryRequest(req, res) {
         const userId = req.user.id; // Obtener el id del usuario desde el token
         const { name, description } = req.body;
         const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : null;
-
         const result = await categoryService.createCategory(name, description, imageUrl, userId);
-
         res.status(201).json(result); 
     } catch (error) {
         console.log(error)
