@@ -9,9 +9,13 @@ function FeaturePanel({user}) {
         <div className='feature-menu'>
             <h1>Bienvenido, {user}</h1>
             <div className="feature-buttons">
+                <div className="button-container">
                 <button className="categories-button" onClick={() => navigate("/categories")}>Categorías</button>
-                <button className="exercises-button" onClick={() => navigate("/exercises")}>Mis ejercicios</button>
-                <button className="guides-button" onClick={() => navigate("/guides")}>Guías</button>
+                </div>
+                <div className="button-container">
+                <button className="exercises-button" onClick={() => navigate("/exercises")}>Mis ejercicios</button></div>
+                <div className="button-container">
+                <button className="guides-button" onClick={() => navigate("/guides")}>Guías</button></div>
             </div>
             <h1>Categorías fijadas</h1>
         </div>

@@ -27,6 +27,11 @@ function Navbar({ playMenuSound }) {
                         <SearchModal />
                         <div className='user-circle-icon'>
                             <box-icon name='user-circle' type='solid' ></box-icon>
+                            <div className="user-conf">
+                                <p>Mi cuenta</p>
+                                <p>Configuración</p>
+                                <p>Cerrar Sesión</p>
+                            </div>
                         </div>
                     </div>
                 </nav>

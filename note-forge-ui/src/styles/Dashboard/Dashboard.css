@@ -1,15 +1,16 @@
 :root {
     --note-color: #FFE354;
     --forge-color: #ff2a74;
-    --category-color: #36EEFF;
+    --category-color: #36eeffd4;
     --exercises-color: #65FF36;
     --guides-color: #F2BA52;
     --forms: #e3e3e3;
     --gray-color: #1E1E1E;
+    --light-gray-color: #3e3e3e;
 }
 
 body {
-    background-color: black;
+    background-color: rgb(18, 18, 18);
 }
 
 body .feature-navbar {
@@ -72,28 +73,29 @@ body .feature-navbar {
     height: 100px;
 }
 
-.feature-buttons button {
+.button-container {
     width: 12rem;
     height: 4rem;
+    margin: 0 10px;
+    background-color: var(--light-gray-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border-radius: 2px;
+}
+
+.feature-buttons button {
+    width: 12rem;
+    height: 3rem;
     font-size: 16px;
     font-weight: 600;
-    border-radius: 12px;
-    border: none;
+    background-color: var(--light-gray-color);
+    color: #fff;
+    border: 2.2px solid #6e6e6e;
 }
 
 .feature-buttons button:hover {
-    filter: brightness(1.2);
     cursor: pointer;
-}
-
-.categories-button {
-    background-color: var(--category-color); 
-}
-
-.exercises-button {
-    background-color: var(--exercises-color);
-}
-
-.guides-button {
-    background-color: var(--guides-color); 
+    border-color: #dcdcdc;
 }

@@ -12,16 +12,6 @@ function Dashboard() {
     const audioRef = useRef(new Audio(hoverSound));
     const menuRef = useRef(new Audio(menuSound));
 
-    /*const [user, setUser] = useState([]);
-
-    useEffect(() => {
-        const fetchCategories = async () => {
-            const data = await getUserById();
-            setUser(data);
-        };
-        fetchCategories();
-    }, []);*/
-
     useEffect(() => {
         audioRef.current.load();
         menuRef.current.load();

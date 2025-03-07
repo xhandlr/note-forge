@@ -61,6 +61,48 @@
     margin-left: 15px;
 }
 
+.user-circle-icon {
+    position: relative; /* Para que .user-conf se posicione con respecto a este */
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.user-conf {
+    position: absolute;
+    top: 100%; /* Lo coloca justo debajo */
+    right: 0;  /* Alineado con el icono */
+    width: 10rem;
+    height: auto;
+    background-color: var(--gray-color);
+    box-shadow: 0px 4px 8px rgba(23, 23, 23, 0.86);
+    z-index: 200;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(5px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    text-align: center;
+}
+
+.user-conf p {
+    color: #fff;
+    padding: 15px 0;
+    margin: 0;
+}
+
+.user-conf p:hover {
+    background-color: var(--forge-color);
+}
+
+/* Mostrar el menú cuando el usuario pasa el mouse */
+.user-circle-icon:hover .user-conf,
+.user-conf:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+
 #check {
     position: absolute;
     width: 50px; 

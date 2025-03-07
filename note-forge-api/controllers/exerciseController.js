@@ -10,7 +10,7 @@ async function createExerciseRequest(req, res) {
         // Primero, crea el ejercicio
         let result = await exerciseService.createExercise(
             title, description, difficulty, collection, reference, 
-            answer, duration, tags, details, imageUrl, userId
+            answer, duration, tags, details, userId, imageUrl
         );
 
         const exerciseId = result.exerciseId; // El ID del ejercicio recién creado

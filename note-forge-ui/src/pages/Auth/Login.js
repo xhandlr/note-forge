@@ -17,28 +17,27 @@ function Login() {
     const navigate = useNavigate();
 
     const handleChange = (e) => {
+        const { name, type, checked, value } = e.target;
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            [name]: type === "checkbox" ? checked : value, // Si es checkbox, guarda true/false
         });
     };
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const data = await loginUser(formData); 
+            const data = await loginUser(formData);  // Enviará keepLoggedIn a backend
             if (data.token) {
                 localStorage.setItem('token', data.token);
-                alert('Login exitoso');
                 navigate('/dashboard');
             } else {
                 alert(`Error: ${data.message}`);
             }
         } catch (error) {
-            setErrors(error);
             console.error('Error en el login:', error);
         }
-    };
+    };    
 
     return (
         <div className="login-page">
@@ -59,9 +58,12 @@ function Login() {
                         {errors.password && <p className='error'>{errors.password}</p>}
                     </div>
                     <div className="remember-forgot">
-                        <label><input type="checkbox"></input>Mantener sesión iniciada</label>
+                        <label>
+                            <input type="checkbox" name="keepLoggedIn" onChange={handleChange} />
+                            Mantener sesión iniciada
+                        </label>
                     </div>
-    
+
                     <button type="submit" className="btn">Ingresar</button>
     
                     <div className="register-link">

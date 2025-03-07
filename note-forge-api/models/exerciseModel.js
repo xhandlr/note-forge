@@ -1,9 +1,9 @@
 const pool = require('../config/db');
 
 const Exercise = {
-    async create(title, description, difficulty, reference, answer, duration, tags, details, imageUrl, userId) {
-        const query = 'INSERT INTO exercises (title, description, difficulty, reference, answer, duration, tags, details, image_url, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        const [result] = await pool.query(query, [title, description, difficulty, reference, answer, duration, tags, details, imageUrl, userId]);
+    async create(title, description, difficulty, reference, answer, duration, tags, details, userId, imageUrl) {
+        const query = 'INSERT INTO exercises (title, description, difficulty, reference, answer, duration, tags, details, user_id, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const [result] = await pool.query(query, [title, description, difficulty, reference, answer, duration, tags, details, userId, imageUrl]);
         return result.insertId;
     },
 

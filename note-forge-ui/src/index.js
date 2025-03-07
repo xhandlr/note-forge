@@ -11,10 +11,11 @@ import CreateExercise from './pages/Exercises/CreateExercise';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Categories from './pages/Categories/CategoriesPage';
 import Exercises from './pages/Exercises/ExercisesPage';
-import Guides from './pages/Guides/Guides';
+import Guides from './pages/Guides/GuidesPage';
 import CreateCategory from './pages/Categories/CreateCategory';
 import EditCategory from './pages/Categories/EditCategory';
 import EditExercise from './pages/Exercises/EditExercise';
+import Library from './pages/ResourceLibrary/Library';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -26,6 +27,7 @@ root.render(
         <Route path="/register" element={<Registration />} /> 
 
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/library" element={<Library />} />
 
         <Route path="/create-exercise" element={<CreateExercise />} />
         <Route path="/edit-exercise/:id" element={<EditExercise />} />
