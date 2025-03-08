@@ -11,13 +11,13 @@
     justify-content: flex-start;
     width: 100vw;
     height: 100vh;
-    color: #000000;
+    color: #ffffff;
 }
 
 .category-form {
     display: flex;
     flex-direction: column;
-    background-color: var(--forms);
+    background-color: var(--gray-color);
     width: 85vw;;
     padding-top: 15px;
     padding-left: 30px;

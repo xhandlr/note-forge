@@ -10,7 +10,7 @@ function Panel() {
             <div className='circle-panel'></div>
             <button onClick={() => { navigate("/create-exercise"); }}>Crear ejercicio</button>
             <button onClick={() => { navigate("/create-category"); }}>Crear categoría</button>
-            <button>Crear guía</button>
+            <button onClick={() => { navigate("/create-guide"); }}>Crear guía</button>
             <button>Exportar a látex</button>
         </div>
     );
