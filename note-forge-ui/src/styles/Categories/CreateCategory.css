@@ -1,0 +1,124 @@
+.create-category-body {
+    overflow: hidden;
+}
+
+.create-category {
+    display: flex;
+    position: relative;
+    top: 100px; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100vw;
+    height: 100vh;
+    color: #ffffff;
+}
+
+.category-form {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--gray-color);
+    width: 85vw;;
+    padding-top: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+}
+
+.new-category-data {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.new-category-data legend {
+    margin-left: 30px;
+}
+
+.new-category-data label {
+    display: flex;
+    align-items: flex-start; 
+    gap: 10px;
+}
+
+.new-category-data textarea {
+    flex-grow: 1; 
+    max-width: 80%;
+    height: auto; 
+    resize: vertical; /* Permite redimensionar solo en dirección vertical */
+}
+
+.category-form label {
+    margin: 15px 5px;
+}
+
+.category-submit {
+    background-color: var(--category-color);
+    width: 250px;
+    height: 45px;
+    color: black;
+    font-size: 18px;
+    font-weight: 600;
+    align-self: center;
+    border: none;
+}
+
+.category-submit:hover {
+    background-color: #4cc9ff;
+    cursor: pointer;
+}
+
+.navigation-buttons {
+    display: flex;
+    width: 85%;
+    height: 50px;
+    background-color: transparent;
+    margin: 15px 30px;
+    align-items: center;
+    justify-content: space-between; /* Distribuye elementos en los extremos */
+}
+ 
+.navigation-buttons button {
+    background-color: transparent;
+    width: 200px;
+    color: #fff;
+    font-size: 18px;
+    border: 2px dashed #bbbbbb;
+}
+
+.navigation-buttons button:hover {
+    background-color: #a1a1a153;
+    cursor: pointer;
+}
+
+
+.duration-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.duration-options {
+    display: flex;
+    gap: 10px;
+}
+
+.duration-option {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.duration-option:hover {
+    background-color: #0056b3;
+}
+
+.duration-option:focus {
+    outline: none;
+    background-color: #004085;
+}

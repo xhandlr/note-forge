@@ -1,18 +1,31 @@
 const exerciseService = require('../services/exerciseService');
+const exerciseCategoryService = require('../services/exerciseCategoryService');
 
 async function createExerciseRequest(req, res) {
     try {
         const userId = req.user.id; // Obtener el id del usuario desde el token
-        
-        const { title, description, difficulty, collection, reference, answer, duration, tags, details } = req.body;
+        const { title, description, difficulty, collection, reference, answer, duration, tags, details, categoryId } = req.body;
+        const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : null;
 
-        const result = await exerciseService.createExercise(title, description, difficulty, collection, reference, answer, duration, tags, details, userId);
+        // Primero, crea el ejercicio
+        let result = await exerciseService.createExercise(
+            title, description, difficulty, collection, reference, 
+            answer, duration, tags, details, userId, imageUrl
+        );
 
-        res.status(201).json(result); 
+        const exerciseId = result.exerciseId; // El ID del ejercicio recién creado
+
+        // Si se proporcionó categoryId, asocia el ejercicio con la categoría
+        if (categoryId) {
+            await exerciseCategoryService.addExerciseCategory(exerciseId, categoryId);
+        }
+
+        res.status(201).json(result); // Retorna el mensaje de éxito con el ID del ejercicio
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 }
+
 
 async function getExerciseByIdRequest(req, res) {
     try {

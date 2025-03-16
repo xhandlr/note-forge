@@ -7,34 +7,35 @@ const validateLogin = (formData) => {
     return errors;
 };
 
-const loginUser = async (formData) => { // Constante que almacena una función flecha asincrónica
-    // Primero se verifican los errores
-    const validationErrors = validateLogin(formData)
-    if (Object.keys(validationErrors).length > 0) { // Cuenta la cantidad de claves que tiene el objeto
-        throw validationErrors; // Lanza una excepción
-    }
+const loginUser = async (formData) => {
+  const validationErrors = validateLogin(formData);
+  if (Object.keys(validationErrors).length > 0) {
+      throw validationErrors;
+  }
 
-    try {
-        const response = await fetch('http://localhost:5000/login', {
+  try {
+      const response = await fetch('http://localhost:5000/login', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+              'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData),
-        });
-    
-        const data = await response.json();
-    
-        // Verificar si el servidor devuelve un token
-        if (data.token) {
-          return data;
-        } else {
-          throw new Error('No se recibió un token. Error: ' + data.message || 'Desconocido');
-        }
-      } catch (error) {
-        console.error('Error al intentar hacer login', error);
-        throw new Error('Error en el login: ' + error.message);
+          credentials: 'include', // Esto es importante para enviar cookies
+      });
+
+      const data = await response.json();
+
+      // Verifica si el token está presente en las cookies
+      if (response.ok) {
+          return data;  // Si el login fue exitoso, el token ya está en las cookies
+      } else {
+          throw new Error(data.message || 'Login fallido');
       }
-    };
+  } catch (error) {
+      console.error('Error al intentar hacer login', error);
+      throw new Error('Error en el login: ' + error.message);
+  }
+};
+
 
 export { loginUser, validateLogin };

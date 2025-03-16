@@ -1,23 +1,22 @@
 import { sendRequest } from "./AppService";
 
-const addCategory = async (categoryData) => {
+export const addCategory = async (categoryData) => {
     return sendRequest('http://localhost:5000/create-category', 'POST', categoryData);
-}
+};
 
-const updateCategory = async (id, categoryData) => {
-    return sendRequest(`http://localhost:5000/update-exercise/${id}`, 'POST', categoryData);
-}
+export const updateCategory = async (id, categoryData) => {
+    return sendRequest(`http://localhost:5000/update-category/${id}`, 'PUT', categoryData);
+};
 
-const deleteCategory = async (id) => {
+export const deleteCategory = async (id) => {
     return sendRequest(`http://localhost:5000/delete-category/${id}`, 'DELETE');
-}
-
-const getCategoryById = async (id) => {
-    return sendRequest(`http://localhost:5000/get-category/${id}`, 'GET'); 
 };
 
-const getCategories = async () => {
-    return sendRequest('http://localhost:5000/get-categories', 'GET');  
+export const getCategoryById = async (id) => {
+    return sendRequest(`http://localhost:5000/category/${id}`, 'GET'); 
 };
 
-export { addCategory, updateCategory, deleteCategory, getCategoryById, getCategories };
+export const getCategories = async () => {
+    return sendRequest('http://localhost:5000/categories', 'GET');  
+};
+
