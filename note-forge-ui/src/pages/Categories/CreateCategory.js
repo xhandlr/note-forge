@@ -11,7 +11,8 @@ function CreateCategory() {
     const [categoryData, setCategoryData] = useState({
         name: '',
         description: '',
-        image: null
+        image: null,
+        isPinned: false
     });
 
     const [errors, setErrors] = useState({}); 
@@ -20,31 +21,32 @@ function CreateCategory() {
         if (e.target.name === "image") {
             console.log("Imagen seleccionada:", e.target.files[0]); 
             setCategoryData({ ...categoryData, image: e.target.files[0] });
+        } else if (e.target.name === "isPinned") { 
+            setCategoryData({ ...categoryData, isPinned: e.target.checked });
         } else {
-            console.log(`Cambiando ${e.target.name}:`, e.target.value); // ✅ Verifica que los otros campos se actualizan
+            console.log(`Cambiando ${e.target.name}:`, e.target.value); 
             setCategoryData({ ...categoryData, [e.target.name]: e.target.value });
         }
     };
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         const formData = new FormData();
         formData.append("name", categoryData.name);
         formData.append("description", categoryData.description);
         formData.append("image", categoryData.image);
-
+        formData.append("isPinned", categoryData.isPinned ? "1" : "0");
+    
         try {
             const response = await addCategory(formData);
             if (response.message) {
-                alert(`Categoría almacenada con éxito! ID: ${response.categoryId}`);
+                alert(`Categoría ${categoryData.isPinned ? 'fijada y ' : ''}creada con éxito! ID: ${response.categoryId}`);
                 navigate("/categories");
-            } else {
-                alert("Error al crear categoría");
             }
         } catch (error) {
             setErrors(error);
-            console.log('Error en el registro', error);
+            console.error('Error al crear categoría:', error);
         }
     };
 
@@ -63,7 +65,16 @@ function CreateCategory() {
                         <label for="category-profile">Portada: <input id="category-profile" name="image" type="file" accept="image/*" onChange={handleChange} />
                         </label>
                     </fieldset>
-                    <label for="set-category"><input className="set-checkbox" id="set-category" type="checkbox"/> Fijar esta categoría en la pantalla de Inicio</label>
+                    <label htmlFor="set-category">
+                        <input 
+                            id="set-category" 
+                            name="isPinned"
+                            type="checkbox" 
+                            onChange={handleChange} 
+                            checked={categoryData.isPinned}
+                        />
+                        Fijar esta categoría en la pantalla de Inicio
+                    </label>
                     <input className="category-submit" type="submit" value="Crear categoría"/>
                 </form>
                 <div className='navigation-buttons'>

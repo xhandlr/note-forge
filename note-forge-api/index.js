@@ -5,14 +5,13 @@ const authRoutes = require('./routes/appRoutes');
 require('dotenv').config();
 
 const app = express();
-const corsOptions = {
-    origin: 'http://localhost:3000', 
-    methods: 'GET,POST',
-    credentials: true,
-};
 
 // Middlewares
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: 'http://localhost:3000', // Reemplaza con tu URL de frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
 app.use(express.json());
 app.use(cookieParser()); 
 app.use('/uploads', express.static('uploads'));
