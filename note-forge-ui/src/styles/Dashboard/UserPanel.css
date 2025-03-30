@@ -25,15 +25,18 @@
 }
 
 .background-panel button {
+    color: #fff;
     margin-bottom: 20px;
-    background-color: #fff;
+    background-color: var(--light-gray-color);
     width: 200px;
     height: 50px;
     font-size: 15px;
     font-weight: 600;
     border-radius: 20px;
+    border: 2px solid #494949;
 }
 
 .background-panel button:hover {
     cursor: pointer;
+    border-color: #959595;
 }

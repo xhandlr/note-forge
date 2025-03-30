@@ -2,18 +2,20 @@ import React, { useState, useEffect } from "react";
 import SearchBar from "../../components/Dashboard/SearchBar";
 import ExercisesPanel from "../../components/Exercises/ExercisesPanel";
 import CategoriesPanel from "../../components/Categories/CategoriesPanel";
+import GuidePanel from "../../components/Guides/GuidesPanel";
 
 import { getExercises } from "../../services/ExerciseService";
 import { getCategories } from "../../services/CategoryService";
+import { getGuides } from "../../services/GuideService";
 
 function Library() {
     const [exercises, setExercises] = useState([]);
     const [categories, setCategories] = useState([]);
-    //const [guides, setGuides] = useState([]);
+    const [guides, setGuides] = useState([]);
     const [filteredData, setFilteredData] = useState({
         exercises: [],
-        categories: []
-        //guides: [],
+        categories: [],
+        guides: []
     });
 
     // Fetch global de todos los datos
@@ -21,16 +23,16 @@ function Library() {
         const fetchData = async () => {
             const exercisesData = await getExercises();
             const categoriesData = await getCategories();
-            //const guidesData = await getGuides();
+            const guidesData = await getGuides();
 
             setExercises(exercisesData);
             setCategories(categoriesData);
-            //setGuides(guidesData);
+            setGuides(guidesData);
 
             setFilteredData({
                 exercises: exercisesData,
-                categories: categoriesData
-                //guides: guidesData,
+                categories: categoriesData,
+                guides: guidesData
             });
         };
         fetchData();
@@ -50,11 +52,11 @@ function Library() {
             ),
             categories: categories.filter(category =>
                 category.name.toLowerCase().includes(query.toLowerCase())
-            )
-            /*guides: guides.filter(guide =>
+            ),
+            guides: guides.filter(guide =>
                 guide.title.toLowerCase().includes(query.toLowerCase()) ||
                 guide.content.toLowerCase().includes(query.toLowerCase())
-            ),*/
+            )
         });
     };
 
@@ -70,6 +72,7 @@ function Library() {
             <CategoriesPanel categories={filteredData.categories} />
 
             <h2>Guías</h2>
+            <GuidePanel guides={filteredData.guides} />
      
         </div>
     );

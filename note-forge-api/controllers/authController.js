@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const authService = require('../services/authService');
 
 async function register(req, res) {
@@ -35,6 +35,9 @@ const login = async (req, res) => {
     }
 };
 
+const logout = (req, res) => {
+    res.clearCookie("token"); // Elimina la cookie del JWT
+    res.status(200).json({ message: "Sesión cerrada exitosamente" });
+};
 
-module.exports = { register, login };
-
+module.exports = { register, login, logout};
