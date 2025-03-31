@@ -99,3 +99,27 @@ body .feature-navbar {
     cursor: pointer;
     border-color: #dcdcdc;
 }
+
+.pinned-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.pinned-category-card {
+    width: 120px;
+    text-align: center;
+}
+
+.pinned-category-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.pinned-category-name {
+    margin-top: 8px;
+    font-size: 14px;
+}

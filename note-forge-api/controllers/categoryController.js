@@ -43,10 +43,13 @@ async function getCategoriesRequest(req, res) {
 async function updateCategoryRequest(req, res) {
     try {
         const categoryId = req.params.id;  
-        const { name, description } = req.body;
+        const { name, description, isPinned } = req.body;
+
+        const pinned = Number(isPinned);
+        
         const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : null;
         
-        const updatedCategory= await categoryService.updateCategory(categoryId, name, description, imageUrl);
+        const updatedCategory= await categoryService.updateCategory(categoryId, name, description, imageUrl, pinned);
         
         res.status(200).json(updatedCategory);
     } catch (error) {

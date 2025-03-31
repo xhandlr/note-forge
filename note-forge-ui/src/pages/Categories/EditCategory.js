@@ -6,15 +6,16 @@ import Navbar from '../../components/Dashboard/Navbar';
 
 function EditCategory() {
     const navigate = useNavigate();
-    const { id } = useParams(); // Obtener el ID de la URL
+    const { id } = useParams();
     const [categoryData, setCategoryData] = useState({
         name: '',
         description: '',
-        image: null
+        image: null,
+        imageUrl: '', // Nuevo estado para la URL de la imagen actual
+        isPinned: false
     });
     const [errors, setErrors] = useState({}); 
 
-    // Al montar el componente, obtener la categoría por ID
     useEffect(() => {
         const fetchCategory = async () => {
             try {
@@ -22,7 +23,9 @@ function EditCategory() {
                 setCategoryData({
                     name: response.name || '',
                     description: response.description || '',
-                    image: response.imageUrl || null
+                    image: null, // Mantenemos null para la nueva imagen
+                    imageUrl: response.imageUrl || '', // Guardamos la URL de la imagen actual
+                    isPinned: response.is_pinned || false // Asegúrate de que el backend envía este campo
                 });
             } catch (error) {
                 console.error('Error al obtener la categoría', error);
@@ -34,10 +37,14 @@ function EditCategory() {
 
     const handleChange = (e) => {
         if (e.target.name === "image") {
-            console.log("Imagen seleccionada:", e.target.files[0]); 
-            setCategoryData({ ...categoryData, image: e.target.files[0] });
+            setCategoryData({ 
+                ...categoryData, 
+                image: e.target.files[0],
+                imageUrl: '' // Limpiamos la URL si se selecciona nueva imagen
+            });
+        } else if (e.target.name === "isPinned") { 
+            setCategoryData({ ...categoryData, isPinned: e.target.checked });
         } else {
-            console.log(`Cambiando ${e.target.name}:`, e.target.value); 
             setCategoryData({ ...categoryData, [e.target.name]: e.target.value });
         }
     };
@@ -47,13 +54,16 @@ function EditCategory() {
         
         if (!categoryData.name) {
             alert("El nombre de la categoría es obligatorio");
-            return; // No enviar la solicitud si el campo 'name' está vacío
+            return;
         }
     
         const formData = new FormData();
         formData.append("name", categoryData.name);
         formData.append("description", categoryData.description);
-        formData.append("image", categoryData.image);
+        if (categoryData.image) {
+            formData.append("image", categoryData.image);
+        }
+        formData.append("isPinned", categoryData.isPinned ? "1" : "0");
         
         try {
             const response = await updateCategory(id, formData); 
@@ -68,7 +78,6 @@ function EditCategory() {
             console.log('Error', error);
         }
     };
-    
 
     return (
         <body className='create-category-body'>
@@ -84,7 +93,7 @@ function EditCategory() {
                                 name="name" 
                                 type="text" 
                                 maxLength="120" 
-                                value={categoryData.name} // Asignar valor desde el estado
+                                value={categoryData.name}
                                 onChange={handleChange} 
                                 required 
                             />
@@ -97,7 +106,7 @@ function EditCategory() {
                                 cols="50" 
                                 maxLength="255" 
                                 className='category-textarea' 
-                                value={categoryData.description} // Asignar valor desde el estado
+                                value={categoryData.description}
                                 onChange={handleChange} 
                                 required 
                             />
@@ -110,10 +119,28 @@ function EditCategory() {
                                 accept="image/*" 
                                 onChange={handleChange} 
                             />
+                            {/* Mostrar la imagen actual si existe y no se ha seleccionado una nueva */}
+                            {categoryData.imageUrl && !categoryData.image && (
+                                <div className="current-image-preview">
+                                    <p>Imagen actual:</p>
+                                    <img 
+                                        src={categoryData.imageUrl} 
+                                        alt="Current category" 
+                                        className="current-image"
+                                    />
+                                </div>
+                            )}
                         </label>
                     </fieldset>
                     <label htmlFor="set-category">
-                        <input className="set-checkbox" id="set-category" type="checkbox" /> Fijar esta categoría en la pantalla de Inicio
+                        <input 
+                            id="set-category" 
+                            name="isPinned"
+                            type="checkbox" 
+                            onChange={handleChange} 
+                            checked={categoryData.isPinned}
+                        />
+                        Fijar esta categoría en la pantalla de Inicio
                     </label>
                     <input className="category-submit" type="submit" value="Actualizar categoría" />
                 </form>
