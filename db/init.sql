@@ -1,3 +1,7 @@
+CREATE USER IF NOT EXISTS 'noteforge_user'@'%' IDENTIFIED BY 'strongpassword123';
+GRANT ALL PRIVILEGES ON note_forge.* TO 'noteforge_user'@'%';
+FLUSH PRIVILEGES;
+
 -- MySQL Workbench Forward Engineering
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;

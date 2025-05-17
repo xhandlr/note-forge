@@ -5,17 +5,22 @@ const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.JWT_SECRET;
 
 const registerUser = async (username, email, password, country, role) => {
+    console.log("here registerUser")
     if (!username || !email || !password || !country || !role) {
+        console.log("algo está vacio");
         throw new Error('Todos los campos son obligatorios');
+        
     }
 
+    console.log("or problem here");
     const existingUser = await User.findByEmail(email);
     if (existingUser) {
+        console.log("correo existe");
         throw new Error('El correo ya está registrado');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
+    console.log("i will create a user")
     const userId = await User.create(username, email, hashedPassword, country, role);
     return { message: 'Usuario registrado con éxito', userId };
 }

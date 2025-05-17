@@ -4,6 +4,13 @@ const authService = require('../services/authService');
 async function register(req, res) {
     try {
         const { username, email, password, country, role } = req.body;
+
+        // En el controller:
+        console.log("Request body:", req.body);
+
+        // En el servicio:
+        console.log("Datos recibidos:", username, email, password, country, role);
+
         const result = await authService.registerUser(username, email, password, country, role);
         res.status(201).json(result);
     } catch (error) {
