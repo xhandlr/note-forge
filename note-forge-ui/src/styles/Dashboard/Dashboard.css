@@ -1,0 +1,125 @@
+:root {
+    --note-color: #FFE354;
+    --forge-color: #ff2a74;
+    --category-color: #36eeffd4;
+    --exercises-color: #65FF36;
+    --guides-color: #F2BA52;
+    --forms: #e3e3e3;
+    --gray-color: #1E1E1E;
+    --light-gray-color: #3e3e3e;
+}
+
+body {
+    background-color: rgb(18, 18, 18);
+}
+
+body .feature-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.feature-navbar button {
+    display: flex; /* Habilita el uso de flexbox dentro de los botones */
+    align-items: center; /* Centra el contenido verticalmente */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    background-color: #3E3E3E;
+    width: 150px;
+    height: 70px;
+    margin-top: 13vh;
+    margin-bottom: 5vh;
+    font-size: 15px;
+    color: #fff;
+}
+
+.feature-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 5rem;
+    padding-left: 28px;
+}
+
+.feature-menu {
+    background-color: transparent;
+    min-width: 700px;
+    min-height: 400px;
+    color: #fff;
+    font-size: 9px;
+    display: flex;
+    flex-direction: column;
+}
+
+.feature-menu h1 {
+    margin: 20px;
+    font-weight: 500;
+}
+
+.feature-menu button {
+    width: 25%;
+    height: 5%;
+    margin: 10px;
+}
+
+.feature-buttons {
+    display: flex;
+    flex-direction: row;
+    background-color: transparent;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    width: 45rem;
+    height: 100px;
+}
+
+.button-container {
+    width: 12rem;
+    height: 4rem;
+    margin: 0 10px;
+    background-color: var(--light-gray-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border-radius: 2px;
+}
+
+.feature-buttons button {
+    width: 12rem;
+    height: 3rem;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: var(--light-gray-color);
+    color: #fff;
+    border: 2.2px solid #6e6e6e;
+}
+
+.feature-buttons button:hover {
+    cursor: pointer;
+    border-color: #dcdcdc;
+}
+
+.pinned-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.pinned-category-card {
+    width: 120px;
+    text-align: center;
+}
+
+.pinned-category-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.pinned-category-name {
+    margin-top: 8px;
+    font-size: 14px;
+}
