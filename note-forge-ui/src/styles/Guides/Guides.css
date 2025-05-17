@@ -1,0 +1,147 @@
+/* General styles for exercises page */
+.guides-page {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: -2.5rem;
+    margin-left: -5rem;
+}
+
+.guides-wrapper {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: transparent;
+    min-height: 600px;
+    width: 73.3vw;
+    margin-top: 55px;
+}
+
+/* Exercise Panel */
+.guides-panel {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; 
+    padding: 0;
+    align-self: center;
+    justify-content: space-around;
+    max-width: 70vw;
+    margin: 30px;
+}
+
+.guides-panel::after {
+    content: "";
+    width: 30vw;
+    margin: 10px;
+}
+
+/* Exercise Option */
+.guide-option {
+    background-color: #ededed;
+    width: 30vw;
+    max-width: 30vw; 
+    max-height: 50vh;
+    color: rgb(0, 0, 0);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin: 10px;
+    flex-grow: 1; 
+    flex-shrink: 0;
+    flex-basis: auto; 
+}
+
+.guide-option h1 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 15px;
+    margin-left: 30px;
+}
+
+.guide-option p {
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 5px;
+    margin-left: 30px;
+}
+
+.guide-option:hover {
+    background-color: rgb(255, 255, 194);
+    border: 2px solid #202020;
+    cursor: pointer;
+}
+
+/* Icons and Buttons inside Exercise Option */
+.guide-box-icon {
+    display: flex;
+    align-self: flex-end;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.guide-box-icon box-icon {
+    width: 30px;
+    height: 100%;
+}
+
+/* Button styles */
+.guide-wrapper button {
+    background-color: #1E1E1E;
+    width: 120px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.guide-buttons {
+    position: absolute;
+    top: 600px;
+    left: 35%;
+}
+
+/* Exercise Title Section */
+.guides-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: transparent;
+    min-width: 100%;
+    height: 50px;
+    font-size: 12px;
+}
+
+.guides-title h1 {
+    font-size: 25px;
+    font-weight: 600;
+    margin-left: 10%;
+    margin-right: 30%;
+}
+
+/* New Exercise Section */
+.new-guide {
+    margin-top: 20px;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 85%;
+    height: 75px;
+    margin-left: 10%;
+    border-radius: 30px;
+    border: 2px dashed rgb(199, 199, 199);
+}
+
+.new-guide h1 {
+    font-size: 19px;
+    font-weight: 600;
+}
+
+.new-guide:hover {
+    background-color: #4d4d4d52;
+    cursor: pointer;
+}
+
