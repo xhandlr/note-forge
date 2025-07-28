@@ -9,6 +9,7 @@
     "@uiw/react-md-editor": "^4.0.5",
     "boxicons": "^2.1.4",
     "katex": "^0.16.21",
+    "multer": "^2.0.2",
     "note-forge-ui": "file:",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
