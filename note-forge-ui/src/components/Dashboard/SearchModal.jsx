@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../../styles/Dashboard/SearchModal.css"; // Estilos para la ventana emergente
 
 function SearchModal() {
     const [isOpen, setIsOpen] = useState(false);

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import '../../styles/Dashboard/Statistics.css';
 import { getCategories } from "../../services/CategoryService";
 import { getExercises } from "../../services/ExerciseService";
 

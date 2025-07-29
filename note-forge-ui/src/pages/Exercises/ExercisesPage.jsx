@@ -6,7 +6,6 @@ import SearchBar from "../../components/Dashboard/SearchBar";
 import ExercisesPanel from "../../components/Exercises/ExercisesPanel";
 import { getExercises } from "../../services/ExerciseService"; 
 
-import "../../styles/Exercises/Exercises.css";
 
 /**
  * Main component for the exercises page.

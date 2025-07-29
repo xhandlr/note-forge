@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../styles/Exercises/TagsInput.css';
 
 function TagsInput({ value = [], onChange }) {
     

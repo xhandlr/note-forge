@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom"; // Para redirigir después del logout
-import "../../styles/Dashboard/Navbar.css";
 import Icon from "./Icon";
 import Logotype from "./Logotype";
 import SearchModal from "./SearchModal";

@@ -1,6 +1,5 @@
 import React from "react";
 import GuideOption from "../Guides/GuidesOption";
-import "../../styles/Guides/Guides.css";
 
 function GuidesPanel({ guides, onDelete }) {
     return (

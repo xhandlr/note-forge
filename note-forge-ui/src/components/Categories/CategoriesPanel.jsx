@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import CategoryOption from "./CategoryOption";
 import { getCategories } from "../../services/CategoryService";
 import { useNavigate } from 'react-router-dom';
-import "../../styles/Categories/Categories.css";
 import SearchBar from "../Dashboard/SearchBar";
 
 function CategoriesPanel() {

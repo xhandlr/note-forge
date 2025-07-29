@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../../styles/Auth/Login.css';
 import { loginUser } from '../../services/LoginService';
 import { useNavigate } from 'react-router-dom';
 import Logotype from '../../components/Dashboard/Logotype';
