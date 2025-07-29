@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from "react"; 
-import '../../styles/Dashboard/Dashboard.css'; 
 import hoverSound from "../../assets/hover-sound.wav"; 
 import menuSound from "../../assets/click-sound.wav"; 
 import Navbar from "../../components/Dashboard/Navbar";

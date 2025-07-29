@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/Guides/Guides.css";
 import { deleteGuide } from "../../services/GuideService";
 
 function GuideOption({ id, title, onDelete }) {

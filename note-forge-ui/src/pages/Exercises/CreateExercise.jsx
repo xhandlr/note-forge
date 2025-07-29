@@ -10,8 +10,6 @@ import DurationInput from '../../components/Exercises/DurationInput';
 import LatexEditor from '../../components/Exercises/LatexEditor';
 import CategoryExercise from '../../components/Exercises/CategoryExercise';
 
-import '../../styles/Exercises/CreateExercise.css';
-
 function CreateExercise() {
     const [exerciseData, setExerciseData] = useState({
         title: '',

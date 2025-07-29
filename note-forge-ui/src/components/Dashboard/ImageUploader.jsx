@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../../styles/Dashboard/ImageUploader.css';
 
 function ImageUploader({ onImageSelect }) {
     const [image, setImage] = useState(null);
