@@ -64,7 +64,7 @@ function Login() {
     };    
 
     return (
-        <div>
+        <div className="bg-(--color-primary) text-black">
             <div>
                 <Icon></Icon>
                 <Logotype></Logotype>
@@ -94,6 +94,8 @@ function Login() {
                         <p>¿No tienes una cuenta? <a href="/register" className='auth-link'>Registrarse</a></p>
                     </div>
                 </form>
+
+                <div> Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons"> Smashicons </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com'</a></div>
             </div>
             </div>
         </div>
