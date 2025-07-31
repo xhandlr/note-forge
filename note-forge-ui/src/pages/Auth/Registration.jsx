@@ -1,5 +1,4 @@
 import React, { useState } from 'react'; // Importa useState que es un hook que permite manejar el estado
-import '../../styles/Auth/Login.css';
 import { registerUser } from '../../services/RegistrationService';
 
 function Registration() { // Declara un componente funcional
