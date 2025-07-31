@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/Categories/Categories.css";
 import { deleteCategory } from "../../services/CategoryService";
 
 function CategoryOption({ id, name, description, imageUrl, onDelete }) {

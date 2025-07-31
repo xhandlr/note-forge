@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/Exercises/Exercises.css";
 import { deleteExercise } from "../../services/ExerciseService";
 
 function ExerciseOption({ id, title, description, difficulty, reference, duration, tags, className, imageUrl, onDelete }) {

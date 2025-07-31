@@ -6,8 +6,6 @@ import SearchBar from "../../components/Dashboard/SearchBar";
 import GuidesPanel from "../../components/Guides/GuidesPanel";
 import { getGuides } from "../../services/GuideService"; 
 
-import "../../styles/Guides/Guides.css";
-
 function Guides() {
     const navigate = useNavigate();
     
