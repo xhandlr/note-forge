@@ -1,6 +1,5 @@
 import React from "react";
 import ExerciseOption from "../Exercises/ExerciseOption";
-import "../../styles/Exercises/Exercises.css";
 
 function ExercisesPanel({ exercises, onDelete }) {
     return (

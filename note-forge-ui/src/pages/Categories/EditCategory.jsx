@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { updateCategory, getCategoryById } from '../../services/CategoryService';
-import '../../styles/Categories/CreateCategory.css';
 import Navbar from '../../components/Dashboard/Navbar';
 
 // Componentes memoizados
