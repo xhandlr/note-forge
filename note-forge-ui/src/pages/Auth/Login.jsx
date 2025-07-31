@@ -64,7 +64,8 @@ function Login() {
     };    
 
     return (
-        <div className="bg-(--color-primary) text-black">
+        <div className="flex items-center justify-center min-h-screen h-screen bg-(--color-primary)">
+            <div className="w-1/3 h-[80%] bg-white text-black rounded-lg shadow-lg flex flex-col justify-center">
             <div>
                 <Icon></Icon>
                 <Logotype></Logotype>
@@ -96,6 +97,7 @@ function Login() {
                 </form>
 
                 <div> Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons"> Smashicons </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com'</a></div>
+            </div>
             </div>
             </div>
         </div>

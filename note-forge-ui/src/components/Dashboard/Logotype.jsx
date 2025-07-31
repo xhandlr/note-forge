@@ -5,9 +5,8 @@ function Logotype() {
     const navigate = useNavigate();
     
     return (
-        <div className="logo-note-forge" onClick={() => { navigate("/dashboard"); }}>
-            <h1 className="note">Note</h1>
-            <h1 className="forge">Forge</h1>
+        <div onClick={() => { navigate("/dashboard"); }}>
+            <h1 className="text-4xl font-bold">Note Forge</h1>
         </div>
     );
 }
