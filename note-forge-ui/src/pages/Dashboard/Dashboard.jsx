@@ -1,6 +1,4 @@
 import React, { useRef, useState, useEffect } from "react"; 
-import hoverSound from "../../assets/hover-sound.wav"; 
-import menuSound from "../../assets/click-sound.wav"; 
 import Navbar from "../../components/Dashboard/Navbar";
 import Statistics from "../../components/Dashboard/Statistics";
 import UserPanel from "../../components/Dashboard/UserPanel";
@@ -17,23 +15,6 @@ function Dashboard() {
     }, []);
 
     const enableSounds = () => setSoundEnabled(true);
-    
-    const playSound = () => {
-        if (soundEnabled) {
-            audioRef.current.currentTime = 0;
-            audioRef.current.volume = 0.5;
-            audioRef.current.play();
-        }
-    };
-
-    const playMenuSound = () => {
-        if (soundEnabled) {
-            menuRef.current.currentTime = 0;
-            menuRef.current.play();
-            menuRef.current.volume = 0.7;
-        }
-    };
-
 
     return (
         <div>
