@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../../styles/Dashboard/SearchBar.css";
 
 function SearchBar({ onSearch }) {
     const [query, setQuery] = useState("");  // Estado para el texto de búsqueda
