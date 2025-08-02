@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { updateExercise, getExerciseById } from '../../services/ExerciseService';
-import Navbar from '../../components/Dashboard/Navbar';
+import Navbar from '../../components/UI/Navbar';
 
 function EditExercise() {
     const navigate = useNavigate();

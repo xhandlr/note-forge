@@ -1,7 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #171439;
+  --color-primary: #F5F2FA;
+  --color-purple: #635dff;
+  --color-purple-hover: #4E48EF;
 }
 
 body {
