@@ -5,30 +5,29 @@ import Logotype from '../../components/Dashboard/Logotype';
 import Icon from '../../components/UI/Icon';
 
 /**
- * Login.jsx
- * Componente de página que permite iniciar sesión en la aplicación.
- * Permite a los usuarios ingresar su correo electrónico y contraseña.
- * También incluye una opción para mantener la sesión iniciada. 
- * 
+ * Login page component.
+ * Allows users to log in to their account.
+ * Also includes an option to keep the session active.
+ *
  * @component
  * @returns {JSX.Element}
  */
 
 function Login() {
 
-    // Hooks para manejar el estado del formulario y errores
+    // Hooks for managing form data and errors
     const [ formData, setFormData ] = useState({
         email: '',
         password: ''
     });
     const [ errors, setErrors ] = useState({});
 
-    // Hook para la navegación
+    // Hook for navigation
     const navigate = useNavigate();
 
     /**
-     * Se ejecuta cada vez que el usuario cambia algo en el formulario.
-     * Actualiza el estado del formulario con los valores ingresados.
+     * Its executed when the user types in the input fields.
+     * Updates the formData state with the input values.
      * 
      * @param {React.ChangeEvent<HTMLInputElement>} e 
      */
@@ -41,12 +40,12 @@ function Login() {
     };
 
     /**
-     * Esta función se ejecuta al enviar el formulario.
-     * Llama al servicio de login con los datos del formulario.
-     * Si el login es exitoso, guarda el token en localStorage y redirige al usuario al dashboard.
-     * Si hay un error, muestra una alerta con el mensaje de error.
-     * 
-     * @param {React.FormEvent<HTMLInputElement>} e 
+     * This function is executed when the form is submitted.
+     * Calls the login service with the form data.
+     * If the login is successful, it saves the token in localStorage and redirects the user to the dashboard.
+     * If there is an error, it shows an alert with the error message.
+     *
+     * @param {React.FormEvent<HTMLInputElement>} e
      */
     const handleSubmit = async (e) => {
         e.preventDefault();

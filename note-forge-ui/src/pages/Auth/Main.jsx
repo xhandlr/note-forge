@@ -12,7 +12,14 @@ import Navbar from '../../components/UI/Navbar';
 import Particles from '../../components/Animations/Particles';
 import TextType from '../../components/Animations/TextType';
 
-
+/**
+ * Main page component.
+ * Displays the presentation of the application.
+ * Allows users to navigate to the login page.
+ *
+ * @component
+ * @returns {JSX.Element}
+ */
 function Main() {
     return (
         <div className="w-full h-screen flex flex-row justify-center items-center relative gap-4">
