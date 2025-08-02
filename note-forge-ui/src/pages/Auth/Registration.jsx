@@ -1,42 +1,66 @@
-import React, { useState } from 'react'; // Importa useState que es un hook que permite manejar el estado
+import React, { useState } from 'react'; 
+
+// Registration service import
 import { registerUser } from '../../services/RegistrationService';
 
-function Registration() { // Declara un componente funcional
-    const [formData, setFormData] = useState({ // Crea un estado llamado formData que almacena los datos del formulario
-        username: '', // setFormData es la función que actualiza el estado
-        email: '', // useState inicializa el estado de un objeto vacío que sigue la estructura del formulario
+/**
+ * Registration page component.
+ * Handles user registration by collecting form data and sending it to the backend.
+ * Includes roles for students, teachers, and assistants.
+ * Displays validation errors if any fields are incorrect.
+ * 
+ * @component
+ * @returns {JSX.Element}
+ */
+function Registration() { 
+
+    // Hook for managing form data
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
         password: '',
         country: '',
-        role: ''
+        role: '',
     });
 
-    const [errors, setErrors] = useState({}); // Errors es una variable de estado donde se almacenan los errores
-    // setErrors es una función para actualizar errors
-    // useState declara el estado inicial de un objeto vacío
+    // Hook for managing errors
+    const [errors, setErrors] = useState({});
 
-    const handleChange = (e) => { // Función que maneja cambios en los inputs, donde e es el evento que dispara el cambio
+    /**
+     * Handles changes to the form inputs.
+     * Updates the formData state with the input values.
+     *
+     * @param {React.ChangeEvent<HTMLInputElement | HTMLSelectElement>} e 
+     */
+    const handleChange = (e) => { 
         setFormData({
-            ...formData, // Copia los valores actuales del formulario
-            [e.target.name]: e.target.value // Actualiza el campo que cambió
+            ...formData,
+            [e.target.name]: e.target.value
         });
     }
 
+    /**
+     * This function is executed when the form is submitted.
+     * Calls the registration service with the form data.
+     * If there is an error, it shows an alert with the error message.
+     * 
+     * @param {React.ChangeEvent<HTMLFormElement>} e 
+     */
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const data = await registerUser(formData); // Llama a la función externa y espera que llegue la respuesta del servidor
+            const data = await registerUser(formData);    
             if (data.message) {
                 alert('Registro exitoso');
             } else {
                 alert(`Error: ${data.message}`);
             }
         } catch (error) {
-            setErrors(error); // Actualiza los errores si hay problemas de validación o en el backend
+            setErrors(error);
             console.error('Error en el registro:', error);
         }
     };
-    /* Se llama a la función handleSubmit cuando se dispara el evento onSubmit */
     
     return (
         <div className='login-page'>
@@ -77,10 +101,13 @@ function Registration() { // Declara un componente funcional
         
                 <button type="submit" className="btn">Crear cuenta</button>
 
-                <div class="register-link">
-                    <p>¿Ya tienes una cuenta? <a href="http://localhost:5173/login" className='auth-link'>Iniciar Sesión</a>
+                <div className="register-link">
+                    <p>¿Ya tienes una cuenta? 
+                        <a href="/login" className='auth-link'>
+                        Iniciar Sesión
+                        </a>
                     </p>
-                    </div>
+                </div>
                 </form>
             </div>
         </div>
