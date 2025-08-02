@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../../components/Dashboard/Navbar";
+import Navbar from '../../components/UI/Navbar';
 import UserPanel from "../../components/Dashboard/UserPanel";
 import CategoriesPanel from "../../components/Categories/CategoriesPanel";
 
