@@ -16,13 +16,14 @@ import CreateCategory from './pages/Categories/CreateCategory';
 import EditCategory from './pages/Categories/EditCategory';
 import EditExercise from './pages/Exercises/EditExercise';
 import Library from './pages/ResourceLibrary/Library';
+import Main from './pages/Auth/Main';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Registration />} /> 
 
