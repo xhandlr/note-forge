@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../../components/Dashboard/Navbar";
+import Navbar from '../../components/UI/Navbar';
 import SearchBar from "../../components/Dashboard/SearchBar";
 import { getExercises } from "../../services/ExerciseService";
 import ExerciseOption from "../../components/Exercises/ExerciseOption";
