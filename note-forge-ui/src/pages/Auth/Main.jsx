@@ -2,31 +2,38 @@ import React, { useState } from 'react';
 import { loginUser } from '../../services/LoginService';
 import { useNavigate } from 'react-router-dom';
 import Logotype from '../../components/Dashboard/Logotype';
-import Icon from '../../components/Dashboard/Icon';
 
+// UI Components
+import Icon from '../../components/UI/Icon';
+import Button from '../../components/UI/Button';
+import Navbar from '../../components/UI/Navbar';
+
+// React Bits
 import Particles from '../../components/Animations/Particles';
 import TextType from '../../components/Animations/TextType';
 
 
 function Main() {
     return (
-        <div className="w-full h-screen flex flex-col justify-center items-center relative gap-4">
-            <Icon />
-            <TextType className='text-center text-black top-1/2 left-1/2 transform text-6xl font-bold mb-8'
-                text={["Note Forge", "Organiza tu aprendizaje", "Bienvenido!"]}
-                typingSpeed={75}
-                pauseDuration={3500}
-                showCursor={true}
-                cursorCharacter="|"
-            />
-            <div className='flex flex-row justify-center items-center gap-4'>
-                <button className='text-white rounded-full bg-purple-500 backdrop-blur-md px-6 py-3'>
-                    Comenzar
-                </button>
-                <button className='text-black rounded-full bg-gray-500/20 backdrop-blur-md px-6 py-3 border border-gray-300'>
-                    Más información
-                </button>
+        <div className="w-full h-screen flex flex-row justify-center items-center relative gap-4">
+            <Navbar />
+            <div className='flex flex-col justify-center items-center relative gap-4'>
+                <TextType className='text-center text-black top-1/2 left-1/2 transform text-6xl font-bold mb-4'
+                    text={["Note Forge", "Organiza tu aprendizaje", "Bienvenido!"]}
+                    typingSpeed={75}
+                    pauseDuration={5000}
+                    showCursor={true}
+                    cursorCharacter="|"
+                />
+                <h2 className='text-gray-600 text-2xl m-2'>Crea tu propio material de estudio: ejercicios, resúmenes y más</h2>
+                <div className='flex flex-row justify-center items-center gap-4'>
+                    <Button 
+                        children='Comenzar'
+                        to='/login'
+                    />
+                </div>
             </div>
+            <img className="w-120 h-120" src="/src/assets/main-image.png"/>
         </div>
     );
 }
