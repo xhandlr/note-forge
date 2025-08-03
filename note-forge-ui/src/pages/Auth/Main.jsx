@@ -23,8 +23,20 @@ import TextType from '../../components/Animations/TextType';
 function Main() {
     return (
         <>
-        <div className="w-full h-screen flex flex-row justify-center items-center relative gap-4">
+        <div className="w-full h-[80vh] flex flex-row justify-center items-center relative mt-10 gap-4">
             <Navbar />
+            <img
+                src="/src/assets/orange.png"
+                alt=""
+                className="absolute top-0 left-0 mt-0 mr-0 w-xs h-xs pointer-events-none select-none z--1"
+                style={{ zIndex: -1}}
+            />
+            <img 
+                src="/src/assets/yellow.png"
+                alt=""
+                className="absolute top-0 right-0 mt-0 mr-0 w-xs h-xs pointer-events-none select-none z--1"
+                style={{ zIndex: -1 }}
+            />
             <div className='flex flex-col justify-center items-start relative gap-4 max-w-2xl px-15'>
                 <TextType className='text-black top-1/2 left-1/2 transform text-6xl font-bold mb-4'
                     text={["Note Forge", "Crea tus ejercicios", "Bienvenido!"]}
@@ -43,9 +55,8 @@ function Main() {
             </div>
             <img className="w-120 h-120" src="/src/assets/home-image.png"/>
         </div>
-        <section className="w-full h-[1000px] bg-gradient-to-b from-pink-200 via-pink-300 to-pink-100 flex items-center justify-center">
-                {/* Puedes poner aquí tu contenido extra */}
-                <h2 className="text-4xl text-pink-700 font-bold">Sección extra aquí</h2>
+        <section className="w-full h-[1000px] bg-gradient-to-t from-pink-200 to-white flex items-center justify-center border-t-2 border-gray-200">
+                <h2 className="text-4xl text-pink-700 font-bold">Selecciona tu rol</h2>
             </section>
         </>
     );
