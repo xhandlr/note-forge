@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function Icon({ size = "w-8 h-8", type = "light" }) {
+function Icon({ size = "w-8 h-8", type = "light", ...props}) {
     const navigate = useNavigate();
     let sourceIcon = "/src/assets/logo-note-forge.png";
     if (type === "dark") {
