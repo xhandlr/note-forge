@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { loginUser } from '../../services/LoginService';
 import { useNavigate } from 'react-router-dom';
-import Logotype from '../../components/Dashboard/Logotype';
 
 // UI Components
 import Button from '../../components/UI/Button';
 import Navbar from '../../components/UI/Navbar';
 import BgDecoration from '../../components/UI/BgDecoration';
+import InfoCard from '../../components/UI/InfoCard';
 
 // React Bits
-import Particles from '../../components/Animations/Particles';
 import TextType from '../../components/Animations/TextType';
 
 /**
@@ -34,7 +33,7 @@ function Main() {
                 position='top-0 right-0'
             />
             <div className='flex flex-col justify-center items-start relative gap-4 max-w-2xl px-15'>
-                <TextType className='text-black top-1/2 left-1/2 transform text-4xl font-bold mb-4'
+                <TextType className='text-black top-1/2 left-1/2 transform text-5xl font-bold mb-4'
                     text={["Note Forge", "Crea tus ejercicios", "Bienvenido!"]}
                     typingSpeed={75}
                     pauseDuration={5000}
@@ -51,11 +50,38 @@ function Main() {
             </div>
             <img className="w-120 h-120" src="/src/assets/home-image.png"/>
         </div>
-        <section className="w-full h-[1000px] bg-gradient-to-t from-pink-200 to-white flex items-center justify-center border-t-2 border-gray-200">
-                <h2 className="text-4xl text-pink-700 font-bold">Selecciona tu rol</h2>
-            </section>
+        <section className="w-full flex items-center justify-around border-t-2 border-gray-200">
+            <div className="flex flex-row items-start justify-start gap-8 mx-auto max-w-5/6 my-10">
+                <div className="flex-1 bg-gray-900 rounded-lg shadow-log flex flex-col p-10 border-2 border-gray-100 item-center">
+                    <h2 className="text-2xl text-white text-center font-bold">Hecho para ti</h2>
+                    <div className="flex flex-row justify-center items-center gap-8 mt-6 h-full w-full">
+                        <InfoCard 
+                            title='Estudiantes'
+                            image='student.png'
+                            alt='Student'
+                            sizeImage='w-2/3 h-2/3'
+                        />
+                        <InfoCard 
+                            title='Ayudantes'
+                            image='assistant.png'
+                            alt='Assistant'
+                            sizeImage='w-2/3 h-2/3' 
+                        />
+                        <InfoCard 
+                            title='Profesores'
+                            image='teacher.png'
+                            alt='Teacher'
+                            sizeImage='w-2/3 h-2/3'
+                        />
+                    </div>
+                </div>
+            </div>
+        </section>
         </>
     );
 }
 
 export default Main;
+
+
+/*<a href="https://www.flaticon.com/free-icons/gpa" title="gpa icons">Gpa icons created by SBTS2018 - Flaticon</a>*/
