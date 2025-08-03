@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 function Icon({ size = "w-8 h-8", type = "light" }) {
     const navigate = useNavigate();
-    let sourceIcon = "/src/assets/icon-light.png";
+    let sourceIcon = "/src/assets/logo-note-forge.png";
     if (type === "dark") {
-        sourceIcon = "/src/assets/icon-dark.png";
+        sourceIcon = "/src/assets/logo-note-forge.png"; // Temporarily using the same icon for dark mode
     }
 
     return (
