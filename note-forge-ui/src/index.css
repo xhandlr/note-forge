@@ -1,13 +1,23 @@
 @import "tailwindcss";
+@import '@fontsource/roboto/300.css';
+@import '@fontsource/roboto/400.css';
+@import '@fontsource/roboto/500.css';
+@import '@fontsource/roboto/700.css';
+@import '@fontsource/marhey/400.css';
 
 :root {
-  --color-primary: #F5F2FA;
+  --color-primary: #ffffff;
   --color-purple: #635dff;
   --color-purple-hover: #4E48EF;
 }
 
 body {
   background-color: var(--color-primary);
+  font-family: 'Roboto', sans-serif;
+}
+
+.logo-font {
+  font-family: 'Marhey', cursive;
 }
 
 /*@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
