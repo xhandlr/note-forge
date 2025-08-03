@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import Logotype from '../../components/Dashboard/Logotype';
 
 // UI Components
-import Icon from '../../components/UI/Icon';
 import Button from '../../components/UI/Button';
 import Navbar from '../../components/UI/Navbar';
+import BgDecoration from '../../components/UI/BgDecoration';
 
 // React Bits
 import Particles from '../../components/Animations/Particles';
@@ -25,17 +25,13 @@ function Main() {
         <>
         <div className="w-full h-[80vh] flex flex-row justify-center items-center relative mt-10 gap-4">
             <Navbar />
-            <img
-                src="/src/assets/orange.png"
-                alt=""
-                className="absolute top-0 left-0 mt-0 mr-0 w-xs h-xs pointer-events-none select-none z--1"
-                style={{ zIndex: -1}}
+            <BgDecoration 
+                file="orange.png"
+                position='top-0 left-0'
             />
-            <img 
-                src="/src/assets/yellow.png"
-                alt=""
-                className="absolute top-0 right-0 mt-0 mr-0 w-xs h-xs pointer-events-none select-none z--1"
-                style={{ zIndex: -1 }}
+            <BgDecoration 
+                file="yellow.png"
+                position='top-0 right-0'
             />
             <div className='flex flex-col justify-center items-start relative gap-4 max-w-2xl px-15'>
                 <TextType className='text-black top-1/2 left-1/2 transform text-6xl font-bold mb-4'
