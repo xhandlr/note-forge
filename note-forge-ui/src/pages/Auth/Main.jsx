@@ -34,7 +34,7 @@ function Main() {
                 position='top-0 right-0'
             />
             <div className='flex flex-col justify-center items-start relative gap-4 max-w-2xl px-15'>
-                <TextType className='text-black top-1/2 left-1/2 transform text-6xl font-bold mb-4'
+                <TextType className='text-black top-1/2 left-1/2 transform text-4xl font-bold mb-4'
                     text={["Note Forge", "Crea tus ejercicios", "Bienvenido!"]}
                     typingSpeed={75}
                     pauseDuration={5000}

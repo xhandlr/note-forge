@@ -15,7 +15,7 @@ function Icon({ size = "w-8 h-8", type = "light", ...props}) {
                 if (localStorage.getItem("token")) {
                     navigate("/dashboard");
                 } else {
-                    navigate("/login");
+                    navigate("/");
                 }
             }}
         >
