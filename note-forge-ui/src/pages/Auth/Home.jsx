@@ -7,19 +7,20 @@ import Button from '../../components/UI/Button';
 import Navbar from '../../components/UI/Navbar';
 import BgDecoration from '../../components/UI/BgDecoration';
 import InfoCard from '../../components/UI/InfoCard';
+import Footer from '../../components/UI/Footer';
 
 // React Bits
 import TextType from '../../components/Animations/TextType';
 
 /**
- * Main page component.
+ * Home page component.
  * Displays the presentation of the application.
  * Allows users to navigate to the login page.
  *
  * @component
  * @returns {JSX.Element}
  */
-function Main() {
+function Home() {
     return (
         <>
         <div className="w-full h-[80vh] flex flex-row justify-center items-center relative mt-10 gap-4">
@@ -77,11 +78,12 @@ function Main() {
                 </div>
             </div>
         </section>
+        <Footer />
         </>
     );
 }
 
-export default Main;
+export default Home;
 
 
 /*<a href="https://www.flaticon.com/free-icons/gpa" title="gpa icons">Gpa icons created by SBTS2018 - Flaticon</a>*/
