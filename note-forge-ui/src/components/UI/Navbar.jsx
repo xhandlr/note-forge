@@ -28,7 +28,7 @@ function Navbar() {
                     size="w-15"
                     type="dark"
                 />
-                <h1 className="text-gray-800 font-bold text-3xl logo-font">Note Forge</h1>
+                <h1 className="text-gray-800 text-3xl logo-font">Note Forge</h1>
             </div>
             <div className="flex flex-row space-x-3">
                 <Button 
