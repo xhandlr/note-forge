@@ -1,12 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import logoDark from '/src/assets/logo-dark.png';
 
 function Icon({ size = "w-8 h-8", type = "light", fontSize = "text-2xl",...props}) {
     const navigate = useNavigate();
-    let sourceIcon = "/src/assets/logo-dark.png";
-    if (type === "dark") {
-        sourceIcon = "/src/assets/logo-dark.png"; // Temporarily using the same icon for dark mode
-    }
+    let sourceIcon = logoDark; // Default to dark logo
 
     return (
         <div
