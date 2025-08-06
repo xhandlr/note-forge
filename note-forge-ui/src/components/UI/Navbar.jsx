@@ -22,17 +22,18 @@ function Navbar() {
     };
 
     return (
-        <nav className="w-screen fixed top-0 left-0 bg-black text-white flex flex-row justify-between items-center px-6 shadow-md border-b-4 border-gray-400 p-5 px-20">
-            <div className="flex flex-row gap-x-8">
+        <nav className="w-screen fixed top-0 left-0 bg-white text-black flex flex-row justify-between items-center p-8 px-20 border-b border-gray-200 shadow-md z-50">
+            <div className="flex flex-row gap-x-8 items-center justify-center">
                 <Icon 
-                    size = "w-12"
-                    type = "light"
+                    size="w-15"
+                    type="dark"
                 />
-                <h1 className="text-white font-bold text-3xl">Note Forge</h1>
+                <h1 className="text-gray-800 text-3xl logo-font">Note Forge</h1>
             </div>
             <div className="flex flex-row space-x-3">
                 <Button 
                     children={"Iniciar Sesión"}
+                    to={"/login"}
                 />
             </div>
         </nav>
