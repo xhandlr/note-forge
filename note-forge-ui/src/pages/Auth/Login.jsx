@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import { loginUser } from '../../services/LoginService';
 import { useNavigate } from 'react-router-dom';
 
-// Icons
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-
 // UI Components
 import Button from '../../components/UI/Button';
 import Icon from '../../components/UI/Icon';

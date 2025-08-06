@@ -4,7 +4,9 @@ function InfoCard({ title, image, alt, description = "", color = "bg-white", siz
 
     const base = "p-6 rounded-lg shadow-md flex-1 m-4 hover:shadow-lg hover:scale-105 transition-transform duration-200 flex flex-col justify-center items-center";
 
-    const imageSrc = `/src/assets/${image}`;
+    const images = import.meta.glob('/src/assets/*', { eager: true, as: 'url' });
+    
+    const imageSrc = images[`/src/assets/${image}`];
 
     return (
         <div className={`${color} ${base} ${size}`}>

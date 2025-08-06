@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { loginUser } from '../../services/LoginService';
 import { useNavigate } from 'react-router-dom';
 
+// Assets
+import homeImage from '../../assets/home-image.png';
+
 // UI Components
 import Button from '../../components/UI/Button';
 import Navbar from '../../components/UI/Navbar';
@@ -49,7 +52,7 @@ function Home() {
                     />
                 </div>
             </div>
-            <img className="w-120 h-120" src="/src/assets/home-image.png"/>
+            <img className="w-120 h-120" src={homeImage} alt="Home" />
         </div>
         <section className="w-full flex items-center justify-around border-t-2 border-gray-200">
             <div className="flex flex-row items-start justify-start gap-8 mx-auto max-w-5/6 my-10">
@@ -84,6 +87,3 @@ function Home() {
 }
 
 export default Home;
-
-
-/*<a href="https://www.flaticon.com/free-icons/gpa" title="gpa icons">Gpa icons created by SBTS2018 - Flaticon</a>*/

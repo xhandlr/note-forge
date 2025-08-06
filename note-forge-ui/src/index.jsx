@@ -21,7 +21,7 @@ import Home from './pages/Auth/Home';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Router>
+    <Router basename="/note-forge">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
