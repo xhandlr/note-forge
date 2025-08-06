@@ -4,6 +4,10 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@fontsource/lato": "^5.2.6",
+    "@fontsource/marhey": "^5.2.6",
+    "@fontsource/open-sans": "^5.2.6",
+    "@fontsource/roboto": "^5.2.6",
     "@matejmazur/react-katex": "3.1.3",
     "@tailwindcss/postcss": "^4.1.11",
     "@tailwindcss/vite": "^4.1.11",
@@ -25,7 +29,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext js,jsx --fix"
+    "lint": "eslint . --ext js,jsx --fix",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
     "@eslint/config-array": "^0.21.0",
@@ -36,6 +42,7 @@
     "eslint": "^9.31.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "gh-pages": "^6.3.0",
     "vite": "^6.2.3"
   }
 }
