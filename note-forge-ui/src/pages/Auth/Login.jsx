@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { loginUser } from '../../services/LoginService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 // UI Components
 import Button from '../../components/UI/Button';
 import Icon from '../../components/UI/Icon';
 import BgDecoration from '../../components/UI/BgDecoration';
+import TextField from '../../components/UI/TextField';
 
 /**
  * Login page component.
@@ -83,23 +84,22 @@ function Login() {
                 <div className="w-full flex flex-col items-center gap-y-4">
                     <form onSubmit={handleSubmit} className="mt-10 w-full flex flex-col items-center gap-y-4">
                         <h1 className='text-2xl font-bold'>Iniciar Sesión</h1>
-                        <div className='w-full flex flex-col items-center gap-y-2 transition-colors'>
-                            <input
-                                type="text"
-                                placeholder="Correo electrónico"
-                                name="email"
-                                required
-                                onChange={handleChange}
-                                className="border-2 border-gray-300 rounded-lg p-2 w-4/5 focus:border-gray-500 focus:outline-none transition-colors"
-                            />
-                            {errors.email && <p className="error">{errors.email}</p>}
-                        </div>
-                        <div className='w-full flex flex-col items-center gap-y-2'>
-                            <input type="password" placeholder='Contraseña' name="password" required onChange={handleChange}
-                            className="border-2 border-gray-300 rounded-lg p-2 w-4/5 focus:border-gray-500 focus:outline-none transition-colors"
-                            />
-                            {errors.password && <p className='error'>{errors.password}</p>}
-                        </div>
+                        <TextField
+                            type="email"
+                            name="email"
+                            placeholder="Correo electrónico"
+                            required
+                            onChange={handleChange}
+                            error={errors.email}
+                        />
+                        <TextField
+                            type="password"
+                            name="password"
+                            placeholder="Contraseña"
+                            required
+                            onChange={handleChange}
+                            error={errors.password}
+                        />
                         <div className="w-full flex flex-col items-center">
                         <label className="flex items-center gap-2 cursor-pointer">
                             <input
@@ -133,7 +133,7 @@ function Login() {
                             type='submit'
                         />
                         <div>
-                            <p>¿No tienes una cuenta? <a href="/register" className='font-semibold hover:text-pink-600'>Registrarse</a></p>
+                            <p>¿No tienes una cuenta? <Link to="/register" className='font-semibold hover:text-pink-600'>Registrarse</Link></p>
                         </div>
                     </form>
                     </div>
