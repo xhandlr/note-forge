@@ -68,7 +68,7 @@ function Login() {
     };    
 
     return (
-        <div className="flex items-center justify-center min-h-screen h-screen">
+        <div className="flex items-start justify-center min-h-screen h-screen">
             <BgDecoration 
                 file="orange.png"
                 position='top-0 left-0'
@@ -77,7 +77,7 @@ function Login() {
                 file="yellow.png"
                 position='top-0 right-0'
             />
-            <div className="min-w-[600px] w-1/3 h-[80vh] bg-white text-black rounded-lg border-2 border-gray-200 flex flex-col justify-start items-center p-10">
+            <div className="min-w-[600px] w-1/3 min-h-[400px]bg-white text-black rounded-lg border-2 border-gray-200 flex flex-col justify-start items-center px-10 py-20 mt-20">
             <div className="flex flex-col items-center w-full">
                 <Icon
                     size='w-25 h-25'

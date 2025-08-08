@@ -74,7 +74,7 @@ function Registration() {
     };
     
     return (
-        <div className="flex items-center justify-center min-h-screen h-screen">
+        <div className="flex items-start justify-center min-h-screen h-screen mb-16">
             <BgDecoration 
                 file="orange.png"
                 position='top-0 left-0'
@@ -83,14 +83,14 @@ function Registration() {
                 file="yellow.png"
                 position='top-0 right-0'
             />
-            <div className="min-w-[600px] w-1/3 h-[80vh] bg-white text-black rounded-lg border-2 border-gray-200 flex flex-col justify-start items-center p-10">
+            <div className="min-w-[600px] w-1/3 min-h-[400px] bg-white text-black rounded-lg border-2 border-gray-200 flex flex-col justify-start items-center p-10 px-10 py-20 mt-20">
             <div className="flex flex-col items-center w-full">
                 <Icon
                     size='w-25 h-25'
                 ></Icon>
                 <div className="w-full flex flex-col items-center gap-y-4">
                     <form onSubmit={handleSubmit} className="mt-10 w-full flex flex-col items-center gap-y-4">
-                        <h1 className='text-2xl font-bold'>Iniciar Sesión</h1>
+                        <h1 className='text-2xl font-bold'>Crear cuenta</h1>
                         <TextField
                             type="text"
                             name="username"
@@ -123,15 +123,20 @@ function Registration() {
                             onChange={handleChange}
                             error={errors.country}
                         />
-                        <div className="input-box">
-                                <select name="role" required onChange={handleChange}>
-                                    <option value="" disabled selected>Selecciona tu rol</option>
-                                    <option value="student">Estudiante</option>
-                                    <option value="teacher">Profesor</option>
-                                    <option value="assistant">Ayudante</option>
-                                </select>
-                                {errors.role && <p className="error">{errors.role}</p>}
-                                <box-icon type='solid' name='face'></box-icon>
+                        <div className='w-full flex flex-col items-center gap-y-2'>
+                            <select 
+                                name="role" 
+                                required 
+                                onChange={handleChange}
+                                value={formData.role}
+                                className="border-2 border-gray-300 rounded-lg p-2 w-4/5 focus:border-gray-500 focus:outline-none transition-colors"
+                            >
+                                <option value="" disabled>Selecciona tu rol</option>
+                                <option value="student">👨‍🎓 Estudiante</option>
+                                <option value="teacher">👨‍🏫 Profesor</option>
+                                <option value="assistant">🤝 Ayudante</option>
+                            </select>
+                            {errors.role && <p className="error text-red-500 text-sm w-4/5 text-left">{errors.role}</p>}
                         </div>
                         <Button 
                             children={'Crear cuenta'}
