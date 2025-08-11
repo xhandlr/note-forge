@@ -1,17 +1,38 @@
-const validateRegistration = (formData) => {
-    const errors = {};
+const validateRegistration = (name, value) => {
+    switch (name) {
+        case "username":
+            if(!value) return "El nombre es obligatorio";
+            return "";
+        case "email":
+            if (!value) return "Debe ingresar un correo electrónico";
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Correo electrónico inválido";
+            return '';
+        case "password":
+            if (!value) return "Debe ingresar una contraseña";
+            if (value.length < 6) return "Mínimo 6 caracteres";
+            return "";
+        case "country":
+            if (!value) return "El país es obligatorio";
+            return "";
+        case "role":
+            if (!value) return "Debe seleccionar un rol"
+            return "";
+        default:
+            return "";
+    }
+};
 
-    if (!formData.username) errors.username = "El nombre es obligatorio";
-    if (!formData.email.includes("@")) errors.email = "Correo inválido";
-    if (formData.password.length < 6) errors.password = "Mínimo 6 caracteres";
-    if (!formData.country) errors.country = "El país es obligatorio";
-    if (!formData.role) errors.role = "Selecciona un rol";
-
-    return errors;
+const validateRegistrationForm = (formData) => {
+  const errors = {};
+  Object.entries(formData).forEach(([name, value]) => {
+    const error = validateRegistration(name, value);
+    if (error) errors[name] = error;
+  });
+  return errors;
 };
 
 const registerUser = async (formData) => { // Async significa asincrónico, lo que permite utilizar await
-    const validationErrors = validateRegistration(formData);
+    const validationErrors = validateRegistrationForm(formData);
     if (Object.keys(validationErrors).length > 0) {
         throw validationErrors;
     }

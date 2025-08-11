@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { loginUser } from '../../services/LoginService';
+import { loginUser, validateLogin } from '../../services/LoginService';
 import { useNavigate, Link } from 'react-router-dom';
 
 // UI Components
@@ -63,9 +63,18 @@ function Login() {
                 alert(`Error: ${data.message}`);
             }
         } catch (error) {
-            console.error('Error en el login:', error);
+            setErrors({ auth: "Las credenciales no coinciden." });
         }
     };    
+
+    const handleBlur = (e) => {
+        const {name, value} = e.target;
+        const errorMsg = validateLogin(name, value);
+        setErrors((prev) => ({
+            ...prev,
+            [name]: errorMsg
+        }));
+    };
 
     return (
         <div className="flex items-start justify-center min-h-screen h-screen">
@@ -91,6 +100,7 @@ function Login() {
                             placeholder="Correo electrónico"
                             required
                             onChange={handleChange}
+                            onBlur={handleBlur}
                             error={errors.email}
                         />
                         <TextField
@@ -99,8 +109,10 @@ function Login() {
                             placeholder="Contraseña"
                             required
                             onChange={handleChange}
+                            onBlur={handleBlur}
                             error={errors.password}
                         />
+                        {errors.auth && <p className="text-red-500 text-sm w-4/5 text-center">{errors.auth}</p>}
                         <Checkbox
                             name="keepLoggedIn"
                             checked={formData.keepLoggedIn || false}
