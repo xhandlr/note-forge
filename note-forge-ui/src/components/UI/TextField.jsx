@@ -22,7 +22,7 @@ function TextField({
                 className={className}
                 {...props}
             />
-            {error && <p className="text-red-500 text-sm w-4/5 text-left"></p>}
+            {error && <p className="text-red-500 text-sm w-4/5 text-left">{error}</p>}
         </div>
     );
 

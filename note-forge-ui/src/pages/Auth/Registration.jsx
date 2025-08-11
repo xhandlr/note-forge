@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 // Registration service import
-import { registerUser } from '../../services/RegistrationService';
+import { registerUser, validateRegistration } from '../../services/RegistrationService';
 
 // UI Components
 import Button from '../../components/UI/Button';
@@ -47,6 +47,15 @@ function Registration() {
             ...formData,
             [e.target.name]: e.target.value
         });
+    }
+
+    const handleBlur = (e) => {
+        const {name, value} = e.target;
+        const errorMsg = validateRegistration(name, value);
+        setErrors((prev) => ({
+            ...prev,
+            [name]: errorMsg
+        }))
     }
 
     /**
@@ -98,6 +107,7 @@ function Registration() {
                             placeholder="Nombre de usuario"
                             required
                             onChange={handleChange}
+                            onBlur={handleBlur}
                             error={errors.username}
                         />
                         <TextField
@@ -106,6 +116,7 @@ function Registration() {
                             placeholder="Correo electrónico"
                             required
                             onChange={handleChange}
+                            onBlur={handleBlur}
                             error={errors.email}
                         />
                         <TextField
@@ -114,6 +125,7 @@ function Registration() {
                             placeholder="Contraseña"
                             required
                             onChange={handleChange}
+                            onBlur={handleBlur}
                             error={errors.password}
                         />
                         <TextField
@@ -122,12 +134,14 @@ function Registration() {
                             placeholder="País"
                             required
                             onChange={handleChange}
+                            onBlur={handleBlur}
                             error={errors.country}
                         />
                         <Select 
                             name="role"
                             required
                             onChange={handleChange}
+                            onBlur={handleBlur}
                             value={formData.role}
                             options={[
                                 { value: 'student', label: '👨‍🎓 Estudiante' },
