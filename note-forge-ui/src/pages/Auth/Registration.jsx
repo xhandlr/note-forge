@@ -9,6 +9,7 @@ import Button from '../../components/UI/Button';
 import Icon from '../../components/UI/Icon';
 import BgDecoration from '../../components/UI/BgDecoration';
 import TextField from '../../components/UI/TextField';
+import Select from '../../components/UI/Select';
 
 /**
  * Registration page component.
@@ -123,21 +124,18 @@ function Registration() {
                             onChange={handleChange}
                             error={errors.country}
                         />
-                        <div className='w-full flex flex-col items-center gap-y-2'>
-                            <select 
-                                name="role" 
-                                required 
-                                onChange={handleChange}
-                                value={formData.role}
-                                className="border-2 border-gray-300 rounded-lg p-2 w-4/5 focus:border-gray-500 focus:outline-none transition-colors"
-                            >
-                                <option value="" disabled>Selecciona tu rol</option>
-                                <option value="student">👨‍🎓 Estudiante</option>
-                                <option value="teacher">👨‍🏫 Profesor</option>
-                                <option value="assistant">🤝 Ayudante</option>
-                            </select>
-                            {errors.role && <p className="error text-red-500 text-sm w-4/5 text-left">{errors.role}</p>}
-                        </div>
+                        <Select 
+                            name="role"
+                            required
+                            onChange={handleChange}
+                            value={formData.role}
+                            options={[
+                                { value: 'student', label: '👨‍🎓 Estudiante' },
+                                { value: 'teacher', label: '👨‍🏫 Profesor' },
+                                { value: 'assistant', label: '🤝 Ayudante' },
+                            ]}
+                            error={errors.role}
+                        />
                         <Button 
                             children={'Crear cuenta'}
                             type='submit'
