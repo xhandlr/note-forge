@@ -52,6 +52,8 @@ const logoutUser = async () => {
             throw new Error('Error al cerrar sesión');
         }
 
+        localStorage.removeItem('token');
+
         return { success: true, message: 'Sesión cerrada correctamente' };
     } catch (error) {
         console.error('Error al intentar cerrar sesión', error);
