@@ -11,6 +11,8 @@ import { logoutUser } from "../../services/LoginService";
 function Navbar() {
     const navigate = useNavigate(); 
 
+    const token = localStorage.getItem('token');
+
     const handleLogout = async () => {
         try {
             await logoutUser();
@@ -31,10 +33,26 @@ function Navbar() {
                 <h1 className="text-gray-800 text-3xl logo-font">Note Forge</h1>
             </div>
             <div className="flex flex-row space-x-3">
-                <Button 
-                    children={"Iniciar Sesión"}
-                    to={"/login"}
-                />
+                {token ? (
+                    <>
+                        <Button 
+                            children={"Dashboard"}
+                            to={"/dashboard"}
+                        />
+                        <Button 
+                            variant="secondary"
+                            children={"Cerrar Sesión"}
+                            onClick={handleLogout}
+                        />
+                    </>
+                ) : (
+                    <>
+                        <Button 
+                            children={"Iniciar Sesión"}
+                            to={"/login"}
+                        />
+                    </>
+                )}
             </div>
         </nav>
     );
