@@ -13,4 +13,7 @@ export default defineConfig({
     tailwindcss(),
   ],
   base: '/note-forge/',
+  server: {
+    historyApiFallback: true
+  }
 })
