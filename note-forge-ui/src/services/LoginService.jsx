@@ -1,14 +1,14 @@
 const validateLogin = (name, value) => {
     switch (name) {
         case 'email':
-        if (!value) return "Debe ingresar un correo electrónico";
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Correo electrónico inválido";
-        return '';
-    case 'password':
-        if (!value) return "Debe ingresar una contraseña";
-        return '';
-    default:
-        return '';
+            if (!value) return "Debe ingresar un correo electrónico";
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Correo electrónico inválido";
+            return '';
+        case 'password':
+            if (!value) return "Debe ingresar una contraseña";
+            return '';
+        default:
+            return '';
     }
 };
 
@@ -25,7 +25,7 @@ const loginUser = async (formData) => {
               'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData),
-          credentials: 'include', // Esto es importante para enviar cookies
+          credentials: 'include',
       });
 
       const data = await response.json();
@@ -37,7 +37,6 @@ const loginUser = async (formData) => {
           throw new Error(data.message || 'Login fallido');
       }
   } catch (error) {
-      console.error('Error al intentar hacer login', error);
       throw new Error('Error en el login: ' + error.message);
   }
 };
