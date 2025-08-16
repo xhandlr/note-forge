@@ -1,8 +1,8 @@
 const Category = require("../models/categoryModel")
 
 const createCategory = async (name, description, imageUrl, isPinned, userId) => {
-    const CategoryId = await Category.create(name, description, imageUrl, isPinned, userId);
-    return { message: "Categoría creada con éxito", CategoryId };
+    const categoryId = await Category.create(name, description, imageUrl, isPinned, userId);
+    return { message: "Categoría creada con éxito", categoryId };
 };
 
 const getCategoryById = async (categoryId) => {
