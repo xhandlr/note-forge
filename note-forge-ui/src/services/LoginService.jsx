@@ -1,10 +1,15 @@
-const validateLogin = (formData) => {
-    const errors = {};
-
-    if (!formData.email) errors.email = "Debe ingresar un correo electrónico";
-    if (!formData.password) errors.password = "Debe ingresar una contraseña"
-
-    return errors;
+const validateLogin = (name, value) => {
+    switch (name) {
+        case 'email':
+        if (!value) return "Debe ingresar un correo electrónico";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Correo electrónico inválido";
+        return '';
+    case 'password':
+        if (!value) return "Debe ingresar una contraseña";
+        return '';
+    default:
+        return '';
+    }
 };
 
 const loginUser = async (formData) => {
