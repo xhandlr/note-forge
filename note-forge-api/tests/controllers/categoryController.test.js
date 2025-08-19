@@ -5,7 +5,7 @@
 const request = require('supertest');
 const app = require('../../app');
 const pool = require('../../config/db'); 
-const jwt = require('jsonwebtoken');
+const { createTestUserAndLogin, createTestCategory } = require('../utils/testHelpers');
 
 // Close database connection
 afterAll(async () => {
@@ -22,25 +22,7 @@ describe('Category Controller', () => {
         let token;
 
         beforeAll(async () => {
-            // Crear usuario temporal
-            const res = await request(app)
-            .post('/register')
-            .send({
-                username: 'testuser',
-                email: 'test@example.com',
-                password: '123456',
-                country: 'Testland',
-                role: 'student'
-            });
-            
-            // Login para obtener token
-            const loginRes = await request(app)
-            .post('/login')
-            .send({
-                email: 'test@example.com',
-                password: '123456'
-            });
-            token = loginRes.body.token;
+            token = await createTestUserAndLogin(); 
         });
 
         it('should create a new category', async () => {
@@ -56,6 +38,26 @@ describe('Category Controller', () => {
             expect(res.statusCode).toBe(201);
             expect(res.body).toHaveProperty('message', 'Categoría creada con éxito');
             expect(res.body).toHaveProperty('categoryId');
+        });
+    });
+
+    describe('GET /category/:id', () => {
+        let token;
+        let categoryId;
+
+        beforeAll(async () => {
+            token = await createTestUserAndLogin();
+            categoryId = await createTestCategory(token);
+        });
+
+        it('should return the category by id', async () => {
+            const res = await request(app)
+            .get(`/category/${categoryId}`)
+            .set('Authorization', `Bearer ${token}`);
+
+            expect(res.statusCode).toBe(200);
+            expect(res.body).toHaveProperty('name');
+            expect(res.body).toHaveProperty('description');
         });
     });
 });

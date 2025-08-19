@@ -10,6 +10,7 @@ const pool = require('../../config/db');
 // Close database connection
 afterAll(async () => {
   await pool.end();
+  
 });
 
 describe('Auth Controller', () => {
