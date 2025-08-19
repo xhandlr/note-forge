@@ -47,4 +47,13 @@ async function createTestCategory(token, overrides = {}) {
   return res.body.categoryId;
 }
 
-module.exports = { createTestUserAndLogin, createTestCategory };
+/**
+ * Cleanup test data
+ */
+async function cleanupTestData() {
+    await pool.query("DELETE FROM exercises");
+    await pool.query("DELETE FROM categories");
+    await pool.query("DELETE FROM users WHERE email LIKE 'test%@example.com'");
+}
+
+module.exports = { createTestUserAndLogin, createTestCategory, cleanupTestData };

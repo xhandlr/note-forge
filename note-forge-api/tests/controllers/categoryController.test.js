@@ -5,10 +5,11 @@
 const request = require('supertest');
 const app = require('../../app');
 const pool = require('../../config/db'); 
-const { createTestUserAndLogin, createTestCategory } = require('../utils/testHelpers');
+const { createTestUserAndLogin, createTestCategory, cleanupTestData } = require('../utils/testHelpers');
 
 // Close database connection
 afterAll(async () => {
+  await cleanupTestData();
   await pool.end();
 });
 
@@ -17,7 +18,6 @@ describe('Category Controller', () => {
      * Test for creating a new category
      * Endpoint POST /categories
      */
-    
     describe('POST /categories', () => {
         let token;
 
