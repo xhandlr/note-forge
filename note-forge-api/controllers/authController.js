@@ -13,7 +13,7 @@ async function register(req, res) {
         if (error.message === 'El correo ya está registrado') {
             return res.status(409).json({ message: error.message });
         }
-        res.status(500).json({ message: 'Error en el servidor' });
+        res.status(500).json({ message: error.message });
     }
 }
 
