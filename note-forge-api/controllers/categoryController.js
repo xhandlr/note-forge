@@ -73,4 +73,10 @@ async function deleteCategoryRequest(req, res) {
     }
 }
 
-module.exports = { createCategoryRequest, getCategoryByIdRequest, getCategoriesRequest, updateCategoryRequest, deleteCategoryRequest };
+module.exports = { 
+    createCategoryRequest, 
+    getCategoryByIdRequest, 
+    getCategoriesRequest, 
+    updateCategoryRequest, 
+    deleteCategoryRequest 
+};
