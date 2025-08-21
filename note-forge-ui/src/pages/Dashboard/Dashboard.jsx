@@ -5,11 +5,13 @@ import Navbar from "../../components/UI/Navbar";
 import Button from "../../components/UI/Button";
 import BgDecoration from "../../components/UI/BgDecoration";
 import coffee from "/src/assets/latte-art.png";
+import imageTutorial from "/src/assets/cloudy-night.png";
+import Footer from "../../components/UI/Footer";
 
 function Dashboard() { 
 
     return (
-        <div className="w-screen flex justify-center items-center flex flex-col">
+        <div className="min-h-screen flex justify-center items-center flex flex-col">
             <BgDecoration 
                 file="orange.png"
                 position='top-0 left-0'
@@ -55,14 +57,20 @@ function Dashboard() {
                 <h1>Mis ejercicios</h1>
                 <h1>Material de estudio</h1>
             </div>
-            <div className="flex flex-row w-4/5 h-1/2 bg-white border border-gray-200 justify-evenly items-center p-4 font-semibold">
+            <div className="flex flex-row w-4/5 h-1/2 bg-white border border-gray-200 justify-around items-center p-4 font-semibold">
                 <div className="grid grid-cols-3 gap-4 w-4/5">
-                    <div className="aspect-square min-h-48 min-w-48 bg-white border border-gray-200 flex flex-col justify-center items-center">
-                        <h1>Tutorial</h1>
-                        <h3>Aprende a crear tu primera asignatura</h3>
+                    <div className="aspect-square min-h-48 min-w-48 bg-white border border-gray-300 flex flex-col shadow-lg gap-2 relative">
+                        <img src={imageTutorial} alt="Tutorial" className="w-full h-3/5 object-contain bg-(--color-night-background)" />
+                        <h1 className="text-gray-800 text-lg font-semibold ml-4">Tutorial</h1>
+                        <p className="text-gray-600 text-sm ml-4">Agrega un ejercicio de tu preferencia</p>
+                        <div className="flex flex-row text-sm text-purple-600 justify-between mx-4 absolute bottom-2 left-0 right-0">
+                            <p>0 ejercicios</p>
+                            <p>0 guías</p>
+                        </div>
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 }
