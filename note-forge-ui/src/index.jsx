@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import 'boxicons';
 
 import Login from './pages/Auth/Login';
@@ -40,6 +40,8 @@ root.render(
 
         <Route path="/guides" element={<Guides />} />
         <Route path="/create-guide" element={<CreateGuide />} />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   </React.StrictMode>
