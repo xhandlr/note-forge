@@ -59,7 +59,7 @@ function Dashboard() {
                     <CategoryCard
                         imageSrc={imageTutorial}
                         alt="Tutorial"
-                        bgColor="(--color-night-background)"
+                        bgColor="bg-(--color-night-background)"
                         title="Tutorial"
                         description="Agrega un ejercicio de tu preferencia"
                         exercisesCount={0}
