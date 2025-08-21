@@ -5,11 +5,11 @@
 const request = require('supertest');
 const app = require('../../app');
 const pool = require('../../config/db');
-const { createTestUserAndLogin, cleanupTestData } = require('../utils/testHelpers');
+const testHelper = require('../utils/testHelpers');
 
 // Close database connection
 afterAll( async () => {
-    await cleanupTestData();
+    await testHelper.cleanupTestData();
     await pool.end();
 });
 
@@ -24,7 +24,8 @@ describe('Exercise Controller', () => {
         let token;
 
         beforeAll(async () => {
-            token = await createTestUserAndLogin();
+            token = await testHelper.createTestUserAndLogin();
+            categoryId = await testHelper.createTestCategory(token);
         });
 
         it('should create a new exercise', async () => {
@@ -36,13 +37,17 @@ describe('Exercise Controller', () => {
                     title: 'Test Exercise',
                     description: 'This is a test exercise',
                     difficulty: 7,
-                    collection: 'Example',
                     reference: 'hxxp://example.com',
                     answer: 'This is a test answer',
                     duration: 60,
-                    tags: ['test', 'exercise'],
+                    tags: 'test',
                     details: 'These are the details of the test exercise',
+                    categoryId: categoryId
                 });
+
+            expect(res.statusCode).toBe(201);
+            expect(res.body).toHaveProperty('message', 'Ejercicio creado con éxito');
+            expect(res.body).toHaveProperty('exerciseId');
         });
     });
 });

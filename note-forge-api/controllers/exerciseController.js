@@ -4,12 +4,12 @@ const exerciseCategoryService = require('../services/exerciseCategoryService');
 async function createExerciseRequest(req, res) {
     try {
         const userId = req.user.id; // Obtener el id del usuario desde el token
-        const { title, description, difficulty, collection, reference, answer, duration, tags, details, categoryId } = req.body;
+        const { title, description, difficulty, reference, answer, duration, tags, details, categoryId } = req.body;
         const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : null;
 
         // Primero, crea el ejercicio
         let result = await exerciseService.createExercise(
-            title, description, difficulty, collection, reference, 
+            title, description, difficulty, reference,
             answer, duration, tags, details, userId, imageUrl
         );
 
@@ -22,6 +22,7 @@ async function createExerciseRequest(req, res) {
 
         res.status(201).json(result); // Retorna el mensaje de éxito con el ID del ejercicio
     } catch (error) {
+        console.log(error.message)
         res.status(400).json({ message: error.message });
     }
 }
