@@ -1,10 +1,19 @@
 const mysql = require('mysql2/promise');
-require('dotenv').config();
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
+  quiet: true
+});
+
+/**
+ * Database configuration
+ * Create a MySQL connection pool
+ * Development and test use separate databases
+ */
 
 const dbConfig = {
-  host: process.env.DB_HOST || 'db',
-  user: process.env.DB_USER || 'noteforge_user',
-  password: process.env.DB_PASSWORD || 'strongpassword123',
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'note_forge',
+  password: process.env.DB_PASSWORD || 'secret',
   database: process.env.DB_NAME || 'note_forge',
   port: process.env.DB_PORT || 3306,
   waitForConnections: true,
@@ -33,7 +42,7 @@ async function testConnection(retries = 5, delay = 5000) {
   }
 }
 
-// Inicia los reintentos apenas se cargue este módulo:
-testConnection();
-
+if (process.env.NODE_ENV !== 'test') {
+  testConnection();
+}
 module.exports = pool;

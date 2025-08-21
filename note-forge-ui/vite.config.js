@@ -8,9 +8,10 @@ export default defineConfig({
     port: 5173,
     host: true,  
     strictPort: true,  
+    historyApiFallback: true
   },
   plugins: [
     tailwindcss(),
   ],
-  base: '/note-forge/',
+  base: '/note-forge/'
 })
