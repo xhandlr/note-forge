@@ -1,7 +1,7 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config({
   path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
-  silent: true
+  quiet: true
 });
 
 /**

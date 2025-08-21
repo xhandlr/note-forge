@@ -28,17 +28,7 @@ describe('Exercise Controller', () => {
         });
 
         it('should create a new exercise', async () => {
-            console.log('Token being used:', token);
-            
-            // Verifica manualmente el token
-            const jwt = require('jsonwebtoken');
-            try {
-                const decoded = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET);
-                console.log('Token decoded successfully:', decoded);
-            } catch (error) {
-                console.log('Token verification failed:', error.message);
-            }
-
+        
             const res = await request(app)
                 .post('/create-exercise')
                 .set('Authorization', `Bearer ${token}`)
@@ -53,9 +43,6 @@ describe('Exercise Controller', () => {
                     tags: ['test', 'exercise'],
                     details: 'These are the details of the test exercise',
                 });
-
-            console.log('Response status:', res.status);
-            console.log('Response body:', res.body);
         });
     });
 });
