@@ -19,7 +19,6 @@ describe('Exercise Controller', () => {
      * Test for create a new exercise
      * Endpoint POST /create-exercise
      */
-
     describe('POST /create-exercise', () => {
         let token;
 
@@ -28,8 +27,7 @@ describe('Exercise Controller', () => {
             categoryId = await testHelper.createTestCategory(token);
         });
 
-        it('should create a new exercise', async () => {
-        
+        it('should create a new exercise', async () => {      
             const res = await request(app)
                 .post('/create-exercise')
                 .set('Authorization', `Bearer ${token}`)
@@ -44,7 +42,6 @@ describe('Exercise Controller', () => {
                     details: 'These are the details of the test exercise',
                     categoryId: categoryId
                 });
-
             expect(res.statusCode).toBe(201);
             expect(res.body).toHaveProperty('message', 'Ejercicio creado con éxito');
             expect(res.body).toHaveProperty('exerciseId');
