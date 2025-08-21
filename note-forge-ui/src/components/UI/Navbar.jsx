@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 
 // UI Components
@@ -11,9 +11,22 @@ import { logoutUser } from "../../services/LoginService";
 function Navbar() {
     const navigate = useNavigate(); 
 
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        if (token) {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+        }
+    }, []);
+
     const handleLogout = async () => {
         try {
             await logoutUser();
+            setIsLoggedIn(false);
             alert("Sesión cerrada con éxito");
             navigate("/");
         } catch (error) {
@@ -31,10 +44,26 @@ function Navbar() {
                 <h1 className="text-gray-800 text-3xl logo-font">Note Forge</h1>
             </div>
             <div className="flex flex-row space-x-3">
-                <Button 
-                    children={"Iniciar Sesión"}
-                    to={"/login"}
-                />
+                {isLoggedIn ? (
+                    <>
+                        <Button 
+                            children={"Dashboard"}
+                            to={"/dashboard"}
+                        />
+                        <Button 
+                            variant="secondary"
+                            children={"Cerrar Sesión"}
+                            onClick={handleLogout}
+                        />
+                    </>
+                ) : (
+                    <>
+                        <Button 
+                            children={"Iniciar Sesión"}
+                            to={"/login"}
+                        />
+                    </>
+                )}
             </div>
         </nav>
     );

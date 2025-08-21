@@ -1,3 +1,9 @@
+/**
+ * Validate registration fields
+ * @param {string} name - Field name
+ * @param {*} value - Field value
+ * @returns {string} - Error message or empty string
+ */
 const validateRegistration = (name, value) => {
     switch (name) {
         case "username":
@@ -22,6 +28,11 @@ const validateRegistration = (name, value) => {
     }
 };
 
+/**
+ * Validate registration form fields
+ * @param {Object} formData - The registration form data
+ * @returns {Object} - An object containing validation errors
+ */
 const validateRegistrationForm = (formData) => {
   const errors = {};
   Object.entries(formData).forEach(([name, value]) => {
@@ -31,13 +42,18 @@ const validateRegistrationForm = (formData) => {
   return errors;
 };
 
-const registerUser = async (formData) => { // Async significa asincrónico, lo que permite utilizar await
+/**
+ * Registers a new user
+ * @param {Object} formData - The registration form data
+ * @returns {Promise<Object>} - The registered user data
+ */
+const registerUser = async (formData) => { 
     const validationErrors = validateRegistrationForm(formData);
     if (Object.keys(validationErrors).length > 0) {
         throw validationErrors;
     }
 
-    const response = await fetch('http://localhost:5000/register', { // fetch realiza una petición HTTP
+    const response = await fetch('http://localhost:5000/register', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

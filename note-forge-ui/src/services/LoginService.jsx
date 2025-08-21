@@ -1,17 +1,28 @@
+/**
+ * Validates the login form fields
+ * @param {string} name - The name of the field to validate
+ * @param {string} value - The value of the field to validate
+ * @returns {string} - An error message if validation fails, or an empty string if it passes
+ */
 const validateLogin = (name, value) => {
     switch (name) {
         case 'email':
-        if (!value) return "Debe ingresar un correo electrónico";
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Correo electrónico inválido";
-        return '';
-    case 'password':
-        if (!value) return "Debe ingresar una contraseña";
-        return '';
-    default:
-        return '';
+            if (!value) return "Debe ingresar un correo electrónico";
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Correo electrónico inválido";
+            return '';
+        case 'password':
+            if (!value) return "Debe ingresar una contraseña";
+            return '';
+        default:
+            return '';
     }
 };
 
+/**
+ * Validates the login form fields
+ * @param {Object} formData 
+ * @returns {Object} - An object containing validation error messages
+ */
 const loginUser = async (formData) => {
   const validationErrors = validateLogin(formData);
   if (Object.keys(validationErrors).length > 0) {
@@ -25,7 +36,7 @@ const loginUser = async (formData) => {
               'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData),
-          credentials: 'include', // Esto es importante para enviar cookies
+          credentials: 'include',
       });
 
       const data = await response.json();
@@ -37,21 +48,26 @@ const loginUser = async (formData) => {
           throw new Error(data.message || 'Login fallido');
       }
   } catch (error) {
-      console.error('Error al intentar hacer login', error);
       throw new Error('Error en el login: ' + error.message);
   }
 };
 
+/**
+ * Logs out the user
+ * @returns {Promise<Object>}
+ */
 const logoutUser = async () => {
     try {
         const response = await fetch('http://localhost:5000/logout', {
             method: 'POST',
-            credentials: 'include', // Para enviar cookies al backend
+            credentials: 'include',
         });
 
         if (!response.ok) {
             throw new Error('Error al cerrar sesión');
         }
+
+        localStorage.removeItem('token');
 
         return { success: true, message: 'Sesión cerrada correctamente' };
     } catch (error) {
@@ -60,6 +76,10 @@ const logoutUser = async () => {
     }
 };
 
+/**
+ * Checks if the user is authenticated
+ * @returns {Promise<boolean>}
+ */
 const checkAuth = async () => {
     try {
         const response = await fetch("http://localhost:5000/check-auth", {
@@ -80,4 +100,9 @@ const checkAuth = async () => {
 };
 
 
-export { loginUser, validateLogin, logoutUser, checkAuth };
+export { 
+    loginUser, 
+    validateLogin, 
+    logoutUser, 
+    checkAuth 
+};
