@@ -1,3 +1,9 @@
+/**
+ * Validates the login form fields
+ * @param {string} name - The name of the field to validate
+ * @param {string} value - The value of the field to validate
+ * @returns {string} - An error message if validation fails, or an empty string if it passes
+ */
 const validateLogin = (name, value) => {
     switch (name) {
         case 'email':
@@ -12,6 +18,11 @@ const validateLogin = (name, value) => {
     }
 };
 
+/**
+ * Validates the login form fields
+ * @param {Object} formData 
+ * @returns {Object} - An object containing validation error messages
+ */
 const loginUser = async (formData) => {
   const validationErrors = validateLogin(formData);
   if (Object.keys(validationErrors).length > 0) {
@@ -41,11 +52,15 @@ const loginUser = async (formData) => {
   }
 };
 
+/**
+ * Logs out the user
+ * @returns {Promise<Object>}
+ */
 const logoutUser = async () => {
     try {
         const response = await fetch('http://localhost:5000/logout', {
             method: 'POST',
-            credentials: 'include', // Para enviar cookies al backend
+            credentials: 'include',
         });
 
         if (!response.ok) {
@@ -61,6 +76,10 @@ const logoutUser = async () => {
     }
 };
 
+/**
+ * Checks if the user is authenticated
+ * @returns {Promise<boolean>}
+ */
 const checkAuth = async () => {
     try {
         const response = await fetch("http://localhost:5000/check-auth", {
@@ -81,4 +100,9 @@ const checkAuth = async () => {
 };
 
 
-export { loginUser, validateLogin, logoutUser, checkAuth };
+export { 
+    loginUser, 
+    validateLogin, 
+    logoutUser, 
+    checkAuth 
+};

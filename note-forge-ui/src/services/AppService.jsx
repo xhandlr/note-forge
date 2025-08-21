@@ -1,3 +1,11 @@
+/**
+ * App service for managing send requests
+ * This service sends an HTTP request to the API
+ * @param {string} route - HTTP request endpoint
+ * @param {string} method - Type of method used
+ * @param {Object|FormData|null} [body=null] - JSON data
+ * @returns {Promise<Object>} Async function returns an object
+ */
 const sendRequest = async (route, method, body = null) => {
     const token = localStorage.getItem('token');
 
