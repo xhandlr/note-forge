@@ -3,3 +3,5 @@
 node_modules/
 note-forge-api/uploads
 dist/
+sonar-project.properties
+.scannerwork/
