@@ -1,70 +1,118 @@
-# Note Forge 📚  
-*A knowledge organizer for students and educators*
+<div align="center">
 
-[![Project Status](https://img.shields.io/badge/status-alpha-orange)](https://github.com/xhandlr/note-forge) 
-[![License](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/MIT)
+# 📚 Note Forge
+### *Empowering students and educators with organized knowledge*
+
+<br>
+
+| 📊 **Project** | ⚡ **Tech Stack** | 🤝 **Community** |
+|:---:|:---:|:---:|
+| [![Status](https://img.shields.io/badge/Status-Alpha_Release-orange?style=for-the-badge)](https://github.com/xhandlr/note-forge) | [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/) | [![Issues](https://img.shields.io/github/issues/xhandlr/note-forge?style=for-the-badge&logo=github)](https://github.com/xhandlr/note-forge/issues) |
+| [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](https://opensource.org/licenses/MIT) | [![Node.js](https://img.shields.io/badge/Node.js-22+-339933?style=for-the-badge&logo=node.js)](https://nodejs.org/) | [![Contributors](https://img.shields.io/badge/Contributors-Welcome-brightgreen?style=for-the-badge)](https://github.com/xhandlr/note-forge/blob/main/CONTRIBUTING.md) |
+|  | [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql)](https://www.mysql.com/) |  |
 
 ---
+
+</div>
 
 ## Table of Contents
-- [Overview](#overview)
-- [Features](#key-features)
-- [Project Status](#project-status)
-- [Roadmap](#development-roadmap)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
+- [🎯 The Problem & Solution](#the-problem--solution)
+- [✨ Key Features](#key-features)
+- [👥 Who Is This For](#who-is-this-for)
+- [🚧 Project Status & Roadmap](#project-status--roadmap)
+- [🛠️ Tech Stack](#tech-stack)
+- [⚡ Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
   - [Manual Installation](#manual-installation)
   - [Docker Installation](#docker-installation)
-- [Project Structure](#project-structure)
-- [Contributions](#contributions)
+- [🗂️ Project Structure](#project-structure)
+- [🤝 Contributions](#contributions)
 
 ---
 
-## Overview
+## The Problem & Solution
 
-Note Forge is an open-source tool designed to streamline the organization of exercises, categories, and study guides for students, educators, and teaching assistants.
+### The Challenge
+Students and educators often struggle with:  
+- 📚 **Scattered Materials**: Practice problems spread across PDFs, websites, and notebooks.  
+- 🔍 **Poor Organization**: Hard to find specific exercises when you need them.  
+- ⏰ **Time-Consuming Setup**: Manually organizing materials takes time away from actual learning.  
+
+### The Solution
+Note Forge makes educational content management easy:  
+- 🎯 **Unified Platform**: All exercises, categories, and study materials in one place.  
+- 🏷️ **Smart Organization**: Tag-based system with custom categories for quick retrieval.  
+- ⚡ **Quick Setup**: Get organized in minutes, not hours.
+
+
+---
+
+## Who Is This For?
+
+### Students 👨‍🎓  
+Keep your study materials, guides, and exercises neatly organized in categories — no more scattered files!  
+
+### Educators 👩‍🏫  
+Reuse exercises you’ve already created by storing them in Note Forge, and export new study material in PDF format.  
+
+### Teaching Assistants 👨‍💼  
+Quickly generate study materials with LaTeX styling, perfect for preparing exercises on demand.  
 
 ---
 
 ## Key Features
 
-- **Exercise Management** – Create, tag, and track practice problems  
-- **Custom Categories** – Organize content with personalized taxonomies  
-- **Study Guide Generator** – Build adaptive learning resources  
+### 📝 Exercise Management
+- **Create & Customize**: Text editor with LaTeX support for mathematical expressions
+- **Smart Tagging**: Organize with custom tags, difficulty levels, and time estimates
+- **Quick Search**: Find exercises instantly by title, tags, or content
+
+### 📁 Custom Categories  
+- **Flexible Organization**: Create subject-based, difficulty-based, or custom taxonomies
+- **Visual Categories**: Add images and descriptions to make browsing intuitive  
+- **Pin Important**: Mark frequently-used categories for quick access
+
+### 📚 Study Guide Generator *(Working on it)*
+- **Adaptive Selection**: Generate guides based on difficulty progression
+- **Time-Based Sessions**: Create study sessions fitting your available time
+- **Export Options**: Generate PDFs for offline studying
 
 ---
 
-## Project Status  
-
-**Alpha Release**  
-*Note: This is an early version under active development with breaking changes possible.*
-
----
-
-## Development Roadmap  
-
-| Status | Feature                          |
-|--------|----------------------------------|
-| 🔴     | UI/UX redesign                   |
-| 🟠     | Responsive layout improvements   |
-| 🟢     | Enhanced error handling          | 
-| ⚪     | API & UI unit testing            |
-| ⚪     | Documentation improvements       |
+## Project Status & Roadmap
+- 📅 **Started**: January 2025
+- 💻 **Active Development**: Yes  
+- 📝 **Documentation**: Continuously updated
 
 ---
 
-## Tech Stack  
+### 🚧 **Current Work**
+| Feature | Status |
+|---------|--------|
+| UI/UX Redesign | `🟡 50%` |
+| API & UI Testing | `🟡 50%` |  
+| Documentation | `🟡 50%` |
 
-### Frontend
-- React 18 + Vite  
-- TailwindCSS   
+### 📋 **Backlog**
+| Feature | Priority |
+|---------|----------|
+| Responsive Layout | `🔸 Medium` |
+| Error Handling | `🔸 Medium` |
 
-### Backend  
-- Node.js (Express)  
-- MySQL 8.0+  
+---
 
-### Infrastructure  
-- Docker/Podman  
+## Tech Stack
+
+**🎨 Frontend**
+- React 18 + Vite
+- TailwindCSS
+
+**⚙️ Backend**  
+- Node.js (Express)
+- MySQL 8.0+
+
+**🐳 Infrastructure**
+- Docker/Podman
 
 ---
 
@@ -72,9 +120,11 @@ Note Forge is an open-source tool designed to streamline the organization of exe
 
 ### Prerequisites
 
-- Node.js v22.x+  
-- MySQL 8.0+  
-- (Optional) Docker or Podman  
+Make sure you have these installed:
+
+- ✅ Node.js `v22.x+`
+- ✅ MySQL `8.0+`  
+- 🐳 Docker/Podman *(optional)*
 
 ---
 
@@ -156,21 +206,33 @@ This will start:
 
 Visit **http://localhost:5173** to use the app.
 
+---
+
 ## Project Structure
+
+### 📦 **Monorepo Structure**
 
 ```bash
 note-forge/
-├── db/                   # Database scripts
-├── note-forge-api/       # Backend services
-│   ├── config/           # Configuration files
-│   ├── controllers/      # Business logic
-│   └── ...               # Standard Express structure
-├── note-forge-ui/        # Frontend application
-│   ├── src/components/   # React components
-│   └── ...               # Standard React structure
-└── docker-compose.yml    # Container orchestration
+┣━━ 🗃️  db/                     ← Database scripts (SQL files)
+┃
+┣━━ ⚡ note-forge-api/          ← Backend service
+┃   ┣━━ config/                 ← App configuration
+┃   ┣━━ controllers/            ← Request handlers
+┃   ┣━━ services/               ← Business logic
+┃   ┣━━ models/                 ← Data models
+┃   ┗━━ routes/                 ← API endpoints
+┃
+┣━━ 🎨 note-forge-ui/           ← Frontend client
+┃   ┣━━ src/components/         ← React components
+┃   ┣━━ src/pages/              ← Application views
+┃
+┗━━ 🐳 docker-compose.yml       ← Container config
 ```
+
 ---
+
 ## Contributions
 
-This project welcomes contributions from the community. Please feel free to submit issues or pull requests to help improve Note Forge.
+Contributions, bug reports, and feature suggestions are welcome! 
+Feel free to open an issue or submit a pull request.
