@@ -3,24 +3,22 @@ const exerciseCategoryService = require('../services/exerciseCategoryService');
 
 async function createExerciseRequest(req, res) {
     try {
-        const userId = req.user.id; // Obtener el id del usuario desde el token
-        const { title, description, difficulty, reference, answer, duration, tags, details, categoryId } = req.body;
-        const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : null;
+        // Get ID from the token
+        const userId = req.user.id;
 
-        // Primero, crea el ejercicio
-        let result = await exerciseService.createExercise(
-            title, description, difficulty, reference,
-            answer, duration, tags, details, userId, imageUrl
-        );
+        // Get object from request body
+        const exerciseData = req.body;
 
-        const exerciseId = result.exerciseId; // El ID del ejercicio recién creado
+        // Create a new exercise
+        exerciseData.userId = userId;
+        let result = await exerciseService.createExercise(exerciseData);
+        const exerciseId = result.exerciseId;
 
-        // Si se proporcionó categoryId, asocia el ejercicio con la categoría
-        if (categoryId) {
-            await exerciseCategoryService.addExerciseCategory(exerciseId, categoryId);
+        if (exerciseData.categoryId) {
+            await exerciseCategoryService.addExerciseCategory(exerciseId, exerciseData.categoryId);
         }
 
-        res.status(201).json(result); // Retorna el mensaje de éxito con el ID del ejercicio
+        res.status(201).json(result);
     } catch (error) {
         console.log(error.message)
         res.status(400).json({ message: error.message });
@@ -55,10 +53,10 @@ async function getExercisesRequest(req, res) {
 async function updateExerciseRequest(req, res) {
     try {
         const exerciseId = req.params.id;  // Obtener el id del ejercicio desde los parámetros de la ruta
-        const { title, description, difficulty, collection, reference, answer, duration, tags, details } = req.body;
-        
-        const updatedExercise = await exerciseService.updateExercise(exerciseId, title, description, difficulty, collection, reference, answer, duration, tags, details);
-        
+        const exerciseData = req.body;
+
+        const updatedExercise = await exerciseService.updateExercise({ ...exerciseData, exerciseId });
+
         res.status(200).json(updatedExercise);
     } catch (error) {
         res.status(400).json({ message: error.message });
