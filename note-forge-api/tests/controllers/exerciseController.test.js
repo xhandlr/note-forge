@@ -21,27 +21,29 @@ describe('Exercise Controller', () => {
      */
     describe('POST /create-exercise', () => {
         let token;
+        let categoryId;
 
         beforeAll(async () => {
             token = await testHelper.createTestUserAndLogin();
             categoryId = await testHelper.createTestCategory(token);
         });
 
-        it('should create a new exercise', async () => {      
+        it('should create a new exercise', async () => {     
+            const exerciseData = {
+                title: 'Test Exercise',
+                description: 'This is a test exercise',
+                difficulty: 7,
+                reference: 'hxxp://example.com',
+                answer: 'This is a test answer',
+                duration: 60,
+                tags: 'test',
+                details: 'These are the details of the test exercise',
+                categoryId: categoryId
+            };
             const res = await request(app)
                 .post('/create-exercise')
                 .set('Authorization', `Bearer ${token}`)
-                .send({
-                    title: 'Test Exercise',
-                    description: 'This is a test exercise',
-                    difficulty: 7,
-                    reference: 'hxxp://example.com',
-                    answer: 'This is a test answer',
-                    duration: 60,
-                    tags: 'test',
-                    details: 'These are the details of the test exercise',
-                    categoryId: categoryId
-                });
+                .send(exerciseData);
             expect(res.statusCode).toBe(201);
             expect(res.body).toHaveProperty('message', 'Ejercicio creado con éxito');
             expect(res.body).toHaveProperty('exerciseId');
