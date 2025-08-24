@@ -1,7 +1,8 @@
 const Exercise = require('../models/exerciseModel');
 
-const createExercise = async (title, description, difficulty, reference, answer, duration, tags, details, userId, ImageUrl) => {
-    const exerciseId = await Exercise.create(title, description, difficulty, reference, answer, duration, tags, details, userId, ImageUrl);
+const createExercise = async (exerciseData) => {
+    exerciseData.file = exerciseData.file ? `http://localhost:5000/uploads/${exerciseData.file.filename}` : null;
+    const exerciseId = await Exercise.create(exerciseData);
     return { message: 'Ejercicio creado con éxito', exerciseId };
 };
 
@@ -13,8 +14,9 @@ const getExercises = async () => {
     return await Exercise.findAll(); 
 };
 
-const updateExercise = async (exerciseId, title, description, difficulty, collection, reference, answer, duration, tags, details) => {
-    return await Exercise.update(exerciseId, title, description, difficulty, collection, reference, answer, duration, tags, details);
+const updateExercise = async (exerciseData) => {
+    // Pending validations
+    return await Exercise.update(exerciseData);
 };
 
 const deleteExercise = async (exerciseId) => {
