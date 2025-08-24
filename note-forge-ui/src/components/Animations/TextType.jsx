@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState, createElement } from "react";
+import PropTypes from "prop-types";
+
 import { gsap } from "gsap";
 
 const TextType = ({
@@ -173,4 +175,29 @@ const TextType = ({
   );
 };
 
+TextType.propTypes = {
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]).isRequired,
+  as: PropTypes.oneOfType([PropTypes.string, PropTypes.elementType]),
+  typingSpeed: PropTypes.number,
+  initialDelay: PropTypes.number,
+  pauseDuration: PropTypes.number,
+  deletingSpeed: PropTypes.number,
+  loop: PropTypes.bool,
+  className: PropTypes.string,
+  showCursor: PropTypes.bool,
+  hideCursorWhileTyping: PropTypes.bool,
+  cursorCharacter: PropTypes.string,
+  cursorClassName: PropTypes.string,
+  cursorBlinkDuration: PropTypes.number,
+  textColors: PropTypes.arrayOf(PropTypes.string),
+  variableSpeed: PropTypes.shape({
+    min: PropTypes.number,
+    max: PropTypes.number,
+  }),
+  onSentenceComplete: PropTypes.func,
+  startOnVisible: PropTypes.bool,
+  reverseMode: PropTypes.bool,
+};
+
 export default TextType;
+
