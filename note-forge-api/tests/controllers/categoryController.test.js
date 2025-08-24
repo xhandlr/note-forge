@@ -70,6 +70,9 @@ describe('Category Controller', () => {
      * Endpoint GET /categories
      */
     describe('GET /categories', () => {
+        let token;
+        let categoryId;
+        
         beforeAll(async () => {
             token = await createTestUserAndLogin();
             categoryId = await createTestCategory(token);
