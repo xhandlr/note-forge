@@ -1,3 +1,5 @@
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 /**
  * Validates the login form fields
  * @param {string} name - The name of the field to validate
@@ -30,7 +32,7 @@ const loginUser = async (formData) => {
   }
 
   try {
-      const response = await fetch('http://localhost:5000/login', {
+      const response = await fetch(`${API_BASE_URL}/login`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -58,7 +60,7 @@ const loginUser = async (formData) => {
  */
 const logoutUser = async () => {
     try {
-        const response = await fetch('http://localhost:5000/logout', {
+        const response = await fetch(`${API_BASE_URL}/logout`, {
             method: 'POST',
             credentials: 'include',
         });
@@ -82,7 +84,7 @@ const logoutUser = async () => {
  */
 const checkAuth = async () => {
     try {
-        const response = await fetch("http://localhost:5000/check-auth", {
+        const response = await fetch(`${API_BASE_URL}/check-auth`, {
             method: "GET",
             credentials: "include", 
         });
