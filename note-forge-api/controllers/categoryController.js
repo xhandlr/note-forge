@@ -1,4 +1,5 @@
 const categoryService = require('../services/categoryService');
+const API_BASE_URL = process.env.BASE_URL;
 
 async function createCategoryRequest(req, res) { 
     try {
@@ -7,7 +8,7 @@ async function createCategoryRequest(req, res) {
 
         const pinned = Number(isPinned);
 
-        const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : null;
+        const imageUrl = req.file ? `${API_BASE_URL}/uploads/${req.file.filename}` : null;
         const result = await categoryService.createCategory(name, description, imageUrl, pinned, userId);
         res.status(201).json(result); 
     } catch (error) {
@@ -47,7 +48,7 @@ async function updateCategoryRequest(req, res) {
 
         const pinned = Number(isPinned);
         
-        const imageUrl = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : null;
+        const imageUrl = req.file ? `${API_BASE_URL}/uploads/${req.file.filename}` : null;
         
         const updatedCategory= await categoryService.updateCategory(categoryId, name, description, imageUrl, pinned);
         
