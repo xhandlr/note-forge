@@ -1,4 +1,5 @@
 import { sendRequest } from "./AppService";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /**
  * Create a new exercise in the API
@@ -6,7 +7,7 @@ import { sendRequest } from "./AppService";
  * @returns {Promise<Object>} - Returns the created exercise
  */
 const addExercise = async (exerciseData) => {
-    return sendRequest('http://localhost:5000/create-exercise', 'POST', exerciseData);  
+    return sendRequest(`${API_BASE_URL}/create-exercise`, 'POST', exerciseData);
 };
 
 /**
@@ -16,7 +17,7 @@ const addExercise = async (exerciseData) => {
  * @returns {Promise<Object>} - Returns the updated exercise
  */
 const updateExercise = async (id, exerciseData) => {
-    return sendRequest(`http://localhost:5000/update-exercise/${id}`, 'PUT', exerciseData); 
+    return sendRequest(`${API_BASE_URL}/update-exercise/${id}`, 'PUT', exerciseData);
 };
 
 /**
@@ -25,7 +26,7 @@ const updateExercise = async (id, exerciseData) => {
  * @returns {Promise<Object>} - Returns the deleted exercise info
  */
 const deleteExercise = async (id) => {
-    return sendRequest(`http://localhost:5000/delete-exercise/${id}`, 'DELETE'); 
+    return sendRequest(`${API_BASE_URL}/delete-exercise/${id}`, 'DELETE');
 };
 
 /**
@@ -34,7 +35,7 @@ const deleteExercise = async (id) => {
  * @returns {Promise<Object>} - Returns the exercise
  */
 const getExerciseById = async (id) => {
-    return sendRequest(`http://localhost:5000/exercise/${id}`, 'GET'); 
+    return sendRequest(`${API_BASE_URL}/exercise/${id}`, 'GET');
 };
 
 /**
@@ -42,7 +43,7 @@ const getExerciseById = async (id) => {
  * @returns {Promise<Object[]>} - Returns a list of exercises
  */
 const getExercises = async () => {
-    return sendRequest('http://localhost:5000/exercises', 'GET');  
+    return sendRequest(`${API_BASE_URL}/exercises`, 'GET');
 };
 
 export { 
