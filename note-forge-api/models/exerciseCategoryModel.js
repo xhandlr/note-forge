@@ -6,7 +6,7 @@ const ExerciseCategory = {
 
         const [result] = await pool.query(query, [exercise_id, category_id]);
 
-        result.insertId;
+        return result.insertId;
     }
 };
 

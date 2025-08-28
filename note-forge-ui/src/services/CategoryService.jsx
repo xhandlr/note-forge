@@ -1,12 +1,13 @@
 import { sendRequest } from "./AppService";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /**
  * Function to add a new category
- * @param {Object} categoryData 
- * @returns {Promise<Object}
+ * @param {Object} categoryData
+ * @returns {Promise<Object>}
  */
 export const addCategory = async (categoryData) => {
-    return sendRequest('http://localhost:5000/create-category', 'POST', categoryData);
+    return sendRequest(`${API_BASE_URL}/create-category`, 'POST', categoryData);
 };
 
 /**
@@ -16,7 +17,7 @@ export const addCategory = async (categoryData) => {
  * @returns {Promise<Object>}
  */
 export const updateCategory = async (id, categoryData) => {
-    return sendRequest(`http://localhost:5000/update-category/${id}`, 'PUT', categoryData);
+    return sendRequest(`${API_BASE_URL}/update-category/${id}`, 'PUT', categoryData);
 };
 
 /**
@@ -25,7 +26,7 @@ export const updateCategory = async (id, categoryData) => {
  * @returns {Promise<Object>}
  */
 export const deleteCategory = async (id) => {
-    return sendRequest(`http://localhost:5000/delete-category/${id}`, 'DELETE');
+    return sendRequest(`${API_BASE_URL}/delete-category/${id}`, 'DELETE');
 };
 
 /**
@@ -34,7 +35,7 @@ export const deleteCategory = async (id) => {
  * @returns {Promise<Object>}
  */
 export const getCategoryById = async (id) => {
-    return sendRequest(`http://localhost:5000/category/${id}`, 'GET'); 
+    return sendRequest(`${API_BASE_URL}/category/${id}`, 'GET');
 };
 
 /**
@@ -42,6 +43,6 @@ export const getCategoryById = async (id) => {
  * @returns {Promise<Array>}
  */
 export const getCategories = async () => {
-    return sendRequest('http://localhost:5000/categories', 'GET');  
+    return sendRequest(`${API_BASE_URL}/categories`, 'GET');
 };
 

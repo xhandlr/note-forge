@@ -1,4 +1,5 @@
 import { sendRequest } from "./AppService";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /**
  * Creates a new guide in the API
@@ -6,7 +7,7 @@ import { sendRequest } from "./AppService";
  * @returns {Promise<Object>} - Returns the created guide
  */
 const addGuide = async (guideData) => {
-    return sendRequest('http://localhost:5000/create-guide', 'POST', guideData);  
+    return sendRequest(`${API_BASE_URL}/create-guide`, 'POST', guideData);  
 };
 
 /**
@@ -16,7 +17,7 @@ const addGuide = async (guideData) => {
  * @returns {Promise<Object>} - Returns the updated guide
  */
 const updateGuide = async (id, guideData) => {
-    return sendRequest(`http://localhost:5000/update-guide/${id}`, 'PUT', guideData); 
+    return sendRequest(`${API_BASE_URL}/update-guide/${id}`, 'PUT', guideData); 
 };
 
 /**
@@ -25,7 +26,7 @@ const updateGuide = async (id, guideData) => {
  * @returns {Promise<Object>} - Returns the deleted guide info
  */
 const deleteGuide = async (id) => {
-    return sendRequest(`http://localhost:5000/delete-guide/${id}`, 'DELETE'); 
+    return sendRequest(`${API_BASE_URL}/delete-guide/${id}`, 'DELETE'); 
 };
 
 /**
@@ -34,7 +35,7 @@ const deleteGuide = async (id) => {
  * @returns {Promise<Object>} - Returns the guide
  */
 const getGuideById = async (id) => {
-    return sendRequest(`http://localhost:5000/guide/${id}`, 'GET'); 
+    return sendRequest(`${API_BASE_URL}/guide/${id}`, 'GET'); 
 };
 
 /**
@@ -42,7 +43,7 @@ const getGuideById = async (id) => {
  * @returns {Promise<Object[]>} - Returns a list of guides
  */
 const getGuides = async () => {
-    return sendRequest('http://localhost:5000/guides', 'GET');  
+    return sendRequest(`${API_BASE_URL}/guides`, 'GET');  
 };
 
 export { 
