@@ -1,3 +1,4 @@
+const TEST_PASSWORD = process.env.TEST_PASSWORD || 'ValidTestPass123!';
 const request = require('supertest');
 const app = require('../../app');
 const pool = require('../../config/db');
@@ -5,14 +6,14 @@ const pool = require('../../config/db');
 const VALID_USER = {
   username: 'testuser',
   email: 'test@example.com',
-  password: 'ValidTestPass123!',
+  password: TEST_PASSWORD,
   country: 'Testland',
   role: 'student'
 };
 
 const LOGIN_CREDENTIALS = {
   email: 'test@example.com',
-  password: 'ValidTestPass123!'
+  password: TEST_PASSWORD
 };
 
 /**
