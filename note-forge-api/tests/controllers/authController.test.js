@@ -3,6 +3,7 @@
  * Runs tests for user registration, login, and logout functionalities
  */
 
+const TEST_PASSWORD = process.env.TEST_PASSWORD || 'ValidTestPass123!';
 const request = require('supertest');
 const app = require('../../app');
 const pool = require('../../config/db'); 
@@ -12,7 +13,7 @@ const { cleanupTestData } = require('../utils/testHelpers');
 const VALID_USER = {
   username: 'testuser',
   email: 'test@example.com',
-  password: 'ValidTestPass123!',
+  password: TEST_PASSWORD,
   country: 'Testland',
   role: 'student'
 };
@@ -28,29 +29,29 @@ const EMPTY_USER = {
 const DUPLICATE_USER = {
   username: 'duplicateuser',
   email: 'test@example.com',
-  password: 'AnotherPass456!',
+  password: TEST_PASSWORD + '1',
   country: 'Testland',
   role: 'student'
 };
 
 const LOGIN_CREDENTIALS = {
   email: 'test@example.com',
-  password: 'ValidTestPass123!'
+  password: TEST_PASSWORD
 };
 
 const WRONG_PASSWORD_LOGIN = {
   email: 'test@example.com',
-  password: 'WrongPassword999!'
+  password: TEST_PASSWORD + 'wrong'
 };
 
 const WRONG_EMAIL_LOGIN = {
   email: 'wrong@example.com',
-  password: 'ValidTestPass123!'
+  password: TEST_PASSWORD
 };
 
 const EMPTY_EMAIL_LOGIN = {
   email: '',
-  password: 'ValidTestPass123!'
+  password: TEST_PASSWORD
 };
 
 // Close database connection

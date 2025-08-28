@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-COPY --chown=node:node --chmod=755 . .
+COPY --chown=root:root --chmod=755 . .
 
 USER node
 
