@@ -5,6 +5,7 @@ import Navbar from "../../components/UI/Navbar";
 import Button from "../../components/UI/Button";
 import BgDecoration from "../../components/UI/BgDecoration";
 import imageTutorial from "/src/assets/cloudy-night.png";
+import plus from "/src/assets/plus.png";
 import Footer from "../../components/UI/Footer";
 
 // Dashboard components
@@ -65,6 +66,13 @@ function Dashboard() {
                         exercisesCount={0}
                         guidesCount={0}
                     />
+                    <button
+                        className="flex flex-col items-center justify-center rounded-full w-16 h-16 bg-purple-100 hover:bg-purple-200 transition-colors duration-200 shadow-md cursor-pointer"
+                        title="Crear nueva categoría"
+                        onClick={() => {/* nueva categoría */}}
+                    >
+                        <img src={plus} alt="Crear categoría" className="w-8 h-8" />
+                    </button>
                 </div>
             </div>
             <Footer />
