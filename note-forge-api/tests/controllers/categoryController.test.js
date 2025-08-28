@@ -75,7 +75,6 @@ describe('Category Controller', () => {
         
         beforeAll(async () => {
             token = await createTestUserAndLogin();
-            categoryId = await createTestCategory(token);
         });
 
         it('should return all the user categories', async () => {
