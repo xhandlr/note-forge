@@ -29,6 +29,10 @@ function Footer() {
                             value: "GPA icons by SBTS2018",
                             href: "https://www.flaticon.com/free-icons/gpa",
                         },
+                        {
+                            value: "More icons by sonnycandra",
+                            href: "https://www.flaticon.com/free-icons/plus-button"
+                        }
                         // Missing attributions of animations and illustrations
                     ]}
                 />
