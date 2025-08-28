@@ -1,6 +1,20 @@
+const TEST_PASSWORD = process.env.TEST_PASSWORD || 'ValidTestPass123!';
 const request = require('supertest');
 const app = require('../../app');
 const pool = require('../../config/db');
+
+const VALID_USER = {
+  username: 'testuser',
+  email: 'test@example.com',
+  password: TEST_PASSWORD,
+  country: 'Testland',
+  role: 'student'
+};
+
+const LOGIN_CREDENTIALS = {
+  email: 'test@example.com',
+  password: TEST_PASSWORD
+};
 
 /**
  * Create a test user and login
@@ -11,18 +25,9 @@ async function createTestUserAndLogin(email = 'test@example.com') {
 
     await pool.query("DELETE FROM users WHERE email = ?", [email]);
 
-    await request(app).post('/register').send({
-    username: 'testuser',
-    email,
-    password: '123456',
-    country: 'Testland',
-    role: 'student'
-    });
+    await request(app).post('/register').send(VALID_USER);
 
-    const loginRes = await request(app).post('/login').send({
-    email,
-    password: '123456'
-    });
+    const loginRes = await request(app).post('/login').send(LOGIN_CREDENTIALS);
 
     return loginRes.body.token;
 }

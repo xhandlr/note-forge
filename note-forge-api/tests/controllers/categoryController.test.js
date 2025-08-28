@@ -70,9 +70,10 @@ describe('Category Controller', () => {
      * Endpoint GET /categories
      */
     describe('GET /categories', () => {
+        let token;
+        
         beforeAll(async () => {
             token = await createTestUserAndLogin();
-            categoryId = await createTestCategory(token);
         });
 
         it('should return all the user categories', async () => {

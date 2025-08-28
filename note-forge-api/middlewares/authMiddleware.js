@@ -14,7 +14,7 @@ const authMiddleware = (req, res, next) => {
         req.user = verified; 
         next();
     } catch (error) {
-        res.status(403).json({ message: 'Token inválido' });
+        return res.status(403).json({ message: 'Token inválido' });
     }
 };
 
