@@ -71,7 +71,6 @@ describe('Category Controller', () => {
      */
     describe('GET /categories', () => {
         let token;
-        let categoryId;
         
         beforeAll(async () => {
             token = await createTestUserAndLogin();
