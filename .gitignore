@@ -2,6 +2,7 @@
 .env.test
 node_modules/
 note-forge-api/uploads
+note-forge-api/coverage
 dist/
 sonar-project.properties
 .scannerwork/

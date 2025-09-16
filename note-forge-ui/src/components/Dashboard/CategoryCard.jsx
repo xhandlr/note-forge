@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 function CategoryCard({ imageSrc = null, alt, bgColor, title, description, exercisesCount = 0, guidesCount = 0 }) {
     return (
@@ -15,4 +16,5 @@ function CategoryCard({ imageSrc = null, alt, bgColor, title, description, exerc
         </div>
     );
 }
+
 export default CategoryCard;
