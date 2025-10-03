@@ -5,6 +5,9 @@ import './index.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import 'boxicons';
 
+import { NotificationProvider } from './contexts/NotificationContext';
+import NotificationContainer from './components/UI/NotificationContainer';
+
 import Login from './pages/Auth/Login';
 import Registration from './pages/Auth/Registration';
 import CreateExercise from './pages/Exercises/CreateExercise';
@@ -19,31 +22,39 @@ import EditExercise from './pages/Exercises/EditExercise';
 import Library from './pages/ResourceLibrary/Library';
 import Home from './pages/Auth/Home';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+    throw new Error('Root element not found');
+}
+
+const root = ReactDOM.createRoot(rootElement);
 root.render(
-  <React.StrictMode>
-    <Router basename="/note-forge">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Registration />} /> 
+    <React.StrictMode>
+        <NotificationProvider>
+            <Router basename="/note-forge">
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Registration />} />
 
-        <Route path="/dashboard" element={<Dashboard /> } />
-        <Route path="/library" element={<Library />} />
+                    <Route path="/dashboard" element={<Dashboard /> } />
+                    <Route path="/library" element={<Library />} />
 
-        <Route path="/create-exercise" element={<CreateExercise />} />
-        <Route path="/edit-exercise/:id" element={<EditExercise />} />
-        <Route path="/exercises" element={<Exercises />} />
+                    <Route path="/create-exercise" element={<CreateExercise />} />
+                    <Route path="/edit-exercise/:id" element={<EditExercise />} />
+                    <Route path="/exercises" element={<Exercises />} />
 
-        <Route path="/create-category" element={<CreateCategory />} />
-        <Route path="/edit-category/:id" element={<EditCategory />} /> 
-        <Route path="/categories" element={<Categories />} />
+                    <Route path="/create-category" element={<CreateCategory />} />
+                    <Route path="/edit-category/:id" element={<EditCategory />} />
+                    <Route path="/categories" element={<Categories />} />
 
-        <Route path="/guides" element={<Guides />} />
-        <Route path="/create-guide" element={<CreateGuide />} />
+                    <Route path="/guides" element={<Guides />} />
+                    <Route path="/create-guide" element={<CreateGuide />} />
 
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
-  </React.StrictMode>
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+                <NotificationContainer />
+            </Router>
+        </NotificationProvider>
+    </React.StrictMode>
 );
