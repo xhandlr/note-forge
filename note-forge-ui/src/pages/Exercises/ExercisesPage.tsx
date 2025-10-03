@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from '../../components/UI/Navbar';
+import Navbar from '../../components/Dashboard/Navbar';
 import UserPanel from "../../components/Dashboard/UserPanel";
 import SearchBar from "../../components/Dashboard/SearchBar";
 import ExercisesPanel from "../../components/Exercises/ExercisesPanel";

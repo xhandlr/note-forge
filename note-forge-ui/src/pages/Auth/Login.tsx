@@ -18,14 +18,26 @@ import Checkbox from '../../components/UI/Checkbox';
  * @returns {JSX.Element}
  */
 
-function Login() {
+interface LoginFormData {
+    email: string;
+    password: string;
+    keepLoggedIn?: boolean;
+}
+
+interface LoginErrors {
+    email?: string;
+    password?: string;
+    auth?: string;
+}
+
+function Login(): JSX.Element {
 
     // Hooks for managing form data and errors
-    const [ formData, setFormData ] = useState({
+    const [ formData, setFormData ] = useState<LoginFormData>({
         email: '',
         password: ''
     });
-    const [ errors, setErrors ] = useState({});
+    const [ errors, setErrors ] = useState<LoginErrors>({});
 
     // Hook for navigation
     const navigate = useNavigate();
@@ -36,7 +48,7 @@ function Login() {
      * 
      * @param {React.ChangeEvent<HTMLInputElement>} e 
      */
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, type, checked, value } = e.target;
         setFormData({
             ...formData,
@@ -50,9 +62,9 @@ function Login() {
      * If the login is successful, it saves the token in localStorage and redirects the user to the dashboard.
      * If there is an error, it shows an alert with the error message.
      *
-     * @param {React.FormEvent<HTMLInputElement>} e
+     * @param {React.FormEvent<HTMLFormElement>} e
      */
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         try {
             const data = await loginUser(formData); 
@@ -67,7 +79,7 @@ function Login() {
         }
     };    
 
-    const handleBlur = (e) => {
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>): void => {
         const {name, value} = e.target;
         const errorMsg = validateLogin(name, value);
         setErrors((prev) => ({
@@ -90,7 +102,7 @@ function Login() {
             <div className="flex flex-col items-center w-full">
                 <Icon
                     size='w-25 h-25'
-                ></Icon>
+                />
                 <div className="w-full flex flex-col items-center gap-y-4">
                     <form onSubmit={handleSubmit} className="mt-10 w-full flex flex-col items-center gap-y-4">
                         <h1 className='text-2xl font-bold'>Iniciar Sesión</h1>

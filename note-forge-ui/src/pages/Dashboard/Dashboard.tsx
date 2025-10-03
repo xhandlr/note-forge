@@ -1,7 +1,8 @@
-import React, { useState } from "react"; 
+import React, { useState } from "react";
+import { useTranslation} from "react-i18next";
 
 // UI components
-import Navbar from "../../components/UI/Navbar";
+import Navbar from "../../components/Dashboard/Navbar";
 import Button from "../../components/UI/Button";
 import BgDecoration from "../../components/UI/BgDecoration";
 import imageTutorial from "/src/assets/cloudy-night.png";
@@ -13,8 +14,9 @@ import ExerciseCounter from "../../components/Dashboard/ExerciseCounter";
 import ProfilePicture from "../../components/Dashboard/ProfilePicture";
 import CategoryCard from "../../components/Dashboard/CategoryCard";
 
-function Dashboard() { 
-    const options = ["Mis asignaturas", "Mis ejercicios", "Material de estudio"];
+function Dashboard() {
+    const { t } = useTranslation();
+    const options = [t('dashboard.my-subjects'), t('dashboard.my-exercises'), t('dashboard.study-material')];
     const [selected, setSelected] = useState(options[0]);
 
     return (
@@ -30,10 +32,10 @@ function Dashboard() {
             <Navbar />
             <div className="m-10 w-4/5 bg-white rounded-md mt-35 border border-gray-300 flex flex-row justify-between gap-5 p-6">
                 <div className="flex flex-col justify-center gap-4">
-                    <h1 className="text-black text-2xl font-bold">Organiza tu aprendizaje</h1>
-                    <p className="max-w-300">Define tus asignaturas, crea ejercicios y diseña guías de aprendizaje.</p>
+                    <h1 className="text-black text-2xl font-bold">{t('dashboard.title')}</h1>
+                    <p className="max-w-300">{t('dashboard.description')}</p>
                     <Button 
-                        children={"Crear un ejercicio"}
+                        children={t('dashboard.create-exercise')}
                         variant="primary"
                         className="max-w-xs"
                     />
@@ -62,7 +64,7 @@ function Dashboard() {
                         alt="Tutorial"
                         bgColor="bg-(--color-night-background)"
                         title="Tutorial"
-                        description="Agrega un ejercicio de tu preferencia"
+                        description={t('dashboard.add-exercise-choice')}
                         exercisesCount={0}
                         guidesCount={0}
                     />

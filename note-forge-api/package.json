@@ -6,7 +6,9 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "NODE_ENV=test jest --runInBand --testTimeout=10000",
-    "test:watch": "NODE_ENV=test jest --runInBand --watch"
+    "test:watch": "NODE_ENV=test jest --runInBand --watch",
+    "test:coverage": "NODE_ENV=test jest --runInBand --testTimeout=10000 --coverage",
+    "sonar": "sonar-scanner"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +29,40 @@
     "jest": "^30.0.5",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": false,
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "controllers/**/*.js",
+      "models/**/*.js", 
+      "routes/**/*.js",
+      "services/**/*.js",
+      "middlewares/**/*.js",
+      "config/**/*.js",
+      "!**/node_modules/**",
+      "!**/tests/**",
+      "!index.js",
+      "!app.js"
+    ],
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 50,
+        "functions": 60,
+        "lines": 70,
+        "statements": 70
+      }
+    },
+    "testMatch": [
+      "**/tests/**/*.test.js",
+      "**/tests/**/*.spec.js"
+    ]
   },
   "description": ""
 }
