@@ -1,5 +1,16 @@
 import React from "react";
 
+interface TextFieldProps {
+    type?: string;
+    name: string;
+    placeholder?: string;
+    required?: boolean;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    className?: string;
+    error?: string;
+    [key: string]: any; 
+}
+
 function TextField({
     type = "text",
     name,
@@ -9,7 +20,7 @@ function TextField({
     className = "border-2 border-gray-300 rounded-lg p-2 w-4/5 focus:border-gray-500 focus:outline-none transition-colors",
     error,
     ... props
-}) {
+}: TextFieldProps) {
     return (
         <div className='w-full flex flex-col items-center gap-y-2 transition-colors'>
             <input 

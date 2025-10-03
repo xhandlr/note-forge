@@ -1,0 +1,48 @@
+{
+  "navbar": {
+    "title": "Note Forge",
+    "dashboard": "Dashboard",
+    "login": "Log In",
+    "logout": "Log Out",
+    "export-guides": "Export Guides",
+    "search": "Search"
+  },
+  "messages": {
+    "logoutSuccess": "Session closed successfully"
+  },
+  "dashboard": {
+    "title": "Organize your learning",
+    "description": "Define your subjects, create exercises and design learning guides.",
+    "create-exercise": "Create a new exercise",
+    "my-subjects": "My subjects",
+    "my-exercises": "My exercises",
+    "study-material": "Study material",
+    "add-exercise-choice": "Add an exercise of your choice"
+  },
+  "footer": {
+    "description": "Note Forge. Open source under MIT License.",
+    "thanks": "Thanks",
+    "contact": "Contact"
+  },
+  "select": {
+    "description": "Select an option"
+  },
+  "home": {
+    "description": "All your study material in one place. Create your own exercises, add subjects and more.",
+    "create-exercises": "Create your exercises",
+    "welcome": "Welcome",
+    "made-for-you": "Made for you"
+  },
+  "roles": {
+    "student": "Student",
+    "assistant": "Assistant",
+    "teacher": "Teacher"
+  },
+  "button": {
+    "start": "Start"
+  },
+  "counter": {
+    "exercise": "exercise",
+    "exercises": "exercises"
+  }
+}

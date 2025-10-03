@@ -1,6 +1,12 @@
 import React from "react";
 
-function ProfilePicture({ circleSize = "w-40 h-40", imageSrc, altText = "Profile"}) {
+interface ProfilePictureProps {
+    circleSize?: string; // Tailwind size classes, e.g., "w-40 h-40"
+    imageSrc?: string; // URL of the profile image
+    altText?: string; // Alt text for the image
+}
+
+function ProfilePicture({ circleSize = "w-40 h-40", imageSrc, altText = "Profile"}: ProfilePictureProps) {
     return (
         <div className={`bg-gray-100 rounded-full p-4 ${circleSize} flex items-center justify-center`}>
             {imageSrc ? (

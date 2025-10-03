@@ -1,4 +1,15 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+
+interface SelectProps {
+    name: string;
+    required?: boolean;
+    onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+    value: string;
+    className?: string;
+    options: { value: string; label: string }[];
+    error?: string;
+}
 
 function Select({ 
     name, 
@@ -7,18 +18,20 @@ function Select({
     value, 
     className = "border-2 border-gray-300 rounded-lg p-2 w-4/5 focus:border-gray-500 focus:outline-none transition-colors", 
     options = [], 
-    error = '' }
-) {
+    error = '' 
+}: SelectProps ) {
+    const { t } = useTranslation();
+
    return (
         <div className="w-full flex flex-col items-center gap-y-2">
-            <select 
-                name={name} 
-                required={required} 
+            <select
+                name={name}
+                required={required}
                 onChange={onChange}
                 value={value}
                 className={className}
             >
-                <option value="" disabled>Selecciona una opción</option>
+                <option value="" disabled>{t('select.description')}</option>
                 {options.map((option) => (
                     <option key={option.value} value={option.value}>
                         {option.label}
