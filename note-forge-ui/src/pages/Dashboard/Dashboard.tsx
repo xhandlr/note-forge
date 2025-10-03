@@ -1,7 +1,7 @@
 import React, { useState } from "react"; 
 
 // UI components
-import Navbar from "../../components/UI/Navbar";
+import Navbar from "../../components/Dashboard/Navbar";
 import Button from "../../components/UI/Button";
 import BgDecoration from "../../components/UI/BgDecoration";
 import imageTutorial from "/src/assets/cloudy-night.png";

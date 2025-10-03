@@ -7,7 +7,7 @@ import homeImage from '../../assets/home-image.png';
 
 // UI Components
 import Button from '../../components/UI/Button';
-import Navbar from '../../components/UI/Navbar';
+import Navbar from '../../components/Dashboard/Navbar';
 import BgDecoration from '../../components/UI/BgDecoration';
 import InfoCard from '../../components/UI/InfoCard';
 import Footer from '../../components/UI/Footer';

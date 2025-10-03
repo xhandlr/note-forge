@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addExercise } from '../../services/ExerciseService';
 
-import Navbar from '../../components/UI/Navbar';
+import Navbar from '../../components/Dashboard/Navbar';
 import DifficultyContainer from '../../components/Exercises/DifficultyContainer';
 import ImageUploader from '../../components/Dashboard/ImageUploader';
 import TagsInput from '../../components/Exercises/TagsInput';

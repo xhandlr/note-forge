@@ -1,11 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-function CategoryCard({ imageSrc = null, alt, bgColor, title, description, exercisesCount = 0, guidesCount = 0 }) {
+interface CategoryCardProps {
+    imageSrc?: string | null;
+    alt: string;
+    bgColor: string;
+    title: string;
+    description: string;
+    exercisesCount?: number;
+    guidesCount?: number;
+}
+
+function CategoryCard({ imageSrc = null, alt, bgColor, title, description, exercisesCount = 0, guidesCount = 0 }: CategoryCardProps) {
+
+    const src = imageSrc as string;
+
     return (
         <div className="aspect-square min-h-40 min-w-40 bg-white border border-gray-300 flex flex-col shadow-lg gap-2 relative transition-transform duration-200 hover:scale-105">
             <div className={`w-full h-3/5 flex items-center justify-center ${bgColor}`}>
-                <img src={imageSrc} alt={alt} className="object-contain w-4/5 h-4/5" />
+                <img src={src} alt={alt} className="object-contain w-4/5 h-4/5" />
             </div>
             <h1 className="text-gray-800 text-lg font-semibold ml-4">{title}</h1>
             <p className="text-gray-600 text-sm ml-4">{description}</p>
