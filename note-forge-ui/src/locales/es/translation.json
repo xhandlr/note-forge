@@ -1,9 +1,11 @@
 {
   "navbar": {
     "title": "Note Forge",
-    "dashboard": "Dashboard",
+    "dashboard": "Tablero",
     "login": "Iniciar Sesión",
-    "logout": "Cerrar Sesión"
+    "logout": "Cerrar Sesión",
+    "export-guides": "Exportar Guías",
+    "search": "Buscador"
   },
   "messages": {
     "logoutSuccess": "Sesión cerrada con éxito"

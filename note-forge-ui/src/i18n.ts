@@ -22,7 +22,7 @@ i18n
     fallbackLng: 'es', // Idioma por defecto
     lng: 'es',
     interpolation: {
-      escapeValue: false // React ya escapa por defecto
+      escapeValue: false
     }
   });
 
