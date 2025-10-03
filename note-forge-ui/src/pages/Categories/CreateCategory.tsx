@@ -1,7 +1,7 @@
 import React, { useState, useCallback, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addCategory } from '../../services/CategoryService';
-import Navbar from '../../components/UI/Navbar';
+import Navbar from '../../components/Dashboard/Navbar';
 
 // Componentes memoizados para mejor rendimiento
 const MemoInput = memo(({ id, name, type, value, onChange, ...props }) => (

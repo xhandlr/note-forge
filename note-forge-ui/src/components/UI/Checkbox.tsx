@@ -1,5 +1,16 @@
 import React from 'react';
 
+interface CheckboxProps {
+    name?: string;
+    checked?: boolean;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    className?: string;
+    strokeWidth?: number;
+    stroke?: string;
+    size?: string;
+    label: string;
+}
+
 function Checkbox({
     name = "keepLoggedIn",
     checked = false,
@@ -9,7 +20,7 @@ function Checkbox({
     stroke = "white",
     size = "w-5 h-5",
     label
-}) {
+}: CheckboxProps) {
     return (
         <div className="w-full flex flex-col items-center">
             <label className="flex items-center gap-2 cursor-pointer">

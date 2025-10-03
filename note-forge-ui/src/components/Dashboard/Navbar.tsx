@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 
 // UI Components
-import Icon from "./Icon";
-import Button from "./Button";
+import Icon from "../UI/Icon";
+import Button from "../UI/Button";
 
 // Login Service
 import { logoutUser } from "../../services/LoginService";
@@ -32,7 +32,11 @@ function Navbar() {
             alert(t('messages.logoutSuccess'));
             navigate("/");
         } catch (error) {
-            alert(error.message);
+            if (error instanceof Error) {
+                alert(error.message);
+            } else {
+                alert(t('messages.logoutError'));
+            }
         }
     };
 

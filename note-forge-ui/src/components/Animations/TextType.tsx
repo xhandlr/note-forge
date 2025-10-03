@@ -1,9 +1,34 @@
-import React, { useEffect, useRef, useState, createElement } from "react";
-import PropTypes from "prop-types";
-
+import React, { useEffect, useRef, useState, createElement, ElementType } from "react";
 import { gsap } from "gsap";
 
-const TextType = ({
+interface VariableSpeed {
+  min: number;
+  max: number;
+}
+
+interface TextTypeProps {
+  text: string | string[];
+  as?: ElementType | keyof JSX.IntrinsicElements;
+  typingSpeed?: number;
+  initialDelay?: number;
+  pauseDuration?: number;
+  deletingSpeed?: number;
+  loop?: boolean;
+  className?: string;
+  showCursor?: boolean;
+  hideCursorWhileTyping?: boolean;
+  cursorCharacter?: string;
+  cursorClassName?: string;
+  cursorBlinkDuration?: number;
+  textColors?: string[];
+  variableSpeed?: VariableSpeed;
+  onSentenceComplete?: (sentence: string, index: number) => void;
+  startOnVisible?: boolean;
+  reverseMode?: boolean;
+  [key: string]: any; // For additional props
+}
+
+const TextType: React.FC<TextTypeProps> = ({
   text,
   as: Component = "div",
   typingSpeed = 50,
@@ -29,22 +54,24 @@ const TextType = ({
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(!startOnVisible);
-  const cursorRef = useRef(null);
-  const containerRef = useRef(null);
+  
+  const cursorRef = useRef<HTMLSpanElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
 
   const textArray = Array.isArray(text) ? text : [text];
 
-  const getRandomSpeed = () => {
+  const getRandomSpeed = (): number => {
     if (!variableSpeed) return typingSpeed;
     const { min, max } = variableSpeed;
     return Math.random() * (max - min) + min;
   };
 
-  const getCurrentTextColor = () => {
+  const getCurrentTextColor = (): string => {
     if (textColors.length === 0) return "#171717ff";
     return textColors[currentTextIndex % textColors.length];
   };
 
+  // Observer to start animation when component is visible
   useEffect(() => {
     if (!startOnVisible || !containerRef.current) return;
 
@@ -63,6 +90,7 @@ const TextType = ({
     return () => observer.disconnect();
   }, [startOnVisible]);
 
+  // Cursor blink effect
   useEffect(() => {
     if (showCursor && cursorRef.current) {
       gsap.set(cursorRef.current, { opacity: 1 });
@@ -76,10 +104,11 @@ const TextType = ({
     }
   }, [showCursor, cursorBlinkDuration]);
 
+  // Principal logic for typing and deleting text
   useEffect(() => {
     if (!isVisible) return;
 
-    let timeout;
+    let timeout: NodeJS.Timeout;
 
     const currentText = textArray[currentTextIndex];
     const processedText = reverseMode
@@ -100,7 +129,7 @@ const TextType = ({
 
           setCurrentTextIndex((prev) => (prev + 1) % textArray.length);
           setCurrentCharIndex(0);
-          timeout = setTimeout(() => { }, pauseDuration);
+          timeout = setTimeout(() => {}, pauseDuration);
         } else {
           timeout = setTimeout(() => {
             setDisplayedText((prev) => prev.slice(0, -1));
@@ -110,9 +139,7 @@ const TextType = ({
         if (currentCharIndex < processedText.length) {
           timeout = setTimeout(
             () => {
-              setDisplayedText(
-                (prev) => prev + processedText[currentCharIndex]
-              );
+              setDisplayedText((prev) => prev + processedText[currentCharIndex]);
               setCurrentCharIndex((prev) => prev + 1);
             },
             variableSpeed ? getRandomSpeed() : typingSpeed
@@ -132,7 +159,6 @@ const TextType = ({
     }
 
     return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     currentCharIndex,
     displayedText,
@@ -175,29 +201,4 @@ const TextType = ({
   );
 };
 
-TextType.propTypes = {
-  text: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]).isRequired,
-  as: PropTypes.oneOfType([PropTypes.string, PropTypes.elementType]),
-  typingSpeed: PropTypes.number,
-  initialDelay: PropTypes.number,
-  pauseDuration: PropTypes.number,
-  deletingSpeed: PropTypes.number,
-  loop: PropTypes.bool,
-  className: PropTypes.string,
-  showCursor: PropTypes.bool,
-  hideCursorWhileTyping: PropTypes.bool,
-  cursorCharacter: PropTypes.string,
-  cursorClassName: PropTypes.string,
-  cursorBlinkDuration: PropTypes.number,
-  textColors: PropTypes.arrayOf(PropTypes.string),
-  variableSpeed: PropTypes.shape({
-    min: PropTypes.number,
-    max: PropTypes.number,
-  }),
-  onSentenceComplete: PropTypes.func,
-  startOnVisible: PropTypes.bool,
-  reverseMode: PropTypes.bool,
-};
-
 export default TextType;
-
