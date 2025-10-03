@@ -1,6 +1,7 @@
 import React, { useState, useEffect} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import { useNotification } from '../../contexts/NotificationContext';
 
 // UI Components
 import Icon from "../UI/Icon";
@@ -13,6 +14,7 @@ import { logoutUser } from "../../services/LoginService";
 function Navbar() {
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { showSuccess, showError } = useNotification();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -25,13 +27,13 @@ function Navbar() {
         try {
             await logoutUser();
             setIsLoggedIn(false);
-            alert(t('messages.logoutSuccess'));
+            showSuccess(t('messages.logoutSuccess'));
             navigate("/");
         } catch (error) {
             if (error instanceof Error) {
-                alert(error.message);
+                showError(error.message);
             } else {
-                alert(t('messages.logoutError'));
+                showError(t('messages.logoutError'));
             }
         }
     };
