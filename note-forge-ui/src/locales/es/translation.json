@@ -5,9 +5,47 @@
     "login": "Iniciar Sesión",
     "logout": "Cerrar Sesión",
     "export-guides": "Exportar Guías",
-    "search": "Buscador"
+    "search": "Buscador",
+    "home-title": "Organiza tu aprendizaje",
+    "home-description": "Define tus asignaturas, crea ejercicios y diseña guías de aprendizaje."
+
   },
   "messages": {
     "logoutSuccess": "Sesión cerrada con éxito"
+  },
+  "dashboard": {
+    "title": "Organiza tu aprendizaje",
+    "description": "Define tus asignaturas, crea ejercicios y diseña guías de aprendizaje.",
+    "create-exercise": "Crear un nuevo ejercicio",
+    "my-subjects": "Mis asignaturas",
+    "my-exercises": "Mis ejercicios",
+    "study-material": "Material de estudio",
+    "add-exercise-choice": "Agrega un ejercicio de tu preferencia"
+  },
+  "footer": {
+    "description": "Note Forge. Código abierto bajo MIT License.",
+    "thanks": "Agradecimientos",
+    "contact": "Contacto"
+  },
+  "select": {
+    "description": "Selecciona una opción"
+  },
+  "home": {
+    "description": "Todo tu material de estudio en un solo lugar. Crea tus propios ejercicios, agrega asignaturas y más.",
+    "create-exercises": "Crea tus ejercicios",
+    "welcome": "Bienvenido",
+    "made-for-you": "Hecho para ti"
+  },
+  "roles": {
+    "student": "Estudiante",
+    "assistant": "Ayudante",
+    "teacher": "Profesor"
+  },
+  "button": {
+    "start": "Comenzar"
+  },
+  "counter": {
+    "exercise": "ejercicio",
+    "exercises": "ejercicios"
   }
 }

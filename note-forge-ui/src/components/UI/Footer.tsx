@@ -1,10 +1,13 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 // UI Components
 import Icon from "./Icon";
 import FooterColumn from "./FooterColumn";
 
 function Footer() {
+    const { t } = useTranslation();
+
     return (
         <footer className="w-full min-h-[400px] bg-white mt-10 text-gray-800 border-t-2 border-gray-200 flex flex-col flex-grow">
             <div className="flex flex-row justify-around items-start w-full max-w-5xl mx-auto py-10">
@@ -15,7 +18,7 @@ function Footer() {
                     />
                 </div>
                 <FooterColumn
-                    title="Agradecimientos"
+                    title={t('footer.thanks')}
                     links={[
                         {
                             value: "Online class icons by SBTS2018",
@@ -33,7 +36,7 @@ function Footer() {
                     ]}
                 />
                 <FooterColumn 
-                    title="Contacto"
+                    title={t('footer.contact')}
                     links={[
                         {
                             value: "GitHub",
@@ -44,7 +47,7 @@ function Footer() {
             </div>
             <div className="bg-gray-900 text-white py-4 w-full mt-auto">
                 <div className="max-w-4xl mx-auto px-4 text-center text-sm">
-                    &copy; {new Date().getFullYear()} Note Forge. Código abierto bajo MIT License.
+                    &copy; {new Date().getFullYear()} {t('footer.description')}
                 </div>
             </div>
         </footer>

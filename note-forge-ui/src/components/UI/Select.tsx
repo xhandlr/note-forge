@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface SelectProps {
     name: string;
@@ -19,16 +20,18 @@ function Select({
     options = [], 
     error = '' 
 }: SelectProps ) {
+    const { t } = useTranslation();
+
    return (
         <div className="w-full flex flex-col items-center gap-y-2">
-            <select 
-                name={name} 
-                required={required} 
+            <select
+                name={name}
+                required={required}
                 onChange={onChange}
                 value={value}
                 className={className}
             >
-                <option value="" disabled>Selecciona una opción</option>
+                <option value="" disabled>{t('select.description')}</option>
                 {options.map((option) => (
                     <option key={option.value} value={option.value}>
                         {option.label}
