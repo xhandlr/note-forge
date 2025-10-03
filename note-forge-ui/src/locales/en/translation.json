@@ -3,7 +3,9 @@
     "title": "Note Forge",
     "dashboard": "Dashboard",
     "login": "Log In",
-    "logout": "Log Out"
+    "logout": "Log Out",
+    "export-guides": "Export Guides",
+    "search": "Search"
   },
   "messages": {
     "logoutSuccess": "Session closed successfully"
