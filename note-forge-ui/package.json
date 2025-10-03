@@ -15,6 +15,8 @@
     "@uiw/react-md-editor": "^4.0.5",
     "boxicons": "^2.1.4",
     "gsap": "^3.13.0",
+    "i18next": "^25.5.3",
+    "i18next-browser-languagedetector": "^8.2.0",
     "katex": "^0.16.21",
     "multer": "^2.0.2",
     "note-forge-ui": "file:",
@@ -22,6 +24,7 @@
     "postcss": "^8.5.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-i18next": "^16.0.0",
     "react-router-dom": "^7.1.3",
     "tailwindcss": "^4.1.11"
   },

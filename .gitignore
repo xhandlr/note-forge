@@ -6,3 +6,4 @@ note-forge-api/coverage
 dist/
 sonar-project.properties
 .scannerwork/
+.idea
