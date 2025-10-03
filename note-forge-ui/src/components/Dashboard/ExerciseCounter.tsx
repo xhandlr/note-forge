@@ -1,5 +1,6 @@
 import React from "react";
 import coffee from "/src/assets/latte-art.png";
+import {t} from "i18next";
 
 function ExerciseCounter({ 
     imageSrc = coffee, 
@@ -11,7 +12,12 @@ function ExerciseCounter({
         <div className="flex flex-row justify-center items-end">
             <div className="flex justify-center items-center gap-4">
                 <img src={imageSrc} alt={alt} className={className} />
-                <p className="text-gray-800 font-bold text-xl">{count} ejercicios</p>
+                <p className="text-gray-800 font-bold text-xl">
+                    { count !== 1
+                        ? `${count} ${t('counter.exercises')}`
+                        : `${count} ${t('counter.exercise')}`
+                    }
+                </p>
             </div>
         </div>
     );
