@@ -1,33 +1,31 @@
 import React, { useState, useEffect } from "react";
 import katex from "katex";
-import "katex/dist/katex.min.css"; // Importa el CSS de KaTeX
+import "katex/dist/katex.min.css";
 
-function LatexEditor({ value, onChange, name }) {
-    const [latexPreview, setLatexPreview] = useState(''); // Variable para la vista previa
-    const [errors, setErrors] = useState({}); // Para manejar errores, si los hay
+interface LatexEditorProps {
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    name: string;
+}
 
-    // Este efecto se activa cuando el valor de `value` cambia.
+function LatexEditor({ value, onChange, name }: LatexEditorProps) {
+    const [latexPreview, setLatexPreview] = useState('');
+
     useEffect(() => {
         if (value) {
             const content = value;
-
-            // Expresión regular para detectar bloques LaTeX
             const latexRegex = /(\\(?:\(|\[|\$\$?)[\s\S]*?\\(?:\)|\]|\$\$?))/g;
-
-            // Dividir el contenido en segmentos de texto y LaTeX
             const segments = content.split(latexRegex);
 
             let processedContent = '';
             segments.forEach(segment => {
                 if (!segment) return;
 
-                // Verificar si el segmento es LaTeX
                 if (latexRegex.test(segment)) {
                     try {
-                        // Eliminar los delimitadores LaTeX y procesar
                         const latexContent = segment
-                            .replace(/^\\(\(|\[|\$\$?)/, '') // Eliminar delimitadores iniciales
-                            .replace(/\\(\)|\]|\$\$?)$/, ''); // Eliminar delimitadores finales
+                            .replace(/^\\(\(|\[|\$\$?)/, '')
+                            .replace(/\\(\)|\]|\$\$?)$/, '');
 
                         const displayMode = segment.startsWith('\\[') || segment.startsWith('$$');
                         processedContent += katex.renderToString(latexContent, {
@@ -38,7 +36,6 @@ function LatexEditor({ value, onChange, name }) {
                         processedContent += `<span style="color: red;">Error en LaTeX: ${segment}</span>`;
                     }
                 } else {
-                    // Mantener el texto plano sin cambios
                     processedContent += segment
                         .replace(/&/g, '&amp;')
                         .replace(/</g, '&lt;')
@@ -47,32 +44,29 @@ function LatexEditor({ value, onChange, name }) {
                 }
             });
 
-            setLatexPreview(processedContent); // Actualizar la vista previa
+            setLatexPreview(processedContent);
         }
-    }, [value]); // Re-renderizar cada vez que `value` cambie
+    }, [value]);
 
     return (
-        <div className="description-container">
-            <div className="description-editor">
-                <label>Utilice \( ..\) o \[ ..]\ para formato LaTeX</label>
+        <div className="space-y-4">
+            <div>
+                <p className="text-xs text-gray-500 mb-2">Utilice \( ..\) o \[ ..\] para formato LaTeX</p>
                 <textarea
-                    className="description-exercise"
-                    name={name} // `name` se pasa desde el componente padre
-                    value={value || ''} // Asegúrate de que `value` siempre sea una cadena
-                    onChange={onChange} // El manejador de cambios se pasa desde el componente padre
-                    rows="5"
-                    cols="50"
+                    name={name}
+                    value={value || ''}
+                    onChange={onChange}
+                    rows={6}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all resize-none font-mono text-sm"
                     placeholder="Escribe aquí en formato LaTeX (usa \( ... \) para matemáticas en línea o \[ ... \] para ecuaciones en bloque)"
                     required
                 />
-                {errors[name] && <p className="error">{errors[name]}</p>} {/* Mostramos el error para el campo correspondiente */}
             </div>
 
-            {/* Vista Previa en Tiempo Real */}
-            <div className="latex-preview">
-                <h3>Vista Previa:</h3>
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <h3 className="text-sm font-semibold text-gray-700 mb-2">Vista Previa:</h3>
                 <div
-                    className="preview-box"
+                    className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: latexPreview }}
                 />
             </div>
