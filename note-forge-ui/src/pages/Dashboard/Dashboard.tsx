@@ -38,6 +38,7 @@ function Dashboard() {
                         children={t('dashboard.create-exercise')}
                         variant="primary"
                         className="max-w-xs"
+                        to={"/create-exercise"}
                     />
                 </div>
                 <ExerciseCounter count={0} />
