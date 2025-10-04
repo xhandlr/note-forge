@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { getCategories } from "../../services/CategoryService";
 
-function CategoryExercise({ value, onChange }) {
-    const [categories, setCategories] = useState([]);
+interface CategoryExerciseProps {
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+}
+
+interface Category {
+    id: number; // depende de tu API: ¿es string o número?
+    name: string;
+}
+
+function CategoryExercise({ value, onChange }: CategoryExerciseProps) {
+    const [categories, setCategories] = useState<Category[]>([]);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -17,23 +27,20 @@ function CategoryExercise({ value, onChange }) {
     }, []);
 
     return (
-        <div>
-            <label>Categoría</label>
-            <select
-                className="category-exercise"
-                name="categoryId" 
-                value={value} 
-                onChange={onChange} 
-                required
-            >
-                <option value="">Selecciona una categoría</option>
-                {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                        {category.name}
-                    </option>
-                ))}
-            </select>
-        </div>
+        <select
+            name="categoryId"
+            value={value}
+            onChange={onChange}
+            required
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all bg-white"
+        >
+            <option value="">Selecciona una categoría</option>
+            {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                    {category.name}
+                </option>
+            ))}
+        </select>
     );
 }
 
