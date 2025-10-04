@@ -34,9 +34,9 @@ function ImageUploader({ onImageSelect }: ImageUploaderProps) {
     };
 
     return (
-        <div>
+        <div className="flex flex-col items-center justify-center w-full">
             {!image ? (
-                <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                <label className="flex flex-col items-center justify-center w-1/2 h-60 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                     <svg className="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -51,8 +51,8 @@ function ImageUploader({ onImageSelect }: ImageUploaderProps) {
                     />
                 </label>
             ) : (
-                <div className="relative w-full h-40 border border-gray-300 rounded-lg overflow-hidden">
-                    <img src={image} alt="Preview" className="w-full h-full object-cover" />
+                <div className="relative w-1/2 h-60 border border-gray-300 rounded-lg overflow-hidden">
+                    <img src={image} alt="Preview" className="w-full h-full object-contain" />
                     <button
                         type="button"
                         onClick={removeImage}
