@@ -23,6 +23,11 @@ interface ReferenceItem {
     content: string;
 }
 
+interface Tag {
+    text: string;
+    color: string;
+}
+
 interface ExerciseData {
     title: string;
     description: string;
@@ -30,7 +35,7 @@ interface ExerciseData {
     references: ReferenceItem[];
     answer: string;
     duration: string;
-    tags: string[];
+    tags: Tag[];
     details: string;
     image: File | null;
     categoryId: string;
