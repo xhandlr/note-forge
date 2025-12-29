@@ -202,12 +202,12 @@ function Dashboard() {
                                 guides={3}
                                 icon={<Coffee size={64} strokeWidth={2} />}
                             />
-                            <button className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[250px] flex flex-col items-center justify-center text-slate-300 hover:bg-amber-50 hover:border-amber-400 hover:text-amber-500 transition-all group shadow-2xl">
+                            <Link to="/create-category" className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[250px] flex flex-col items-center justify-center text-slate-300 hover:bg-amber-50 hover:border-amber-400 hover:text-amber-500 transition-all group shadow-2xl">
                                 <div className="bg-slate-50 p-5 rounded-full group-hover:bg-white group-hover:scale-110 transition-all mb-3">
                                     <Plus size={40} strokeWidth={3} className="text-slate-200 group-hover:text-amber-500" />
                                 </div>
                                 <span className="font-black text-lg">Nueva Asignatura</span>
-                            </button>
+                            </Link>
                         </div>
                     )}
 
@@ -221,12 +221,12 @@ function Dashboard() {
                                     subject={i % 2 === 0 ? "Física I" : "Química"}
                                 />
                             ))}
-                            <button className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[300px] flex flex-col items-center justify-center text-slate-300 hover:bg-rose-50 hover:border-rose-400 hover:text-rose-500 transition-all group shadow-2xl">
+                            <Link to="/create-guide" className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[300px] flex flex-col items-center justify-center text-slate-300 hover:bg-rose-50 hover:border-rose-400 hover:text-rose-500 transition-all group shadow-2xl">
                                 <div className="bg-slate-50 p-5 rounded-full group-hover:bg-white group-hover:scale-110 transition-all mb-3">
                                     <Plus size={40} strokeWidth={3} className="text-slate-200 group-hover:text-rose-500" />
                                 </div>
                                 <span className="font-black text-lg">Nueva Guía</span>
-                            </button>
+                            </Link>
                         </div>
                     )}
 
