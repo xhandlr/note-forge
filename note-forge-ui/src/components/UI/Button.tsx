@@ -11,10 +11,10 @@ interface ButtonProps {
 }
 
 function Button({ children, variant = "primary", className = "", to, href, ...props }: ButtonProps) {
-    const base = "rounded-md px-6 py-3 cursor-pointer";
+    const base = "w-full py-5 rounded-2xl font-bold text-lg transition-all shadow-lg active:scale-95 cursor-pointer";
     const variants = {
-        primary: "bg-gray-900 text-white font-bold hover:bg-gray-800 hover:scale-105 transition-transform flex justify-center",
-        secondary: "bg-gray-500/20 text-black border border-gray-300 hover:bg-gray-700 hover:scale-105 hover:text-white transition-transform",
+        primary: "bg-slate-900 text-white hover:bg-gray-800",
+        secondary: "bg-gray-500/20 text-black border border-gray-300 hover:bg-gray-700 hover:text-white",
     };
 
     const classes = `${base} ${variants[variant]} ${className}`
@@ -25,7 +25,7 @@ function Button({ children, variant = "primary", className = "", to, href, ...pr
                 {children}
             </Link>
         );
-    } 
+    }
     if (href) {
         return (
             <a href={href} className={classes} {...props}>
