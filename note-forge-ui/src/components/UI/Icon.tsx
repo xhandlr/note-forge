@@ -1,14 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import logoDark from '/src/assets/logo-dark.png';
+import { BookOpen } from "lucide-react";
 
-function Icon({ size = "w-8 h-8", type = "light", fontSize = "text-2xl",...props}) {
+function Icon({ size = "w-8 h-8", type = "light", fontSize = "text-xl",...props}) {
     const navigate = useNavigate();
-    let sourceIcon = logoDark; // Default to dark logo
 
     return (
         <div
-            className="cursor-pointer"
+            className="flex items-center gap-3 cursor-pointer"
             onClick={() => {
                 if (localStorage.getItem("token")) {
                     navigate("/dashboard");
@@ -17,11 +16,15 @@ function Icon({ size = "w-8 h-8", type = "light", fontSize = "text-2xl",...props
                 }
             }}
         >
-            <img src={sourceIcon} alt="Note Forge Icon" className={size} />
-            {type === "logotype"
-                ? <h1 className={`mt-4 logo-font ${fontSize}`}>Note Forge</h1>
-                : null
-            }
+            <div className={`relative ${size}`}>
+                <BookOpen className="w-full h-full text-slate-900" strokeWidth={2.5} />
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-rose-500 rounded-full shadow-[0_0_15px_rgba(244,63,94,0.6)] animate-pulse" />
+            </div>
+            {type === "logotype" && (
+                <span className={`${fontSize} font-extrabold text-slate-900 tracking-tight`}>
+                    Note Forge
+                </span>
+            )}
         </div>
     );
 }
