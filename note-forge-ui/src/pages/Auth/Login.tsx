@@ -5,7 +5,6 @@ import { useNavigate, Link } from 'react-router-dom';
 // UI Components
 import Button from '../../components/UI/Button';
 import Icon from '../../components/UI/Icon';
-import BgDecoration from '../../components/UI/BgDecoration';
 import TextField from '../../components/UI/TextField';
 import Checkbox from '../../components/UI/Checkbox';
 
@@ -89,59 +88,55 @@ function Login(): JSX.Element {
     };
 
     return (
-        <div className="flex items-start justify-center min-h-screen h-screen">
-            <BgDecoration 
-                file="orange.png"
-                position='top-0 left-0'
-            />
-            <BgDecoration 
-                file="yellow.png"
-                position='top-0 right-0'
-            />
-            <div className="min-w-[600px] w-1/3 min-h-[400px]bg-white text-black rounded-lg border-2 border-gray-200 flex flex-col justify-start items-center px-10 py-20 mt-20">
-            <div className="flex flex-col items-center w-full">
+        <div className="min-h-screen bg-white flex items-center justify-center p-4">
+            <div className="bg-white w-full max-w-md p-10 rounded-[2.5rem] shadow-2xl border border-slate-200 flex flex-col items-center">
                 <Icon
-                    size='w-25 h-25'
+                    size='w-10 h-10'
+                    type='logotype'
+                    fontSize='text-2xl'
                 />
-                <div className="w-full flex flex-col items-center gap-y-4">
-                    <form onSubmit={handleSubmit} className="mt-10 w-full flex flex-col items-center gap-y-4">
-                        <h1 className='text-2xl font-bold'>Iniciar Sesión</h1>
-                        <TextField
-                            type="email"
-                            name="email"
-                            placeholder="Correo electrónico"
-                            required
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            error={errors.email}
-                        />
-                        <TextField
-                            type="password"
-                            name="password"
-                            placeholder="Contraseña"
-                            required
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            error={errors.password}
-                        />
-                        {errors.auth && <p className="text-red-500 text-sm w-4/5 text-center">{errors.auth}</p>}
-                        <Checkbox
-                            name="keepLoggedIn"
-                            checked={formData.keepLoggedIn || false}
-                            onChange={handleChange}
-                            label="Mantener sesión iniciada"
-                        />
-                        <Button
-                            children='Ingresar'
-                            variant='primary' 
-                            type='submit'
-                        />
-                        <div>
-                            <p>¿No tienes una cuenta? <Link to="/register" className='font-semibold hover:text-pink-600'>Registrarse</Link></p>
-                        </div>
-                    </form>
-                    </div>
-            </div>
+                <h2 className="text-3xl font-black text-slate-900 mt-8 mb-10 tracking-tight">Iniciar Sesión</h2>
+
+                <form onSubmit={handleSubmit} className="w-full space-y-6">
+                    <TextField
+                        type="email"
+                        name="email"
+                        placeholder="Correo electrónico"
+                        required
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={errors.email}
+                    />
+
+                    <TextField
+                        type="password"
+                        name="password"
+                        placeholder="Contraseña"
+                        required
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={errors.password}
+                    />
+
+                    {errors.auth && <p className="text-red-500 text-sm font-bold text-center">{errors.auth}</p>}
+
+                    <Checkbox
+                        name="keepLoggedIn"
+                        checked={formData.keepLoggedIn || false}
+                        onChange={handleChange}
+                        label="Mantener sesión iniciada"
+                    />
+
+                    <Button
+                        children='Ingresar'
+                        variant='primary'
+                        type='submit'
+                    />
+                </form>
+
+                <p className="mt-8 text-slate-600 font-medium">
+                    ¿No tienes una cuenta? <Link to="/register" className="text-slate-900 font-black hover:text-rose-500 transition-colors">Registrarse</Link>
+                </p>
             </div>
         </div>
     );

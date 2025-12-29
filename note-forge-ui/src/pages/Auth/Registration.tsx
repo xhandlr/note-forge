@@ -7,7 +7,6 @@ import { registerUser, validateRegistration } from '../../services/RegistrationS
 // UI Components
 import Button from '../../components/UI/Button';
 import Icon from '../../components/UI/Icon';
-import BgDecoration from '../../components/UI/BgDecoration';
 import TextField from '../../components/UI/TextField';
 import Select from '../../components/UI/Select';
 
@@ -84,84 +83,76 @@ function Registration() {
     };
     
     return (
-        <div className="flex items-start justify-center min-h-screen h-screen mb-16">
-            <BgDecoration 
-                file="orange.png"
-                position='top-0 left-0'
-            />
-            <BgDecoration 
-                file="yellow.png"
-                position='top-0 right-0'
-            />
-            <div className="min-w-[600px] w-1/3 min-h-[400px] bg-white text-black rounded-lg border-2 border-gray-200 flex flex-col justify-start items-center p-10 px-10 py-20 mt-20">
-            <div className="flex flex-col items-center w-full">
+        <div className="min-h-screen bg-white flex items-center justify-center p-4">
+            <div className="bg-white w-full max-w-lg p-10 rounded-[2.5rem] shadow-2xl border border-slate-200 flex flex-col items-center">
                 <Icon
-                    size='w-25 h-25'
-                ></Icon>
-                <div className="w-full flex flex-col items-center gap-y-4">
-                    <form onSubmit={handleSubmit} className="mt-10 w-full flex flex-col items-center gap-y-4">
-                        <h1 className='text-2xl font-bold'>Crear cuenta</h1>
-                        <TextField
-                            type="text"
-                            name="username"
-                            placeholder="Nombre de usuario"
-                            required
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            error={errors.username}
-                        />
-                        <TextField
-                            type="email"
-                            name="email"
-                            placeholder="Correo electrónico"
-                            required
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            error={errors.email}
-                        />
-                        <TextField
-                            type="password"
-                            name="password"
-                            placeholder="Contraseña"
-                            required
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            error={errors.password}
-                        />
-                        <TextField
-                            type="text"
-                            name="country"
-                            placeholder="País"
-                            required
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            error={errors.country}
-                        />
-                        <Select 
-                            name="role"
-                            required
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={formData.role}
-                            options={[
-                                { value: 'student', label: '👨‍🎓 Estudiante' },
-                                { value: 'teacher', label: '👨‍🏫 Profesor' },
-                                { value: 'assistant', label: '🤝 Ayudante' },
-                            ]}
-                            error={errors.role}
-                        />
-                        <Button 
-                            children={'Crear cuenta'}
-                            type='submit'
-                        />
-                        <div>
-                            <p>¿Ya tienes una cuenta? <Link to="/login" className='font-semibold hover:text-pink-600'>Iniciar Sesión</Link></p>
-                        </div>
-                    </form>
-                </div>
+                    size='w-10 h-10'
+                    type='logotype'
+                    fontSize='text-2xl'
+                />
+                <h2 className="text-3xl font-black text-slate-900 mt-8 mb-10 tracking-tight">Crear cuenta</h2>
+
+                <form onSubmit={handleSubmit} className="w-full space-y-5">
+                    <TextField
+                        type="text"
+                        name="username"
+                        placeholder="Nombre de usuario"
+                        required
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={errors.username}
+                    />
+                    <TextField
+                        type="email"
+                        name="email"
+                        placeholder="Correo electrónico"
+                        required
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={errors.email}
+                    />
+                    <TextField
+                        type="password"
+                        name="password"
+                        placeholder="Contraseña"
+                        required
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={errors.password}
+                    />
+                    <TextField
+                        type="text"
+                        name="country"
+                        placeholder="País"
+                        required
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={errors.country}
+                    />
+                    <Select
+                        name="role"
+                        required
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={formData.role}
+                        options={[
+                            { value: 'student', label: 'Estudiante' },
+                            { value: 'teacher', label: 'Profesor' },
+                            { value: 'assistant', label: 'Ayudante' },
+                        ]}
+                        error={errors.role}
+                    />
+                    <Button
+                        children={'Crear cuenta'}
+                        type='submit'
+                    />
+                </form>
+
+                <p className="mt-8 text-slate-600 font-medium">
+                    ¿Ya tienes una cuenta? <Link to="/login" className="text-slate-900 font-black hover:text-rose-500 transition-colors">Iniciar Sesión</Link>
+                </p>
             </div>
         </div>
-    </div>
     );
 }
 

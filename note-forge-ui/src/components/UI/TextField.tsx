@@ -16,24 +16,24 @@ function TextField({
     name,
     placeholder,
     required = false,
-    onChange, 
-    className = "border-2 border-gray-300 rounded-lg p-2 w-4/5 focus:border-gray-500 focus:outline-none transition-colors",
+    onChange,
+    className = "w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-slate-900 transition-all",
     error,
     ... props
 }: TextFieldProps) {
     return (
-        <div className='w-full flex flex-col items-center gap-y-2 transition-colors'>
-            <input 
+        <div className='w-full space-y-2'>
+            <input
                 id={name}
                 type={type}
                 name={name}
                 placeholder={placeholder}
                 onChange={onChange}
                 required={required}
-                className={className}
+                className={error ? className.replace('border-gray-200', 'border-red-500') : className}
                 {...props}
             />
-            {error && <p className="text-red-500 text-sm w-4/5 text-left">{error}</p>}
+            {error && <p className="text-red-500 text-sm font-semibold pl-2">{error}</p>}
         </div>
     );
 

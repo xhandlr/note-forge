@@ -11,19 +11,19 @@ interface SelectProps {
     error?: string;
 }
 
-function Select({ 
-    name, 
-    required = false, 
-    onChange, 
-    value, 
-    className = "border-2 border-gray-300 rounded-lg p-2 w-4/5 focus:border-gray-500 focus:outline-none transition-colors", 
-    options = [], 
-    error = '' 
+function Select({
+    name,
+    required = false,
+    onChange,
+    value,
+    className = "w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-slate-900 transition-all appearance-none cursor-pointer",
+    options = [],
+    error = ''
 }: SelectProps ) {
     const { t } = useTranslation();
 
    return (
-        <div className="w-full flex flex-col items-center gap-y-2">
+        <div className="w-full space-y-2">
             <select
                 name={name}
                 required={required}
@@ -38,7 +38,7 @@ function Select({
                     </option>
                 ))}
             </select>
-            {error && <p className="error text-red-500 text-sm w-4/5 text-left">{error}</p>}
+            {error && <p className="text-red-500 text-sm font-semibold pl-2">{error}</p>}
         </div>
     );
 }
