@@ -1,92 +1,254 @@
 import React, { useState } from "react";
-import { useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { Coffee, Plus, MoreVertical, Pin, Search, Filter, BookOpen, Layers } from "lucide-react";
 
 // UI components
 import Navbar from "../../components/Dashboard/Navbar";
-import imageTutorial from "/src/assets/cloudy-night.png";
-import plus from "/src/assets/plus.png";
 import Footer from "../../components/UI/Footer";
 
-// Dashboard components
-import ExerciseCounter from "../../components/Dashboard/ExerciseCounter";
-import ProfilePicture from "../../components/Dashboard/ProfilePicture";
-import CategoryCard from "../../components/Dashboard/CategoryCard";
+interface SubjectCardProps {
+    title: string;
+    exercises: number;
+    guides: number;
+    icon: React.ReactNode;
+    pinned?: boolean;
+}
+
+const SubjectCard: React.FC<SubjectCardProps> = ({ title, exercises, guides, icon, pinned }) => (
+    <div className="bg-white rounded-[2rem] overflow-hidden border border-slate-200 shadow-2xl transition-all hover:shadow-xl hover:-translate-y-1 group relative">
+        {pinned && (
+            <div className="absolute top-3 left-3 z-20 bg-amber-500 text-white p-2 rounded-xl shadow-lg">
+                <Pin size={14} fill="white" />
+            </div>
+        )}
+        <div className="h-40 bg-slate-900 relative overflow-hidden flex items-center justify-center">
+            <div className="text-white transform group-hover:scale-110 transition-transform duration-700">
+                {icon}
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
+            <div className="absolute top-3 right-3 z-20">
+                <button className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-white/40 rounded-xl transition-all">
+                    <MoreVertical size={18} />
+                </button>
+            </div>
+            <div className="absolute bottom-4 left-4 text-white">
+                <h3 className="text-xl font-extrabold tracking-tight">{title}</h3>
+            </div>
+        </div>
+        <div className="p-6 flex items-center justify-between">
+            <div className="flex flex-col gap-1">
+                <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Contenido disponible</span>
+                <div className="flex gap-3">
+                    <span className="text-amber-600 font-bold text-sm">{exercises} Ejercicios</span>
+                    <span className="text-rose-600 font-bold text-sm">{guides} Guías</span>
+                </div>
+            </div>
+            <Link to={`/subject/${title}`} className="p-3 bg-slate-900 text-white rounded-xl hover:bg-rose-600 transition-all shadow-lg active:scale-95">
+                <Plus size={18} strokeWidth={3} />
+            </Link>
+        </div>
+    </div>
+);
+
+interface GuideCardProps {
+    title: string;
+    status: string;
+    subject: string;
+}
+
+const GuideCard: React.FC<GuideCardProps> = ({ title, status, subject }) => (
+    <div className="bg-white rounded-[2rem] p-6 border border-slate-200 shadow-2xl flex flex-col gap-5 group hover:border-rose-300 transition-all">
+        <div className="aspect-[3/4] bg-slate-50 rounded-2xl relative overflow-hidden flex flex-col items-center justify-center p-8 border border-slate-100">
+            <div className="w-full space-y-4">
+                <div className="h-4 bg-amber-200/40 rounded-full w-4/5" />
+                <div className="flex gap-2">
+                    <div className="h-10 bg-rose-100/30 rounded-xl w-1/2" />
+                    <div className="h-10 bg-rose-100/30 rounded-xl w-1/2" />
+                </div>
+                <div className="space-y-2">
+                    <div className="h-2 bg-slate-100 rounded-full w-full" />
+                    <div className="h-2 bg-slate-100 rounded-full w-full" />
+                    <div className="h-2 bg-slate-100 rounded-full w-3/4" />
+                </div>
+                <div className="pt-4 space-y-2">
+                    <div className="h-2 bg-amber-100/40 rounded-full w-full" />
+                    <div className="h-2 bg-amber-100/40 rounded-full w-5/6" />
+                </div>
+            </div>
+            <div className="absolute inset-0 bg-rose-500/0 group-hover:bg-rose-500/5 transition-colors" />
+        </div>
+        <div className="space-y-4">
+            <h4 className="font-extrabold text-slate-900 text-lg leading-tight line-clamp-2 group-hover:text-rose-600 transition-colors">{title}</h4>
+            <div className="flex items-center justify-between">
+                <span className="px-3 py-1 bg-amber-100 text-amber-700 text-[9px] font-black rounded-lg uppercase tracking-wider border border-amber-200">{status}</span>
+                <span className="text-slate-400 text-[10px] font-bold">{subject}</span>
+            </div>
+        </div>
+    </div>
+);
 
 function Dashboard() {
     const { t } = useTranslation();
-    const options = [t('dashboard.my-subjects'), t('dashboard.my-exercises'), t('dashboard.study-material')];
-    const [selected, setSelected] = useState(options[0]);
+    const [activeTab, setActiveTab] = useState('asignaturas');
+
+    const tabs = [
+        { id: 'asignaturas', label: t('dashboard.my-subjects'), icon: <Layers size={18} /> },
+        { id: 'ejercicios', label: t('dashboard.my-exercises'), icon: <Coffee size={18} /> },
+        { id: 'guias', label: t('dashboard.study-material'), icon: <BookOpen size={18} /> },
+    ];
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
             <Navbar />
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 w-full mt-16">
-                {/* Hero Section */}
-                <div className="bg-white p-8 rounded-[3rem] shadow-2xl border border-slate-200 flex flex-col lg:flex-row justify-between gap-6 mb-8 transition-all hover:shadow-xl">
-                    <div className="flex flex-col justify-center gap-4 flex-1">
-                        <h1 className="text-slate-900 text-3xl lg:text-4xl font-black tracking-tight">
-                            {t('dashboard.title')}
-                        </h1>
-                        <p className="text-slate-600 text-base font-bold max-w-2xl leading-relaxed">
-                            {t('dashboard.description')}
-                        </p>
-                        <Link
-                            to="/create-exercise"
-                            className="inline-block bg-slate-900 text-white text-base px-8 py-3 rounded-[2rem] font-black hover:bg-rose-500 transition-all shadow-xl transform active:scale-95 max-w-xs text-center"
-                        >
-                            {t('dashboard.create-exercise')}
-                        </Link>
-                    </div>
-                    <div className="flex flex-col lg:flex-row items-center gap-8">
-                        <ExerciseCounter count={0} />
-                        <ProfilePicture />
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 mt-16">
+
+                {/* Banner con contraste agresivo y moderno */}
+                <div className="relative overflow-hidden bg-slate-900 p-8 lg:p-12 rounded-[3rem] shadow-2xl text-white">
+                    <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-500/20 blur-[150px] rounded-full -translate-y-1/2 translate-x-1/2" />
+                    <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-rose-500/20 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/4" />
+
+                    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div className="space-y-6 md:w-3/5 text-center md:text-left">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-amber-300 text-xs font-black uppercase tracking-widest border border-white/10">
+                                <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" /> Panel de Control
+                            </div>
+                            <h1 className="text-4xl lg:text-5xl font-black leading-tight tracking-tight">
+                                Forja tu <br/> <span className="text-amber-400">Aprendizaje</span>
+                            </h1>
+                            <p className="text-base text-slate-300 font-medium max-w-lg leading-relaxed">
+                                {t('dashboard.description')}
+                            </p>
+                            <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
+                                <Link to="/create-exercise" className="bg-rose-500 text-white px-8 py-4 rounded-[2rem] font-black text-base hover:bg-rose-600 transition-all shadow-2xl shadow-rose-900/40 active:scale-95">
+                                    {t('dashboard.create-exercise')}
+                                </Link>
+                                <Link to="/create-guide" className="bg-white text-slate-900 px-8 py-4 rounded-[2rem] font-black text-base hover:bg-amber-50 transition-all shadow-xl">
+                                    Crear Guía
+                                </Link>
+                            </div>
+                        </div>
+
+                        <div className="hidden lg:grid grid-cols-2 gap-6">
+                            <div className="bg-white/10 backdrop-blur-xl p-6 rounded-[3rem] border border-white/20 flex flex-col items-center text-center">
+                                <BookOpen size={32} className="text-amber-400 mb-3" />
+                                <span className="text-3xl font-black">12</span>
+                                <p className="text-[10px] font-black uppercase text-slate-400 mt-2 tracking-widest">Guías</p>
+                            </div>
+                            <div className="bg-white/10 backdrop-blur-xl p-6 rounded-[3rem] border border-white/20 flex flex-col items-center text-center">
+                                <Coffee size={32} className="text-rose-400 mb-3" />
+                                <span className="text-3xl font-black">45</span>
+                                <p className="text-[10px] font-black uppercase text-slate-400 mt-2 tracking-widest">Ejercicios</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* Tabs Section */}
-                <div className="bg-white border border-slate-200 rounded-[2rem] shadow-xl p-6 mb-8">
-                    <div className="flex flex-col sm:flex-row justify-center items-center gap-3">
-                        {options.map((text) => (
+                {/* Tab Selection CENTRADO de ALTO CONTRASTE */}
+                <div className="flex flex-col items-center gap-8">
+                    <div className="bg-slate-100/80 p-2 rounded-[2rem] flex items-center gap-2 border border-slate-200">
+                        {tabs.map((tab) => (
                             <button
-                                key={text}
-                                onClick={() => setSelected(text)}
-                                className={`rounded-[1.5rem] px-6 py-3 text-sm font-black transition-all outline-none border-none shadow-lg transform active:scale-95
-                                    ${selected === text
-                                        ? "bg-rose-500 text-white shadow-xl scale-105"
-                                        : "bg-slate-100 text-slate-700 hover:bg-slate-200 hover:-translate-y-1"}`}
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`px-6 py-3 rounded-[1.5rem] font-black text-sm transition-all duration-300 flex items-center gap-2 ${
+                                    activeTab === tab.id
+                                        ? 'bg-rose-500 text-white shadow-xl shadow-rose-200 scale-105'
+                                        : 'text-slate-500 hover:text-rose-500 hover:bg-white'
+                                }`}
                             >
-                                {text}
+                                {tab.icon} {tab.label}
                             </button>
                         ))}
                     </div>
-                </div>
 
-                {/* Categories Grid */}
-                <div className="bg-white border border-slate-200 rounded-[3rem] shadow-2xl p-8">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <CategoryCard
-                            imageSrc={imageTutorial}
-                            alt="Tutorial"
-                            bgColor="bg-slate-900"
-                            title="Tutorial"
-                            description={t('dashboard.add-exercise-choice')}
-                            exercisesCount={0}
-                            guidesCount={0}
-                        />
-                        <button
-                            className="flex flex-col items-center justify-center rounded-[2rem] w-full aspect-square bg-slate-50 hover:bg-rose-50 transition-all shadow-lg hover:shadow-2xl hover:-translate-y-2 cursor-pointer border border-slate-200 group"
-                            title="Crear nueva categoría"
-                            onClick={() => {/* nueva categoría */}}
-                        >
-                            <div className="w-16 h-16 bg-slate-100 rounded-[1.5rem] flex items-center justify-center group-hover:bg-rose-500 transition-all">
-                                <img src={plus} alt="Crear categoría" className="w-8 h-8 opacity-60 group-hover:opacity-100" />
+                    <div className="w-full flex justify-between items-center max-w-7xl">
+                        <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+                            {activeTab === 'asignaturas' && t('dashboard.my-subjects')}
+                            {activeTab === 'ejercicios' && 'Banco de Ejercicios'}
+                            {activeTab === 'guias' && 'Gestión de Guías'}
+                        </h2>
+                        <div className="flex gap-3">
+                            <button className="p-3 bg-white rounded-xl border border-slate-200 text-slate-400 hover:text-slate-900 transition-all shadow-lg">
+                                <Filter size={18} />
+                            </button>
+                            <div className="relative group">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-rose-500 transition-colors" size={18} />
+                                <input
+                                    type="text"
+                                    placeholder="Buscar..."
+                                    className="bg-white border border-slate-200 pl-10 pr-4 py-3 rounded-xl outline-none focus:ring-4 focus:ring-rose-100 shadow-sm font-bold text-sm w-48 focus:w-64 transition-all"
+                                />
                             </div>
-                            <p className="mt-4 text-slate-600 font-black text-sm group-hover:text-rose-500 transition-colors">Nueva Categoría</p>
-                        </button>
+                        </div>
                     </div>
                 </div>
+
+                {/* Zona de Renderizado con Blanco Sólido */}
+                <div className="min-h-[500px]">
+                    {activeTab === 'asignaturas' && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <SubjectCard
+                                title="Física Mecánica"
+                                exercises={24}
+                                guides={5}
+                                icon={<BookOpen size={64} strokeWidth={2} />}
+                                pinned
+                            />
+                            <SubjectCard
+                                title="Cálculo II"
+                                exercises={18}
+                                guides={3}
+                                icon={<Coffee size={64} strokeWidth={2} />}
+                            />
+                            <button className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[250px] flex flex-col items-center justify-center text-slate-300 hover:bg-amber-50 hover:border-amber-400 hover:text-amber-500 transition-all group shadow-2xl">
+                                <div className="bg-slate-50 p-5 rounded-full group-hover:bg-white group-hover:scale-110 transition-all mb-3">
+                                    <Plus size={40} strokeWidth={3} className="text-slate-200 group-hover:text-amber-500" />
+                                </div>
+                                <span className="font-black text-lg">Nueva Asignatura</span>
+                            </button>
+                        </div>
+                    )}
+
+                    {activeTab === 'guias' && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {[1, 2, 3, 4, 5].map((i) => (
+                                <GuideCard
+                                    key={i}
+                                    title={`Guía #${i}: Teoría y Práctica`}
+                                    status="En revisión"
+                                    subject={i % 2 === 0 ? "Física I" : "Química"}
+                                />
+                            ))}
+                            <button className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[300px] flex flex-col items-center justify-center text-slate-300 hover:bg-rose-50 hover:border-rose-400 hover:text-rose-500 transition-all group shadow-2xl">
+                                <div className="bg-slate-50 p-5 rounded-full group-hover:bg-white group-hover:scale-110 transition-all mb-3">
+                                    <Plus size={40} strokeWidth={3} className="text-slate-200 group-hover:text-rose-500" />
+                                </div>
+                                <span className="font-black text-lg">Nueva Guía</span>
+                            </button>
+                        </div>
+                    )}
+
+                    {activeTab === 'ejercicios' && (
+                        <div className="text-center py-32 space-y-6 bg-white rounded-[3rem] border border-slate-200 shadow-2xl">
+                            <div className="relative inline-block">
+                                <div className="absolute inset-0 bg-rose-200 blur-3xl opacity-20 rounded-full" />
+                                <div className="relative p-10 bg-slate-50 rounded-full text-rose-500 border border-slate-100">
+                                    <Coffee size={64} strokeWidth={1.5} />
+                                </div>
+                            </div>
+                            <div className="space-y-2">
+                                <h3 className="text-3xl font-black text-slate-900">Banco Vacío</h3>
+                                <p className="text-slate-500 font-medium text-lg">Empieza a forjar tus primeros retos educativos.</p>
+                            </div>
+                            <Link to="/create-exercise" className="inline-block px-10 py-4 bg-rose-500 text-white rounded-[2rem] font-black text-base hover:bg-rose-600 transition-all shadow-2xl shadow-rose-200 active:scale-95">
+                                Crear Ejercicio →
+                            </Link>
+                        </div>
+                    )}
+                </div>
+
             </div>
 
             <Footer />
