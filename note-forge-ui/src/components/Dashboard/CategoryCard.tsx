@@ -16,15 +16,15 @@ function CategoryCard({ imageSrc = null, alt, bgColor, title, description, exerc
     const src = imageSrc as string;
 
     return (
-        <div className="aspect-square min-h-40 min-w-40 bg-white border border-gray-300 flex flex-col shadow-lg gap-2 relative transition-transform duration-200 hover:scale-105">
-            <div className={`w-full h-3/5 flex items-center justify-center ${bgColor}`}>
-                <img src={src} alt={alt} className="object-contain w-4/5 h-4/5" />
+        <div className="aspect-square bg-white p-6 rounded-[2rem] shadow-2xl border border-slate-200 flex flex-col gap-3 relative transition-all hover:-translate-y-2 hover:shadow-xl hover:border-rose-300 group cursor-pointer">
+            <div className={`w-full h-2/5 flex items-center justify-center ${bgColor} rounded-[1.5rem] shadow-inner`}>
+                <img src={src} alt={alt} className="object-contain w-4/5 h-4/5 rounded-xl" />
             </div>
-            <h1 className="text-gray-800 text-lg font-semibold ml-4">{title}</h1>
-            <p className="text-gray-600 text-sm ml-4">{description}</p>
-            <div className="flex flex-row text-sm text-purple-600 justify-between mx-4 absolute bottom-2 left-0 right-0">
-                <p>{exercisesCount} ejercicios</p>
-                <p>{guidesCount} guías</p>
+            <h1 className="text-slate-900 text-lg font-black tracking-tight mt-2">{title}</h1>
+            <p className="text-slate-600 text-xs font-bold leading-relaxed">{description}</p>
+            <div className="flex flex-row text-xs font-black justify-between mt-auto pt-3 border-t border-slate-200">
+                <p className="text-rose-500">{exercisesCount} ejercicios</p>
+                <p className="text-amber-500">{guidesCount} guías</p>
             </div>
         </div>
     );
