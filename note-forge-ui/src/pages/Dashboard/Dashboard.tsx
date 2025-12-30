@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Coffee, Plus, MoreVertical, Pin, Search, Filter, BookOpen, Layers } from "lucide-react";
+import { Coffee, Plus, MoreVertical, Pin, Search, Filter, BookOpen, Layers, Edit3, Eye } from "lucide-react";
 
 // UI components
 import Navbar from "../../components/Dashboard/Navbar";
@@ -27,7 +27,10 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ title, exercises, guides, ico
                 {icon}
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
-            <div className="absolute top-3 right-3 z-20">
+            <div className="absolute top-3 right-3 z-20 flex gap-2">
+                <Link to={`/edit-category/${title}`} className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-rose-500 rounded-xl transition-all" title="Editar Asignatura">
+                    <Edit3 size={16} />
+                </Link>
                 <button className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-white/40 rounded-xl transition-all">
                     <MoreVertical size={18} />
                 </button>
@@ -88,6 +91,64 @@ const GuideCard: React.FC<GuideCardProps> = ({ title, status, subject }) => (
     </div>
 );
 
+interface ExerciseListItemProps {
+    title: string;
+    subject: string;
+    difficulty: number;
+    desc: string;
+    img: string;
+}
+
+const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ title, subject, difficulty, desc, img }) => (
+    <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden flex flex-col md:flex-row group hover:border-rose-300 transition-all text-left">
+        <div className="md:w-1/3 lg:w-1/4 h-48 md:h-auto relative overflow-hidden">
+            <img src={img} alt={title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+            <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition-colors" />
+            <div className="absolute top-4 left-4">
+                <span className="px-3 py-1.5 bg-white/90 backdrop-blur-md rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-900 border border-white/20 shadow-lg">
+                    {subject}
+                </span>
+            </div>
+        </div>
+        <div className="flex-grow p-6 lg:p-7 flex flex-col justify-between">
+            <div className="space-y-3">
+                <div className="flex justify-between items-start">
+                    <h3 className="text-lg font-black text-slate-900 tracking-tight group-hover:text-rose-600 transition-colors">{title}</h3>
+                    <div className="flex gap-1.5">
+                        {[...Array(5)].map((_, i) => (
+                            <div key={i} className={`w-1.5 h-1.5 rounded-full ${i < difficulty ? 'bg-amber-400' : 'bg-slate-100'}`} />
+                        ))}
+                    </div>
+                </div>
+                <p className="text-slate-500 font-medium text-sm leading-relaxed line-clamp-2 max-w-2xl">{desc}</p>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-4 mt-5 pt-5 border-t border-slate-50">
+                <div className="flex gap-3">
+                    <span className="flex items-center gap-2 text-slate-400 text-[10px] font-bold bg-slate-50 px-3 py-1.5 rounded-xl">
+                        <Layers size={12} /> ID: #FX-2023
+                    </span>
+                    <span className="flex items-center gap-2 text-slate-400 text-[10px] font-bold bg-slate-50 px-3 py-1.5 rounded-xl">
+                        <Coffee size={12} /> 15 min
+                    </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <button className="flex items-center gap-1.5 px-4 py-2 bg-slate-50 text-slate-500 rounded-xl font-black text-xs hover:bg-slate-900 hover:text-white transition-all">
+                        <Eye size={14} /> Ver
+                    </button>
+                    <Link to={`/edit-exercise/${title}`} className="flex items-center gap-1.5 px-4 py-2 bg-rose-50 text-rose-600 rounded-xl font-black text-xs hover:bg-rose-500 hover:text-white transition-all">
+                        <Edit3 size={14} /> Editar
+                    </Link>
+                    <button className="p-2 text-slate-300 hover:text-amber-600 transition-colors">
+                        <MoreVertical size={16} />
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+);
+
 function Dashboard() {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('asignaturas');
@@ -98,11 +159,36 @@ function Dashboard() {
         { id: 'guias', label: t('dashboard.study-material'), icon: <BookOpen size={18} /> },
     ];
 
+    // Datos falsos para ejercicios
+    const mockExercises = [
+        {
+            title: "Movimiento Parabólico: Reto del Cañón",
+            subject: "Física I",
+            difficulty: 4,
+            desc: "Análisis cinemático completo de un proyectil lanzado con ángulo variable sobre un plano inclinado. Requiere descomposición vectorial avanzada.",
+            img: "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+            title: "Integración por Partes: El Desafío Logarítmico",
+            subject: "Cálculo II",
+            difficulty: 3,
+            desc: "Cálculo de la integral indefinida de funciones trascendentes combinadas. Aplicación práctica del método DI para optimización de tiempo.",
+            img: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+            title: "Equilibrio Ácido-Base: Titulación de Vinagre",
+            subject: "Química General",
+            difficulty: 2,
+            desc: "Determinación de la concentración molar de ácido acético mediante neutralización con NaOH. Cálculo de pH en el punto de equivalencia.",
+            img: "https://images.unsplash.com/photo-1603126010305-2f560a3773f7?auto=format&fit=crop&q=80&w=800"
+        },
+    ];
+
     return (
         <div className="min-h-screen bg-white flex flex-col">
             <Navbar />
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 mt-16">
+            <div className="w-[70%] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 mt-16">
 
                 {/* Banner con contraste agresivo y moderno */}
                 <div className="relative overflow-hidden bg-slate-900 p-8 lg:p-12 rounded-[3rem] shadow-2xl text-white">
@@ -163,7 +249,7 @@ function Dashboard() {
                         ))}
                     </div>
 
-                    <div className="w-full flex justify-between items-center max-w-7xl">
+                    <div className="w-full flex justify-between items-center">
                         <h2 className="text-2xl font-black text-slate-900 tracking-tight">
                             {activeTab === 'asignaturas' && t('dashboard.my-subjects')}
                             {activeTab === 'ejercicios' && 'Banco de Ejercicios'}
@@ -231,19 +317,23 @@ function Dashboard() {
                     )}
 
                     {activeTab === 'ejercicios' && (
-                        <div className="text-center py-32 space-y-6 bg-white rounded-[3rem] border border-slate-200 shadow-2xl">
-                            <div className="relative inline-block">
-                                <div className="absolute inset-0 bg-rose-200 blur-3xl opacity-20 rounded-full" />
-                                <div className="relative p-10 bg-slate-50 rounded-full text-rose-500 border border-slate-100">
-                                    <Coffee size={64} strokeWidth={1.5} />
+                        <div className="space-y-6">
+                            {mockExercises.map((exercise, idx) => (
+                                <ExerciseListItem
+                                    key={idx}
+                                    title={exercise.title}
+                                    subject={exercise.subject}
+                                    difficulty={exercise.difficulty}
+                                    desc={exercise.desc}
+                                    img={exercise.img}
+                                />
+                            ))}
+
+                            <Link to="/create-exercise" className="w-full py-8 bg-white border-4 border-dashed border-slate-200 rounded-[2.5rem] flex items-center justify-center gap-3 text-slate-300 hover:bg-rose-50 hover:border-rose-400 hover:text-rose-500 transition-all group shadow-xl">
+                                <div className="p-3 bg-slate-50 rounded-xl group-hover:bg-rose-500 group-hover:text-white transition-all">
+                                    <Plus size={24} strokeWidth={3} />
                                 </div>
-                            </div>
-                            <div className="space-y-2">
-                                <h3 className="text-3xl font-black text-slate-900">Banco Vacío</h3>
-                                <p className="text-slate-500 font-medium text-lg">Empieza a forjar tus primeros retos educativos.</p>
-                            </div>
-                            <Link to="/create-exercise" className="inline-block px-10 py-4 bg-rose-500 text-white rounded-[2rem] font-black text-base hover:bg-rose-600 transition-all shadow-2xl shadow-rose-200 active:scale-95">
-                                Crear Ejercicio →
+                                <span className="font-black text-base tracking-tight">Forjar Nuevo Ejercicio</span>
                             </Link>
                         </div>
                     )}
