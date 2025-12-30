@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Dashboard/Navbar';
-import BgDecoration from '../../components/UI/BgDecoration';
 import Footer from '../../components/UI/Footer';
-import SearchBar from "../../components/Dashboard/SearchBar";
-import { getExercises } from "../../services/ExerciseService";
+import { useExerciseService } from '../../services/serviceFactory';
 import { addGuide, updateGuide, getGuideById } from "../../services/GuideService";
-import ExerciseOption from "../../components/Exercises/ExerciseOption";
-import { FileText, GripVertical, Trash2, Download, Eye, ArrowLeft, Plus } from 'lucide-react';
+import { FileText, GripVertical, Trash2, Download, Eye, ArrowLeft, Plus, Search, BookOpen, Code, Type } from 'lucide-react';
 import { useNotification } from '../../contexts/NotificationContext';
 
 interface Exercise {
@@ -17,6 +14,7 @@ interface Exercise {
     answer?: string;
     imageUrl?: string;
     difficulty?: number;
+    categoryId?: number;
 }
 
 interface GuideFormProps {
@@ -27,20 +25,25 @@ interface GuideFormProps {
 const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
     const navigate = useNavigate();
     const { showSuccess, showError } = useNotification();
+    const exerciseService = useExerciseService();
     const [loading, setLoading] = useState(mode === 'edit');
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([]);
     const [guideExercises, setGuideExercises] = useState<Exercise[]>([]);
     const [guideTitle, setGuideTitle] = useState("");
     const [guideAuthor, setGuideAuthor] = useState("");
-    const [guideDescription, setGuideDescription] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
 
     // Load exercises
     useEffect(() => {
         const fetchData = async () => {
-            const exercisesData = await getExercises();
-            setExercises(exercisesData);
-            setFilteredExercises(exercisesData);
+            try {
+                const exercisesData = await exerciseService.getAll();
+                setExercises(exercisesData);
+                setFilteredExercises(exercisesData);
+            } catch (error) {
+                console.error('Error loading exercises:', error);
+            }
         };
         fetchData();
     }, []);
@@ -54,7 +57,6 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
                     if (data) {
                         setGuideTitle(data.title || '');
                         setGuideAuthor(data.author || '');
-                        // If the API returns associated exercises, load them
                         if (data.exercises) {
                             setGuideExercises(data.exercises);
                         }
@@ -69,34 +71,26 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
         }
     }, [mode, guideId, showError]);
 
-    const updateGuideDescription = (newGuideExercises: Exercise[]) => {
-        const latexContent = `
-\\title{${guideTitle || "Título de la guía"}}
-\\author{${guideAuthor || "Autor"}}
-
-${newGuideExercises
-    .map(exercise =>
-        `\\subsection*{${exercise.title}}\n${exercise.description}`
-        + (exercise.answer && exercise.answer.trim() !== "" ? `\n\n\\subsection*{Respuesta}\n${exercise.answer}` : "")
-    )
-    .join("\n\n")}`;
-
-        setGuideDescription(latexContent);
-    };
-
-    useEffect(() => {
-        updateGuideDescription(guideExercises);
-    }, [guideTitle, guideAuthor, guideExercises]);
-
-    const handleDeleteExercise = (id: number) => {
-        const updatedExercises = exercises.filter(exercise => exercise.id !== id);
-        const updatedFilteredExercises = filteredExercises.filter(exercise => exercise.id !== id);
-        setExercises(updatedExercises);
-        setFilteredExercises(updatedFilteredExercises);
+    const handleSearch = (query: string) => {
+        setSearchQuery(query);
+        if (!query.trim()) {
+            setFilteredExercises(exercises);
+        } else {
+            const filtered = exercises.filter(exercise =>
+                exercise.title.toLowerCase().includes(query.toLowerCase())
+            );
+            setFilteredExercises(filtered);
+        }
     };
 
     const handleRemoveFromGuide = (id: number) => {
         setGuideExercises(guideExercises.filter(ex => ex.id !== id));
+    };
+
+    const handleAddToGuide = (exercise: Exercise) => {
+        if (!guideExercises.some(ex => ex.id === exercise.id)) {
+            setGuideExercises([...guideExercises, exercise]);
+        }
     };
 
     const handleDragStart = (e: React.DragEvent, id: number) => {
@@ -131,17 +125,6 @@ ${newGuideExercises
         setGuideExercises(newGuideExercises);
     };
 
-    const handleSearch = (query: string) => {
-        if (!query.trim()) {
-            setFilteredExercises(exercises);
-        } else {
-            const filtered = exercises.filter(exercise =>
-                exercise.title.toLowerCase().includes(query.toLowerCase())
-            );
-            setFilteredExercises(filtered);
-        }
-    };
-
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault();
     };
@@ -152,10 +135,20 @@ ${newGuideExercises
             return;
         }
 
+        const latexContent = `\\title{${guideTitle}}
+\\author{${guideAuthor || "Autor"}}
+
+${guideExercises
+    .map(exercise =>
+        `\\subsection*{${exercise.title}}\n${exercise.description}`
+        + (exercise.answer && exercise.answer.trim() !== "" ? `\n\n\\subsection*{Respuesta}\n${exercise.answer}` : "")
+    )
+    .join("\n\n")}`;
+
         const guideData = {
             title: guideTitle,
             author: guideAuthor,
-            description: guideDescription,
+            description: latexContent,
             exerciseIds: guideExercises.map(ex => ex.id)
         };
 
@@ -174,12 +167,25 @@ ${newGuideExercises
         }
     };
 
+    const calculateTotalTime = () => {
+        return guideExercises.length * 15; // Estimado 15 min por ejercicio
+    };
+
+    const calculateAvgDifficulty = () => {
+        if (guideExercises.length === 0) return 0;
+        const sum = guideExercises.reduce((acc, ex) => acc + (ex.difficulty || 0), 0);
+        return Math.round(sum / guideExercises.length);
+    };
+
     if (loading) {
         return (
-            <div className="min-h-screen bg-white flex items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-500 mx-auto mb-4"></div>
-                    <p className="text-slate-600 font-semibold">Cargando guía...</p>
+            <div className="min-h-screen bg-white flex flex-col">
+                <Navbar />
+                <div className="flex items-center justify-center h-screen">
+                    <div className="text-center space-y-3">
+                        <div className="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mx-auto" />
+                        <p className="text-slate-400 font-black text-sm">Cargando guía...</p>
+                    </div>
                 </div>
             </div>
         );
@@ -187,214 +193,259 @@ ${newGuideExercises
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
-            <BgDecoration file="orange.png" position="top-0 left-0" />
-            <BgDecoration file="yellow.png" position="top-0 right-0" />
-
             <Navbar />
 
-            <div className="w-[60%] mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 text-left mt-20">
+            <div className="w-[70%] mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16">
 
-                {/* Header de página */}
-                <div className="flex items-center justify-between bg-white p-5 rounded-[2rem] shadow-lg border border-slate-200">
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center shadow-inner">
-                            <FileText size={22} strokeWidth={2.5} />
+                {/* Workspace Container - Unificado */}
+                <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden flex flex-col min-h-[85vh]">
+
+                    {/* Header del Workspace */}
+                    <div className="px-10 py-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
+                        <div className="flex items-center gap-5">
+                            <div className="w-12 h-12 bg-slate-900 text-white rounded-2xl flex items-center justify-center shadow-lg">
+                                <FileText size={24} />
+                            </div>
+                            <div>
+                                <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+                                    {mode === 'edit' ? 'Editor de Guías' : 'Forjador de Guías'}
+                                </h1>
+                                <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">
+                                    Documento ID: #GU-{guideId || '0042'}
+                                </p>
+                            </div>
                         </div>
-                        <div>
-                            <h1 className="text-xl font-black text-slate-900 tracking-tight">
-                                {mode === 'edit' ? 'Editar Guía' : 'Forjar Guía'}
-                            </h1>
-                            <p className="text-slate-500 font-semibold text-xs">
-                                {mode === 'edit' ? 'Actualiza la configuración de tu guía.' : 'Agrupa ejercicios en un documento profesional.'}
-                            </p>
-                        </div>
+                        <button
+                            onClick={() => navigate('/dashboard')}
+                            className="flex items-center gap-2 px-4 py-2 text-slate-400 font-bold hover:text-slate-900 transition-colors"
+                        >
+                            <ArrowLeft size={18} strokeWidth={2.5} /> Volver al tablero
+                        </button>
                     </div>
-                    <button
-                        onClick={() => navigate('/dashboard')}
-                        className="p-3 bg-slate-50 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all hover:cursor-pointer"
-                    >
-                        <ArrowLeft size={20} strokeWidth={3} />
-                    </button>
-                </div>
 
-                {/* Contenedor de dos columnas */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Main Body - Grid Unificado */}
+                    <div className="flex flex-col lg:flex-row flex-grow">
 
-                    {/* Columna izquierda: Configuración y Ejercicios Seleccionados */}
-                    <div className="space-y-8">
+                        {/* Columna de Edición (Izquierda) */}
+                        <div className="lg:w-2/3 p-10 space-y-12 border-r border-slate-100">
 
-                        {/* Configuración de la Guía */}
-                        <div className="bg-white p-7 lg:p-9 rounded-[2.5rem] shadow-xl border border-slate-200 space-y-8">
-                            <h2 className="text-lg font-black text-slate-900 tracking-tight">Configuración</h2>
+                            {/* Sección 1: Metadatos */}
+                            <section className="space-y-6">
+                                <div className="flex items-center gap-2 text-rose-500">
+                                    <Type size={18} strokeWidth={2.5} />
+                                    <h2 className="text-sm font-black uppercase tracking-widest">Configuración General</h2>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-slate-400 ml-1">Título de la Guía *</label>
+                                        <input
+                                            type="text"
+                                            value={guideTitle}
+                                            onChange={(e) => setGuideTitle(e.target.value)}
+                                            placeholder="Ej: Guía #4 - Cinemática"
+                                            className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-rose-100 focus:border-rose-400 transition-all font-bold text-slate-700"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-slate-400 ml-1">Autor / Institución</label>
+                                        <input
+                                            type="text"
+                                            value={guideAuthor}
+                                            onChange={(e) => setGuideAuthor(e.target.value)}
+                                            placeholder="Ej: Facultad de Ciencias"
+                                            className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-rose-100 focus:border-rose-400 transition-all font-bold text-slate-700"
+                                        />
+                                    </div>
+                                </div>
+                            </section>
 
-                            <div className="w-full">
-                                <label className="text-slate-900 font-black text-base ml-1 block mb-4">Título de la Guía *</label>
-                                <input
-                                    type="text"
-                                    value={guideTitle}
-                                    onChange={(e) => setGuideTitle(e.target.value)}
-                                    placeholder="Ej: Guía de Ejercicios #4 - Cálculo"
-                                    className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-400 transition-all font-bold text-slate-800 text-base"
-                                />
-                            </div>
+                            {/* Sección 2: Orden de Retos */}
+                            <section className="space-y-6 pt-4">
+                                <div className="flex justify-between items-center">
+                                    <div className="flex items-center gap-2 text-amber-500">
+                                        <GripVertical size={18} strokeWidth={2.5} />
+                                        <h2 className="text-sm font-black uppercase tracking-widest">Orden de los Retos</h2>
+                                    </div>
+                                    <span className="px-3 py-1 bg-slate-100 text-slate-500 text-[10px] font-black rounded-lg uppercase tracking-widest">
+                                        {guideExercises.length} Ejercicios
+                                    </span>
+                                </div>
 
-                            <div className="w-full">
-                                <label className="text-slate-900 font-black text-base ml-1 block mb-4">Autor</label>
-                                <input
-                                    type="text"
-                                    value={guideAuthor}
-                                    onChange={(e) => setGuideAuthor(e.target.value)}
-                                    placeholder="Ej: Facultad de Ciencias"
-                                    className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-400 transition-all font-bold text-slate-800 text-base"
-                                />
-                            </div>
+                                <div
+                                    className="space-y-3"
+                                    onDrop={(e) => handleDrop(e, -1)}
+                                    onDragOver={handleDragOver}
+                                >
+                                    {guideExercises.length === 0 ? (
+                                        <div className="py-20 text-center border-2 border-dashed border-slate-100 rounded-3xl bg-slate-50/30">
+                                            <p className="text-slate-300 font-bold">No hay retos seleccionados aún.</p>
+                                        </div>
+                                    ) : (
+                                        guideExercises.map((item, idx) => (
+                                            <div
+                                                key={item.id}
+                                                draggable
+                                                onDragStart={(e) => handleDragStart(e, item.id)}
+                                                onDrop={(e) => handleDrop(e, idx)}
+                                                onDragOver={handleDragOver}
+                                                className="flex items-center gap-4 p-4 bg-white border border-slate-100 rounded-2xl hover:border-rose-200 hover:shadow-sm transition-all group cursor-grab active:cursor-grabbing"
+                                            >
+                                                <div className="cursor-grab text-slate-200 group-hover:text-slate-400 p-1">
+                                                    <GripVertical size={20} />
+                                                </div>
+                                                <div className="w-10 h-10 shrink-0 bg-slate-900 text-white rounded-xl flex items-center justify-center font-black text-sm">
+                                                    {idx + 1}
+                                                </div>
+                                                <div className="flex-grow min-w-0">
+                                                    <h4 className="font-bold text-slate-900 text-sm truncate">{item.title}</h4>
+                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                                        Dificultad: {item.difficulty || 'N/A'}
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleRemoveFromGuide(item.id)}
+                                                    className="p-2.5 text-slate-300 hover:text-rose-500 transition-colors"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </section>
                         </div>
 
-                        {/* Ejercicios Seleccionados */}
-                        <div className="bg-white p-7 lg:p-9 rounded-[2.5rem] shadow-xl border border-slate-200 space-y-6">
-                            <div className="flex justify-between items-center">
-                                <h3 className="text-lg font-black text-slate-900 tracking-tight">Orden de los Retos</h3>
-                                <span className="text-xs bg-slate-900 text-white px-4 py-2 rounded-full font-black uppercase tracking-widest">
-                                    {guideExercises.length} ejercicios
-                                </span>
-                            </div>
+                        {/* Panel Lateral (Derecha) */}
+                        <div className="lg:w-1/3 bg-slate-50/50 flex flex-col overflow-hidden">
 
-                            <div
-                                className="space-y-4"
-                                onDrop={(e) => handleDrop(e, -1)}
-                                onDragOver={handleDragOver}
-                            >
-                                {guideExercises.length === 0 ? (
-                                    <div className="py-16 text-center border-4 border-dashed border-slate-100 rounded-[2rem] bg-slate-50/50">
-                                        <p className="text-slate-300 font-black text-base">Sin ejercicios seleccionados</p>
-                                        <p className="text-slate-400 font-semibold mt-2 text-sm">Arrastra ejercicios desde el panel derecho.</p>
-                                    </div>
-                                ) : (
-                                    guideExercises.map((exercise, idx) => (
+                            {/* Biblioteca de Ejercicios */}
+                            <div className="p-8 flex-grow flex flex-col gap-6 border-b border-slate-100">
+                                <div className="flex items-center gap-2 text-slate-900">
+                                    <BookOpen size={18} strokeWidth={2.5} />
+                                    <h3 className="text-sm font-black uppercase tracking-widest">Biblioteca de Retos</h3>
+                                </div>
+
+                                <div className="relative">
+                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
+                                    <input
+                                        type="text"
+                                        placeholder="Buscar retos..."
+                                        value={searchQuery}
+                                        onChange={(e) => handleSearch(e.target.value)}
+                                        className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-rose-100 text-sm font-bold"
+                                    />
+                                </div>
+
+                                <div className="flex-grow overflow-y-auto max-h-[300px] lg:max-h-none space-y-2 pr-2 custom-scrollbar">
+                                    {filteredExercises.map(exercise => (
                                         <div
                                             key={exercise.id}
                                             draggable
                                             onDragStart={(e) => handleDragStart(e, exercise.id)}
-                                            onDrop={(e) => handleDrop(e, idx)}
-                                            onDragOver={handleDragOver}
-                                            className="flex items-center gap-4 p-4 bg-slate-50 rounded-[1.5rem] border border-slate-100 group hover:bg-white hover:border-rose-400 hover:shadow-lg transition-all cursor-grab active:cursor-grabbing"
+                                            className="bg-white p-4 rounded-xl border border-slate-200 hover:border-amber-400 transition-all flex items-center justify-between group cursor-grab shadow-sm"
                                         >
-                                            <div className="text-slate-200 group-hover:text-rose-400 transition-colors">
-                                                <GripVertical size={20} />
-                                            </div>
-                                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center font-black text-rose-500 shadow-sm border border-slate-100 text-sm group-hover:bg-rose-500 group-hover:text-white transition-all">
-                                                {idx + 1}
-                                            </div>
-                                            <div className="flex-grow">
-                                                <h4 className="font-black text-slate-900 text-sm group-hover:text-rose-600 transition-colors line-clamp-1">{exercise.title}</h4>
-                                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Dificultad: {exercise.difficulty || 'N/A'}</span>
+                                            <div className="min-w-0">
+                                                <p className="font-bold text-slate-900 text-xs truncate">{exercise.title}</p>
+                                                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
+                                                    Nivel {exercise.difficulty || 'N/A'}
+                                                </p>
                                             </div>
                                             <button
-                                                onClick={() => handleRemoveFromGuide(exercise.id)}
-                                                className="p-2 text-slate-300 hover:text-red-500 transition-colors bg-white rounded-lg shadow-sm border border-slate-100"
+                                                onClick={() => handleAddToGuide(exercise)}
+                                                className="p-2 bg-slate-50 text-slate-400 rounded-lg group-hover:bg-amber-500 group-hover:text-white transition-all"
                                             >
-                                                <Trash2 size={16} />
+                                                <Plus size={16} strokeWidth={3} />
                                             </button>
                                         </div>
-                                    ))
-                                )}
+                                    ))}
+                                    {filteredExercises.length === 0 && (
+                                        <div className="py-8 text-center">
+                                            <p className="text-slate-400 font-semibold text-sm">No hay ejercicios disponibles</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Preview de LaTeX */}
+                            <div className="p-8 space-y-4">
+                                <div className="flex items-center gap-2 text-slate-900">
+                                    <Code size={18} strokeWidth={2.5} />
+                                    <h3 className="text-sm font-black uppercase tracking-widest">Vista Previa LaTeX</h3>
+                                </div>
+                                <div className="bg-slate-900 rounded-2xl p-6 font-mono text-[11px] text-slate-400 space-y-2 border border-slate-800 shadow-inner max-h-[250px] overflow-y-auto custom-scrollbar">
+                                    <p className="text-rose-400">\\documentclass<span className="text-slate-200">{"{article}"}</span></p>
+                                    <p className="text-rose-400">\\title<span className="text-slate-200">{"{"}{guideTitle || "Título de la guía"}{"}"}</span></p>
+                                    <p className="text-rose-400">\\author<span className="text-slate-200">{"{"}{guideAuthor || "Autor"}{"}"}</span></p>
+                                    <p className="text-slate-500 mt-4">% Cuerpo del documento...</p>
+                                    <p className="text-rose-400">\\begin<span className="text-slate-200">{"{document}"}</span></p>
+                                    <p className="text-slate-400 pl-4">\\maketitle</p>
+                                    {guideExercises.map((item, idx) => (
+                                        <p key={idx} className="text-slate-400 pl-4">\\section*<span className="text-slate-200">{"{"}{item.title}{"}"}</span></p>
+                                    ))}
+                                    <p className="text-rose-400 mt-4">\\end<span className="text-slate-200">{"{document}"}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Footer del Workspace / Acciones */}
+                    <div className="px-10 py-8 border-t border-slate-100 bg-slate-50/50 flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div className="flex gap-10">
+                            <div className="flex flex-col">
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tiempo de Resolución</span>
+                                <span className="text-slate-900 font-black">~ {calculateTotalTime()} Minutos</span>
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nivel Promedio</span>
+                                <div className="flex gap-1 mt-1">
+                                    {[...Array(5)].map((_, i) => (
+                                        <div key={i} className={`w-2 h-2 rounded-full ${i < calculateAvgDifficulty() ? 'bg-amber-400' : 'bg-slate-200'}`} />
+                                    ))}
+                                </div>
                             </div>
                         </div>
 
-                        {/* Botones de Acción */}
-                        <div className="flex gap-4">
-                            <button
-                                onClick={handleSave}
-                                className="flex-1 bg-rose-500 text-white py-4 rounded-[1.5rem] font-black text-base flex items-center justify-center gap-2 shadow-xl shadow-rose-900/20 hover:bg-rose-600 transition-all active:scale-95"
-                            >
-                                <Download size={20} strokeWidth={3} /> {mode === 'edit' ? 'Actualizar' : 'Guardar'} Guía
-                            </button>
-                            <button className="flex-1 bg-slate-100 text-slate-600 py-4 rounded-[1.5rem] font-black text-base flex items-center justify-center gap-2 hover:bg-slate-200 transition-all">
+                        <div className="flex gap-4 w-full md:w-auto">
+                            <button className="flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 bg-white border border-slate-200 text-slate-600 rounded-2xl font-black hover:bg-slate-50 transition-all shadow-sm">
                                 <Eye size={20} /> Vista Previa
                             </button>
+                            <button
+                                onClick={handleSave}
+                                className="flex-1 md:flex-none flex items-center justify-center gap-3 px-12 py-4 bg-rose-500 text-white rounded-2xl font-black shadow-xl shadow-rose-200 hover:bg-rose-600 transition-all active:scale-95"
+                            >
+                                <Download size={20} strokeWidth={3} /> {mode === 'edit' ? 'Actualizar' : 'Guardar y Exportar'}
+                            </button>
                         </div>
                     </div>
+                </div>
 
-                    {/* Columna derecha: Ejercicios Disponibles y Vista Previa */}
-                    <div className="space-y-8">
-
-                        {/* Ejercicios Disponibles */}
-                        <div className="bg-white p-7 lg:p-9 rounded-[2.5rem] shadow-xl border border-slate-200 space-y-6">
-                            <div className="flex justify-between items-center">
-                                <h3 className="text-lg font-black text-slate-900 tracking-tight">Ejercicios Disponibles</h3>
-                                <button
-                                    onClick={() => navigate('/create-exercise')}
-                                    className="p-2 bg-slate-900 text-white rounded-xl hover:bg-rose-500 transition-all"
-                                >
-                                    <Plus size={18} strokeWidth={3} />
-                                </button>
-                            </div>
-
-                            <SearchBar onSearch={handleSearch} />
-
-                            <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
-                                {filteredExercises.map((exercise) => (
-                                    <div
-                                        key={exercise.id}
-                                        draggable
-                                        onDragStart={(e) => handleDragStart(e, exercise.id)}
-                                        className="cursor-grab active:cursor-grabbing"
-                                    >
-                                        <ExerciseOption
-                                            id={exercise.id}
-                                            title={exercise.title}
-                                            description={exercise.description}
-                                            difficulty={exercise.difficulty}
-                                            reference={null}
-                                            duration={null}
-                                            tags={null}
-                                            className="custom-exercise-option"
-                                            imageUrl={exercise.imageUrl}
-                                            onDelete={handleDeleteExercise}
-                                        />
-                                    </div>
-                                ))}
-                                {filteredExercises.length === 0 && (
-                                    <div className="py-8 text-center">
-                                        <p className="text-slate-400 font-semibold text-sm">No hay ejercicios disponibles</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Vista Previa LaTeX */}
-                        <div className="bg-white p-7 lg:p-9 rounded-[2.5rem] shadow-xl border border-slate-200 space-y-6">
-                            <h3 className="text-lg font-black text-slate-900 tracking-tight">Vista Previa LaTeX</h3>
-
-                            <textarea
-                                value={guideDescription}
-                                readOnly
-                                rows={12}
-                                className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none resize-none font-mono text-xs text-slate-700 leading-relaxed"
-                            />
-
-                            {guideExercises.some(ex => ex.imageUrl && ex.imageUrl.trim() !== "") && (
-                                <div className="space-y-3">
-                                    <p className="text-slate-500 font-black text-sm ml-1">Imágenes incluidas</p>
-                                    <div className="grid grid-cols-2 gap-3">
-                                        {guideExercises
-                                            .filter(exercise => exercise.imageUrl && exercise.imageUrl.trim() !== "")
-                                            .map((exercise) => (
-                                                <div key={exercise.id} className="rounded-[1.5rem] overflow-hidden border-2 border-slate-100 shadow-sm">
-                                                    <img src={exercise.imageUrl} alt={exercise.title} className="w-full h-24 object-cover" />
-                                                </div>
-                                            ))
-                                        }
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                {/* Info Tip - Unificada al flujo */}
+                <div className="mt-8 flex items-center gap-4 text-slate-400 font-bold text-sm bg-white/50 p-6 rounded-3xl border border-slate-100">
+                    <div className="p-2 bg-amber-100 text-amber-600 rounded-lg">
+                        <BookOpen size={16} />
                     </div>
+                    <p>Puedes reordenar los ejercicios arrastrándolos desde el icono de rejilla lateral.</p>
                 </div>
 
             </div>
 
             <Footer />
+
+            <style>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 4px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: #e2e8f0;
+                    border-radius: 10px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: #cbd5e1;
+                }
+            `}</style>
         </div>
     );
 };

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { GraduationCap, Megaphone, UserRound } from 'lucide-react';
 import { useTranslation } from "react-i18next";
+import { useDemoMode } from '../../contexts/DemoContext';
 
 // UI Components
 import Navbar from '../../components/Dashboard/Navbar';
@@ -32,8 +33,15 @@ const RoleCard: React.FC<{ role: string; icon: React.ReactNode; img: string }> =
  */
 function Home() {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+    const { enableDemoMode } = useDemoMode();
     const images = import.meta.glob('/src/assets/*', { eager: true, query: '?url', import: 'default' });
     const heroImage = images['/src/assets/home-image.png'] as string;
+
+    const handleDemoMode = () => {
+        enableDemoMode();
+        navigate('/dashboard');
+    };
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
@@ -57,12 +65,12 @@ function Home() {
                         >
                             {t('button.start')}
                         </Link>
-                        <Link
-                            to="/login"
+                        <button
+                            onClick={handleDemoMode}
                             className="text-base font-black text-slate-500 hover:text-rose-600 transition-colors flex items-center gap-2 group"
                         >
-                            {t('home.create-exercises')} <span className="group-hover:translate-x-2 transition-transform text-rose-500">→</span>
-                        </Link>
+                            Probar sin registrarse <span className="group-hover:translate-x-2 transition-transform text-rose-500">→</span>
+                        </button>
                     </div>
                 </div>
                 <div className="lg:w-1/2 relative">

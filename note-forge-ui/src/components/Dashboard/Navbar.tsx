@@ -2,6 +2,7 @@ import React, { useState, useEffect} from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { useNotification } from '../../contexts/NotificationContext';
+import { useDemoMode } from '../../contexts/DemoContext';
 import { Search, LogOut } from 'lucide-react';
 
 // UI Components
@@ -17,6 +18,7 @@ function Navbar() {
     const location = useLocation();
     const { t } = useTranslation();
     const { showSuccess, showError } = useNotification();
+    const { isDemoMode, disableDemoMode } = useDemoMode();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -25,7 +27,19 @@ function Navbar() {
         setIsLoggedIn(!!token);
     }, []);
 
+    // User is "authenticated" if logged in OR in demo mode
+    const isAuthenticated = isLoggedIn || isDemoMode;
+
     const handleLogout = async () => {
+        // If in demo mode, just disable it and go home
+        if (isDemoMode) {
+            disableDemoMode();
+            showSuccess('Saliste del modo demo');
+            navigate("/");
+            return;
+        }
+
+        // Otherwise, normal logout
         try {
             await logoutUser();
             setIsLoggedIn(false);
@@ -55,7 +69,7 @@ function Navbar() {
 
                     {/* Navigation links - center (desktop only) */}
                     <div className="hidden md:flex items-center gap-8">
-                        {isLoggedIn && (
+                        {isAuthenticated && (
                             <>
                                 <Link
                                     to="/dashboard"
@@ -93,12 +107,12 @@ function Navbar() {
 
                     {/* Right side buttons */}
                     <div className="flex items-center gap-4">
-                        {isLoggedIn ? (
+                        {isAuthenticated ? (
                             <button
                                 onClick={handleLogout}
                                 className="flex items-center gap-2 bg-slate-900 text-white px-5 py-2 rounded-xl text-sm font-black hover:bg-rose-600 transition-all shadow-sm"
                             >
-                                {t('navbar.logout')} <LogOut size={16} />
+                                {isDemoMode ? 'Salir del Demo' : t('navbar.logout')} <LogOut size={16} />
                             </button>
                         ) : (
                             <div className="flex items-center gap-4">
@@ -120,8 +134,8 @@ function Navbar() {
                         {/* Language selector */}
                         <LanguageToggle />
 
-                        {/* Mobile menu button - mobile only when logged in */}
-                        {isLoggedIn && (
+                        {/* Mobile menu button - mobile only when authenticated */}
+                        {isAuthenticated && (
                             <button
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                                 className="md:hidden inline-flex items-center justify-center p-3 rounded-[1.5rem] text-slate-500 hover:text-white hover:bg-slate-900 focus:outline-none transition-all shadow-lg"
@@ -140,7 +154,7 @@ function Navbar() {
             </div>
 
             {/* Mobile menu */}
-            {isLoggedIn && isMobileMenuOpen && (
+            {isAuthenticated && isMobileMenuOpen && (
                 <div className="md:hidden border-t border-slate-200 bg-white shadow-xl">
                     <div className="px-4 pt-4 pb-4 space-y-3">
                         <Link
@@ -166,7 +180,7 @@ function Navbar() {
                                 onClick={handleLogout}
                                 className="w-full bg-slate-100 text-slate-700 text-base px-6 py-3 rounded-[2rem] font-black hover:bg-rose-500 hover:text-white transition-all shadow-lg transform active:scale-95"
                             >
-                                {t('navbar.logout')}
+                                {isDemoMode ? 'Salir del Demo' : t('navbar.logout')}
                             </button>
                         </div>
                     </div>
