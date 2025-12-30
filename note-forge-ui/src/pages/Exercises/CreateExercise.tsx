@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Dashboard/Navbar';
 import BgDecoration from '../../components/UI/BgDecoration';
 import Footer from '../../components/UI/Footer';
+import LatexEditor from '../../components/Exercises/LatexEditor';
 import { Book, Link as LinkIcon, FileText, Camera, ChevronLeft, ChevronRight, Check, X, Eye } from 'lucide-react';
 
 interface Reference {
@@ -180,23 +181,11 @@ const CreateExercise: React.FC = () => {
                      <label className="text-slate-900 font-black text-base">Enunciado del problema</label>
                      <span className="text-[10px] bg-slate-900 text-white px-5 py-2 rounded-full font-black uppercase tracking-widest shadow-md">LaTeX Activo</span>
                   </div>
-                  <textarea
-                    rows={6}
+                  <LatexEditor
+                    name="enunciado"
                     value={enunciado}
                     onChange={(e) => setEnunciado(e.target.value)}
-                    placeholder="Escribe el reto detallado. El editor soporta símbolos matemáticos complejos..."
-                    className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-400 transition-all resize-none font-bold text-sm leading-relaxed text-slate-800"
                   />
-                </div>
-
-                {/* Vista Previa Enunciado */}
-                <div className="space-y-3 w-full">
-                   <div className="flex items-center gap-2 text-slate-400 font-black uppercase text-[10px] tracking-widest ml-4">
-                      <Eye size={14} /> Vista Previa:
-                   </div>
-                   <div className="min-h-[120px] w-full bg-slate-50/50 border-2 border-slate-100 rounded-[1.5rem] p-5 text-slate-600 font-medium text-sm italic">
-                      {enunciado || "Aquí aparecerá el renderizado de tu ejercicio..."}
-                   </div>
                 </div>
 
                 <input
@@ -301,22 +290,11 @@ const CreateExercise: React.FC = () => {
                 {/* Guía de Resolución */}
                 <div className="w-full">
                   <label className="text-slate-900 font-black text-base ml-1 block mb-4">Guía de Resolución</label>
-                  <textarea
-                    rows={4}
+                  <LatexEditor
+                    name="resolucion"
                     value={resolucion}
                     onChange={(e) => setResolucion(e.target.value)}
-                    placeholder="Detalla los pasos críticos para resolver el ejercicio..."
-                    className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-rose-100 transition-all font-bold text-slate-800 text-sm"
                   />
-                  {/* Vista Previa Resolución */}
-                  <div className="space-y-3 pt-2 w-full">
-                    <div className="flex items-center gap-2 text-slate-400 font-black uppercase text-[10px] tracking-widest ml-4">
-                        <Eye size={14} /> Vista Previa:
-                    </div>
-                    <div className="min-h-[100px] w-full bg-slate-50/50 border-2 border-slate-100 rounded-[1.5rem] p-5 text-slate-600 font-medium text-sm italic">
-                        {resolucion || "Aquí aparecerá la guía de resolución renderizada..."}
-                    </div>
-                  </div>
                 </div>
               </div>
             )}

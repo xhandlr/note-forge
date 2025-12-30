@@ -49,28 +49,28 @@ function LatexEditor({ value, onChange, name }: LatexEditorProps) {
     }, [value]);
 
     return (
-        <div className="space-y-4">
-            <div>
-                <p className="text-xs text-gray-500 mb-2">Utilice \( ..\) o \[ ..\] para formato LaTeX</p>
-                <textarea
-                    name={name}
-                    value={value || ''}
-                    onChange={onChange}
-                    rows={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all resize-none font-mono text-sm"
-                    placeholder="Escribe aquí en formato LaTeX (usa \( ... \) para matemáticas en línea o \[ ... \] para ecuaciones en bloque)"
-                    required
-                />
-            </div>
+        <>
+            <textarea
+                name={name}
+                value={value || ''}
+                onChange={onChange}
+                rows={6}
+                className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-400 transition-all resize-none font-bold text-sm leading-relaxed text-slate-800"
+                placeholder="Escribe aquí en formato LaTeX (usa \( ... \) para matemáticas en línea o \[ ... \] para ecuaciones en bloque)"
+            />
 
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                <h3 className="text-sm font-semibold text-gray-700 mb-2">Vista Previa:</h3>
-                <div
-                    className="prose max-w-none"
-                    dangerouslySetInnerHTML={{ __html: latexPreview }}
-                />
+            <div className="space-y-3 w-full mt-6">
+                <div className="flex items-center gap-2 text-slate-400 font-black uppercase text-[10px] tracking-widest ml-4">
+                    Vista Previa:
+                </div>
+                <div className="min-h-[120px] w-full bg-slate-50/50 border-2 border-slate-100 rounded-[1.5rem] p-5 text-slate-600 font-medium text-sm">
+                    <div
+                        className="prose max-w-none"
+                        dangerouslySetInnerHTML={{ __html: latexPreview || "Aquí aparecerá el renderizado..." }}
+                    />
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 
