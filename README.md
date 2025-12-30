@@ -35,55 +35,101 @@
 
 ## 🎯 Overview
 
-**Note Forge** is a modern educational platform for organizing study materials. Built with React, TypeScript, and Node.js, it combines LaTeX typesetting with intuitive drag-and-drop interfaces.
+**Note Forge** is a modern, full-stack educational platform designed to revolutionize how students, educators, and teaching assistants organize and share study materials. Built with cutting-edge technologies and an unwavering focus on user experience, it combines the power of LaTeX typesetting with intuitive drag-and-drop interfaces.
 
 **Perfect for:**
-- 🎓 **Students** - Centralize study materials and create custom study sessions
-- 👨‍🏫 **Educators** - Build reusable exercise libraries and generate professional study guides
-- 👨‍💼 **Teaching Assistants** - Quickly assemble study materials with LaTeX formatting
+- 🎓 **Students** - Centralize study materials in one searchable platform with custom study sessions
+- 👨‍🏫 **Educators** - Build reusable exercise libraries and generate professional LaTeX-formatted guides
+- 👨‍💼 **Teaching Assistants** - Quickly assemble study materials from existing exercise banks
+
+**What makes it different:**
+- 🎨 Production-ready UI with smooth animations and responsive design
+- ⚡ Lightning-fast builds with Vite and optimized performance
+- 🌍 Global-ready with complete i18n support (English/Spanish)
+- 🎮 Interactive demo mode—no registration required
+- 🏗️ Enterprise architecture with Factory pattern and TypeScript
 
 ---
 
 ## ✨ Key Features
 
-- **🎨 Modern UI/UX** - Polished interface with TailwindCSS, smooth animations, and full responsive design
-- **📝 LaTeX Editor** - Real-time rendering for mathematical expressions and scientific notation
-- **🎯 Drag & Drop Builder** - Intuitive workspace to create study guides by dragging exercises
-- **📁 Smart Organization** - Category system with tags, difficulty levels, and visual browsing
-- **🔍 Advanced Search** - Full-text search with multi-criteria filtering
-- **🌍 Internationalization** - English and Spanish support with easy extensibility
-- **🎮 Demo Mode** - Try the platform without registration via GitHub Pages
-- **📊 Smart Metrics** - Automatic time calculation and difficulty averaging
+### 🎨 Modern UI/UX Design
+- **Polished Interface**: Meticulously crafted with TailwindCSS, smooth micro-interactions, and consistent design language across 15+ views
+- **Fully Responsive**: Mobile-first approach with optimized breakpoints for tablet and desktop
+- **Smart Navigation**: Active route indicators with smooth animations, mobile hamburger menu, and breadcrumb support
+- **Custom Design System**: Rounded corners, custom scrollbars, and carefully chosen color palette (slate, rose, amber)
+
+### 📝 Exercise Management
+- **LaTeX Editor**: Real-time rendering for mathematical expressions, equations, matrices, and scientific notation with syntax highlighting
+- **Rich Metadata**: 5-level difficulty rating, duration estimates, multi-tag support, custom images (Unsplash integration), and timestamps
+- **Advanced Search**: Full-text search across titles/descriptions with real-time multi-criteria filtering (category, difficulty, tags)
+- **Visual Organization**: Card-based layouts with high-quality images, grid/list views, and smooth transitions
+
+### 🎯 Study Guide Builder
+- **Drag & Drop Interface**: Intuitive reordering of exercises with smooth animations and visual feedback
+- **Unified Workspace**: Three-panel layout with exercise library, configuration panel, and live LaTeX preview
+- **Smart Metrics**: Automatic calculation of total time (15 min/exercise) and average difficulty with visual indicators
+- **Export Options**: Save drafts for later editing and export to LaTeX (.tex) format
+
+### 📁 Category System
+- **Flexible Organization**: Subject-based categories with custom images, rich descriptions, and unlimited nesting
+- **Dedicated Views**: Beautiful hero sections with cover images, tabbed interface (exercises vs. guides), and statistics dashboard
+- **Smart Features**: Pin favorites, track recently accessed, empty state prompts, and bulk operations
+
+### 🌍 Internationalization & Demo
+- **Multi-Language Support**: Complete i18n with English and Spanish translations, dynamic language switching, and easy extensibility
+- **Interactive Demo Mode**: Full-featured demo with comprehensive mock data (3 categories, 5 exercises, 3 guides) and 300ms simulated latency
+- **Factory Pattern Architecture**: Clean service abstraction for seamless switching between demo and production environments
 
 ---
 
 ## 🎨 Screenshots
 
-> 📸 **Coming Soon!** Screenshots will be added to showcase the platform's interface.
+> 📸 **Coming Soon!** Screenshots showcasing the platform's interface, drag-and-drop functionality, and LaTeX editor will be added here.
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend
-- React 18 + TypeScript 5.5
-- Vite 5.0 (build tool)
-- TailwindCSS 3.4 (styling)
-- React Router 6.x (routing)
-- Lucide React (icons)
-- react-i18next (i18n)
+### Frontend Technologies
 
-### Backend
-- Node.js 22+ with Express
-- MySQL 8.0+
-- JWT authentication
-- RESTful API
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **React** | 18.3 | UI library with hooks and functional components |
+| **TypeScript** | 5.5 | Type safety and enhanced developer experience |
+| **Vite** | 5.0 | Lightning-fast build tool with instant HMR |
+| **TailwindCSS** | 3.4 | Utility-first CSS framework for rapid development |
+| **React Router** | 6.x | Client-side routing with nested routes |
+| **Lucide React** | Latest | 1000+ consistent, customizable icons |
+| **react-i18next** | Latest | Complete i18n solution with language detection |
 
-### Architecture
+### Backend Technologies
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Node.js** | 22+ | JavaScript runtime with ES modules support |
+| **Express** | 4.x | Fast, minimalist web framework |
+| **MySQL** | 8.0+ | Relational database with JSON support |
+| **JWT** | Latest | Stateless authentication tokens |
+| **bcrypt** | Latest | Password hashing and security |
+
+### Development Tools & Architecture
+
+**Build & Development**
+- Vite for instant hot module replacement
+- ESLint + TypeScript ESLint for code quality
+- PostCSS for CSS transformations
+
+**Code Architecture**
 - Factory Pattern for service abstraction
-- Context API for state management
-- Custom hooks & TypeScript interfaces
-- Docker/Podman containerization
+- Context API for global state management
+- Custom React hooks for reusable logic
+- TypeScript interfaces for type safety
+
+**DevOps & Deployment**
+- Docker & Docker Compose for containerization
+- GitHub Pages for demo deployment
+- Environment variable management
 
 ---
 
@@ -91,129 +137,242 @@
 
 ### Quick Start (Demo)
 
-The fastest way to explore Note Forge:
+The fastest way to explore Note Forge is through our interactive demo:
 
-1. Visit [xhandlr.github.io/note-forge](https://xhandlr.github.io/note-forge/)
-2. Click "Probar sin registrarse"
-3. Explore with pre-loaded mock data
+1. **Visit** [xhandlr.github.io/note-forge](https://xhandlr.github.io/note-forge/)
+2. **Click** "Probar sin registrarse" on the landing page
+3. **Explore** full functionality with pre-loaded mock data
+4. **No registration** or setup required!
+
+**The demo includes:**
+- ✅ Pre-configured categories (e.g., Physics, Mathematics, Chemistry)
+- ✅ Sample exercises with LaTeX formatting
+- ✅ Study guides with drag-and-drop functionality
+- ✅ Full navigation and search capabilities
+- ✅ Simulated 300ms API latency for realistic feel
 
 ### Prerequisites
 
-- Node.js `v22.x+`
-- MySQL `8.0+`
-- Docker/Podman *(optional)*
+For local development, ensure you have:
+
+- ✅ **Node.js** `v22.x+` - [Download](https://nodejs.org/)
+- ✅ **MySQL** `8.0+` - [Installation Guide](https://dev.mysql.com/downloads/mysql/)
+- 🐳 **Docker/Podman** *(optional)* - [Get Docker](https://www.docker.com/)
+- 📦 **npm** or **pnpm** - Comes with Node.js
+
+---
 
 ### Manual Installation
 
 1. **Clone the repository**
+
 ```bash
 git clone https://github.com/xhandlr/note-forge.git
 cd note-forge
 ```
 
-2. **Set up database**
+2. **Set up the database**
+
+Make sure MySQL is running, then execute the initialization script:
+
 ```bash
-# Start MySQL and run db/init.sql
+# Log into MySQL
+mysql -u root -p
+
+# Run the initialization script
+source db/init.sql
 ```
 
-3. **Configure environment**
+3. **Configure environment variables**
+
 ```bash
+# Copy the example environment file
 cp note-forge-api/.env.example note-forge-api/.env
-# Edit .env with your database credentials
+
+# Edit the .env file with your database credentials
+# DB_HOST=localhost
+# DB_USER=root
+# DB_PASSWORD=your_password
+# DB_NAME=noteforge
+# JWT_SECRET=your_secret_key
 ```
 
-4. **Start backend**
+4. **Start the backend**
+
 ```bash
 cd note-forge-api
 npm install
 node index.js
-# API runs at http://localhost:5000
 ```
 
-5. **Start frontend**
+The API will run at **http://localhost:5000**
+
+5. **Start the frontend**
+
+Open a new terminal:
+
 ```bash
 cd note-forge-ui
 npm install
 npm run dev
-# App runs at http://localhost:5173
 ```
 
+Access the app at **http://localhost:5173**
+
+---
+
 ### Docker Installation
+
+If you prefer to run the app using containers:
+
+1. **Clone the repository**
 
 ```bash
 git clone https://github.com/xhandlr/note-forge.git
 cd note-forge
+```
+
+2. **Start services with Docker Compose**
+
+```bash
 docker-compose up -d
-# Visit http://localhost:5173
+```
+
+This will start:
+- MySQL database with initial schema
+- Backend API (Node.js + Express)
+- Frontend UI (React + Vite)
+
+Visit **http://localhost:5173** to use the app.
+
+To stop the containers:
+
+```bash
+docker-compose down
 ```
 
 ---
 
 ## 📁 Project Structure
 
-```
+### Monorepo Architecture
+
+```bash
 note-forge/
-├── db/                   # Database scripts
-├── note-forge-api/       # Backend (Node.js + Express)
-│   ├── config/
-│   ├── controllers/
-│   ├── services/
-│   ├── models/
-│   └── routes/
-├── note-forge-ui/        # Frontend (React + TypeScript)
+│
+├── db/                          # Database Layer
+│   ├── init.sql                 # Initial schema and tables
+│   └── seed.sql                 # Sample data (optional)
+│
+├── note-forge-api/              # Backend Service (Node.js + Express)
+│   ├── config/                  # Database and auth configuration
+│   ├── controllers/             # Request handlers (Category, Exercise, Guide)
+│   ├── services/                # Business logic layer
+│   ├── models/                  # Data models and SQL queries
+│   ├── routes/                  # API endpoint definitions
+│   ├── middleware/              # JWT authentication
+│   ├── .env.example             # Environment template
+│   ├── index.js                 # Server entry point
+│   └── package.json
+│
+├── note-forge-ui/               # Frontend Application (React + TypeScript)
+│   ├── public/                  # Static assets
 │   ├── src/
-│   │   ├── components/   # Reusable UI components
-│   │   ├── pages/        # Route-based views
-│   │   ├── contexts/     # React Context providers
-│   │   ├── services/     # API & mock services
-│   │   ├── mocks/        # Demo mode data
-│   │   └── i18n/         # Translations
-│   └── vite.config.ts
-└── docker-compose.yml
+│   │   ├── assets/              # Images, fonts
+│   │   ├── components/
+│   │   │   ├── UI/              # Reusable components (Button, Icon, etc.)
+│   │   │   └── Dashboard/       # Navbar, Footer
+│   │   ├── contexts/            # React Context (Demo, Notifications)
+│   │   ├── pages/               # Route-based views
+│   │   │   ├── Auth/            # Home, Login, Registration
+│   │   │   ├── Categories/      # Category views and forms
+│   │   │   ├── Exercises/       # Exercise views and forms
+│   │   │   ├── Guides/          # GuideForm with unified workspace
+│   │   │   ├── Dashboard/       # Main dashboard
+│   │   │   └── Search/          # Search page
+│   │   ├── services/            # API services and factory pattern
+│   │   ├── mocks/               # Mock data and services for demo
+│   │   └── i18n/                # English and Spanish translations
+│   ├── vite.config.ts           # Vite configuration
+│   ├── tailwind.config.js       # TailwindCSS configuration
+│   ├── tsconfig.json            # TypeScript configuration
+│   └── package.json
+│
+├── docker-compose.yml           # Multi-container orchestration
+├── README.md                    # This file
+└── LICENSE                      # MIT License
 ```
 
 ---
 
 ## 🌍 Internationalization
 
-Built-in support for:
-- 🇬🇧 English
-- 🇪🇸 Spanish
+Note Forge is built with global audiences in mind using **react-i18next**.
 
-Add new languages by creating JSON files in `src/i18n/` and importing them.
+### Current Languages
+
+| Language | Code | Status | Coverage |
+|----------|------|--------|----------|
+| 🇬🇧 English | `en` | ✅ Complete | 100% |
+| 🇪🇸 Spanish | `es` | ✅ Complete | 30% |
+
+### Adding a New Language
+
+1. Create a JSON file in `note-forge-ui/src/i18n/` (e.g., `fr.json`)
+2. Import it in `i18n.ts`
+3. Add the language option to `LanguageToggle.tsx`
+
+Translation keys are organized by feature: `navbar.*`, `home.*`, `dashboard.*`, `exercises.*`, `guides.*`, `messages.*`
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please:
-1. Fork the repo
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+Contributions are welcome! Whether you're fixing bugs, adding features, improving documentation, or suggesting ideas, your help is appreciated.
 
-**Areas for contribution:**
-- 🌍 Translations
-- 🎨 UI/UX improvements
-- 🐛 Bug fixes
-- ✨ New features
-- 📖 Documentation
+### How to Contribute
+
+1. **Fork the repository**
+   ```bash
+   git clone https://github.com/xhandlr/note-forge.git
+   ```
+
+2. **Create a feature branch**
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+
+3. **Make your changes**
+   - Follow existing TypeScript/React patterns
+   - Add types for new code
+   - Test your changes locally
+
+4. **Commit your changes**
+   ```bash
+   git add .
+   git commit -m "feat: add amazing feature"
+   ```
+
+5. **Push and open a Pull Request**
+   ```bash
+   git push origin feature/amazing-feature
+   ```
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 <div align="center">
 
-**Built with ❤️ by [xhandlr](https://github.com/xhandlr)**
+**Built with 💛 by [xhandlr](https://github.com/xhandlr)**
 
-Give it a ⭐ if you find it useful!
+If you find this project useful, consider giving it a ⭐ on GitHub!
 
 [⬆ Back to Top](#-note-forge)
 
 </div>
+
