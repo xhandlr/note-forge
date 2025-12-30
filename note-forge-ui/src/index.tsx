@@ -19,7 +19,9 @@ import CreateGuide from './pages/Guides/CreateGuide';
 import EditGuide from './pages/Guides/EditGuide';
 import CreateCategory from './pages/Categories/CreateCategory';
 import EditCategory from './pages/Categories/EditCategory';
+import CategoryView from './pages/Categories/CategoryView';
 import EditExercise from './pages/Exercises/EditExercise';
+import ExerciseView from './pages/Exercises/ExerciseView';
 import Library from './pages/ResourceLibrary/Library';
 import Home from './pages/Auth/Home';
 import SearchPage from './pages/Search/SearchPage';
@@ -45,10 +47,12 @@ root.render(
 
                     <Route path="/create-exercise" element={<CreateExercise />} />
                     <Route path="/edit-exercise/:id" element={<EditExercise />} />
+                    <Route path="/exercise/:id" element={<ExerciseView />} />
                     <Route path="/exercises" element={<Exercises />} />
 
                     <Route path="/create-category" element={<CreateCategory />} />
                     <Route path="/edit-category/:id" element={<EditCategory />} />
+                    <Route path="/category/:id" element={<CategoryView />} />
                     <Route path="/categories" element={<Categories />} />
 
                     <Route path="/guides" element={<Guides />} />
