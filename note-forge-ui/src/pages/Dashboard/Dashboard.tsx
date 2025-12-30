@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Coffee, Plus, MoreVertical, Pin, Search, Filter, BookOpen, Layers, Edit3, Eye } from "lucide-react";
+import { useCategoryService, useExerciseService, useGuideService } from "../../services/serviceFactory";
 
 // UI components
 import Navbar from "../../components/Dashboard/Navbar";
@@ -159,6 +160,14 @@ const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject,
 function Dashboard() {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('asignaturas');
+    const [categories, setCategories] = useState<any[]>([]);
+    const [exercises, setExercises] = useState<any[]>([]);
+    const [guides, setGuides] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const categoryService = useCategoryService();
+    const exerciseService = useExerciseService();
+    const guideService = useGuideService();
 
     const tabs = [
         { id: 'asignaturas', label: t('dashboard.my-subjects'), icon: <Layers size={18} /> },
@@ -166,33 +175,27 @@ function Dashboard() {
         { id: 'guias', label: t('dashboard.study-material'), icon: <BookOpen size={18} /> },
     ];
 
-    // Datos falsos para ejercicios (con IDs)
-    const mockExercises = [
-        {
-            id: 1,
-            title: "Movimiento Parabólico: Reto del Cañón",
-            subject: "Física I",
-            difficulty: 4,
-            desc: "Análisis cinemático completo de un proyectil lanzado con ángulo variable sobre un plano inclinado. Requiere descomposición vectorial avanzada.",
-            img: "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?auto=format&fit=crop&q=80&w=800"
-        },
-        {
-            id: 2,
-            title: "Integración por Partes: El Desafío Logarítmico",
-            subject: "Cálculo II",
-            difficulty: 3,
-            desc: "Cálculo de la integral indefinida de funciones trascendentes combinadas. Aplicación práctica del método DI para optimización de tiempo.",
-            img: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800"
-        },
-        {
-            id: 3,
-            title: "Equilibrio Ácido-Base: Titulación de Vinagre",
-            subject: "Química General",
-            difficulty: 2,
-            desc: "Determinación de la concentración molar de ácido acético mediante neutralización con NaOH. Cálculo de pH en el punto de equivalencia.",
-            img: "https://images.unsplash.com/photo-1603126010305-2f560a3773f7?auto=format&fit=crop&q=80&w=800"
-        },
-    ];
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                setLoading(true);
+                const [categoriesData, exercisesData, guidesData] = await Promise.all([
+                    categoryService.getAll(),
+                    exerciseService.getAll(),
+                    guideService.getAll()
+                ]);
+                setCategories(categoriesData);
+                setExercises(exercisesData);
+                setGuides(guidesData);
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadData();
+    }, []);
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
@@ -283,72 +286,81 @@ function Dashboard() {
 
                 {/* Zona de Renderizado con Blanco Sólido */}
                 <div className="min-h-[500px]">
-                    {activeTab === 'asignaturas' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <SubjectCard
-                                id={1}
-                                title="Física Mecánica"
-                                exercises={24}
-                                guides={5}
-                                icon={<BookOpen size={64} strokeWidth={2} />}
-                                pinned
-                            />
-                            <SubjectCard
-                                id={2}
-                                title="Cálculo II"
-                                exercises={18}
-                                guides={3}
-                                icon={<Coffee size={64} strokeWidth={2} />}
-                            />
-                            <Link to="/create-category" className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[250px] flex flex-col items-center justify-center text-slate-300 hover:bg-amber-50 hover:border-amber-400 hover:text-amber-500 transition-all group shadow-2xl">
-                                <div className="bg-slate-50 p-5 rounded-full group-hover:bg-white group-hover:scale-110 transition-all mb-3">
-                                    <Plus size={40} strokeWidth={3} className="text-slate-200 group-hover:text-amber-500" />
-                                </div>
-                                <span className="font-black text-lg">Nueva Asignatura</span>
-                            </Link>
+                    {loading ? (
+                        <div className="flex items-center justify-center h-[500px]">
+                            <div className="text-center space-y-3">
+                                <div className="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mx-auto" />
+                                <p className="text-slate-400 font-black text-sm">Cargando datos...</p>
+                            </div>
                         </div>
-                    )}
-
-                    {activeTab === 'guias' && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {[1, 2, 3, 4, 5].map((i) => (
-                                <GuideCard
-                                    key={i}
-                                    title={`Guía #${i}: Teoría y Práctica`}
-                                    status="En revisión"
-                                    subject={i % 2 === 0 ? "Física I" : "Química"}
-                                />
-                            ))}
-                            <Link to="/create-guide" className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[300px] flex flex-col items-center justify-center text-slate-300 hover:bg-rose-50 hover:border-rose-400 hover:text-rose-500 transition-all group shadow-2xl">
-                                <div className="bg-slate-50 p-5 rounded-full group-hover:bg-white group-hover:scale-110 transition-all mb-3">
-                                    <Plus size={40} strokeWidth={3} className="text-slate-200 group-hover:text-rose-500" />
+                    ) : (
+                        <>
+                            {activeTab === 'asignaturas' && (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                    {categories.map((category, index) => (
+                                        <SubjectCard
+                                            key={category.id}
+                                            id={category.id}
+                                            title={category.name}
+                                            exercises={exercises.filter(e => e.categoryId === category.id).length}
+                                            guides={guides.filter(g => g.exerciseIds?.some((eId: number) =>
+                                                exercises.find(e => e.id === eId && e.categoryId === category.id)
+                                            )).length}
+                                            icon={<BookOpen size={64} strokeWidth={2} />}
+                                            pinned={category.is_pinned}
+                                        />
+                                    ))}
+                                    <Link to="/create-category" className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[250px] flex flex-col items-center justify-center text-slate-300 hover:bg-amber-50 hover:border-amber-400 hover:text-amber-500 transition-all group shadow-2xl">
+                                        <div className="bg-slate-50 p-5 rounded-full group-hover:bg-white group-hover:scale-110 transition-all mb-3">
+                                            <Plus size={40} strokeWidth={3} className="text-slate-200 group-hover:text-amber-500" />
+                                        </div>
+                                        <span className="font-black text-lg">Nueva Asignatura</span>
+                                    </Link>
                                 </div>
-                                <span className="font-black text-lg">Nueva Guía</span>
-                            </Link>
-                        </div>
-                    )}
+                            )}
 
-                    {activeTab === 'ejercicios' && (
-                        <div className="space-y-6">
-                            {mockExercises.map((exercise) => (
-                                <ExerciseListItem
-                                    key={exercise.id}
-                                    id={exercise.id}
-                                    title={exercise.title}
-                                    subject={exercise.subject}
-                                    difficulty={exercise.difficulty}
-                                    desc={exercise.desc}
-                                    img={exercise.img}
-                                />
-                            ))}
-
-                            <Link to="/create-exercise" className="w-full py-8 bg-white border-4 border-dashed border-slate-200 rounded-[2.5rem] flex items-center justify-center gap-3 text-slate-300 hover:bg-rose-50 hover:border-rose-400 hover:text-rose-500 transition-all group shadow-xl">
-                                <div className="p-3 bg-slate-50 rounded-xl group-hover:bg-rose-500 group-hover:text-white transition-all">
-                                    <Plus size={24} strokeWidth={3} />
+                            {activeTab === 'guias' && (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                    {guides.map((guide) => (
+                                        <GuideCard
+                                            key={guide.id}
+                                            title={guide.title}
+                                            status={guide.status}
+                                            subject={guide.author}
+                                        />
+                                    ))}
+                                    <Link to="/create-guide" className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[300px] flex flex-col items-center justify-center text-slate-300 hover:bg-rose-50 hover:border-rose-400 hover:text-rose-500 transition-all group shadow-2xl">
+                                        <div className="bg-slate-50 p-5 rounded-full group-hover:bg-white group-hover:scale-110 transition-all mb-3">
+                                            <Plus size={40} strokeWidth={3} className="text-slate-200 group-hover:text-rose-500" />
+                                        </div>
+                                        <span className="font-black text-lg">Nueva Guía</span>
+                                    </Link>
                                 </div>
-                                <span className="font-black text-base tracking-tight">Forjar Nuevo Ejercicio</span>
-                            </Link>
-                        </div>
+                            )}
+
+                            {activeTab === 'ejercicios' && (
+                                <div className="space-y-6">
+                                    {exercises.map((exercise) => (
+                                        <ExerciseListItem
+                                            key={exercise.id}
+                                            id={exercise.id}
+                                            title={exercise.title}
+                                            subject={categories.find(c => c.id === exercise.categoryId)?.name || 'Sin categoría'}
+                                            difficulty={exercise.difficulty}
+                                            desc={exercise.description}
+                                            img={exercise.imageUrl}
+                                        />
+                                    ))}
+
+                                    <Link to="/create-exercise" className="w-full py-8 bg-white border-4 border-dashed border-slate-200 rounded-[2.5rem] flex items-center justify-center gap-3 text-slate-300 hover:bg-rose-50 hover:border-rose-400 hover:text-rose-500 transition-all group shadow-xl">
+                                        <div className="p-3 bg-slate-50 rounded-xl group-hover:bg-rose-500 group-hover:text-white transition-all">
+                                            <Plus size={24} strokeWidth={3} />
+                                        </div>
+                                        <span className="font-black text-base tracking-tight">Forjar Nuevo Ejercicio</span>
+                                    </Link>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
 
