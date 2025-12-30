@@ -17,7 +17,7 @@ interface SubjectCardProps {
 }
 
 const SubjectCard: React.FC<SubjectCardProps> = ({ id, title, exercises, guides, icon, pinned }) => (
-    <div className="bg-white rounded-[2rem] overflow-hidden border border-slate-200 shadow-2xl transition-all hover:shadow-xl hover:-translate-y-1 group relative">
+    <Link to={id ? `/category/${id}` : '#'} className="bg-white rounded-[2rem] overflow-hidden border border-slate-200 shadow-2xl transition-all hover:shadow-xl hover:-translate-y-1 group relative block">
         {pinned && (
             <div className="absolute top-3 left-3 z-20 bg-amber-500 text-white p-2 rounded-xl shadow-lg">
                 <Pin size={14} fill="white" />
@@ -29,10 +29,18 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ id, title, exercises, guides,
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
             <div className="absolute top-3 right-3 z-20 flex gap-2">
-                <Link to={id ? `/edit-category/${id}` : '#'} className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-rose-500 rounded-xl transition-all" title="Editar Asignatura">
+                <Link
+                    to={id ? `/edit-category/${id}` : '#'}
+                    className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-rose-500 rounded-xl transition-all"
+                    title="Editar Asignatura"
+                    onClick={(e) => e.stopPropagation()}
+                >
                     <Edit3 size={16} />
                 </Link>
-                <button className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-white/40 rounded-xl transition-all">
+                <button
+                    className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-white/40 rounded-xl transition-all"
+                    onClick={(e) => e.stopPropagation()}
+                >
                     <MoreVertical size={18} />
                 </button>
             </div>
@@ -48,11 +56,8 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ id, title, exercises, guides,
                     <span className="text-rose-600 font-bold text-sm">{guides} Guías</span>
                 </div>
             </div>
-            <Link to={`/subject/${title}`} className="p-3 bg-slate-900 text-white rounded-xl hover:bg-rose-600 transition-all shadow-lg active:scale-95">
-                <Plus size={18} strokeWidth={3} />
-            </Link>
         </div>
-    </div>
+    </Link>
 );
 
 interface GuideCardProps {
@@ -136,9 +141,9 @@ const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject,
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <button className="flex items-center gap-1.5 px-4 py-2 bg-slate-50 text-slate-500 rounded-xl font-black text-xs hover:bg-slate-900 hover:text-white transition-all">
+                    <Link to={id ? `/exercise/${id}` : '#'} className="flex items-center gap-1.5 px-4 py-2 bg-slate-50 text-slate-500 rounded-xl font-black text-xs hover:bg-slate-900 hover:text-white transition-all">
                         <Eye size={14} /> Ver
-                    </button>
+                    </Link>
                     <Link to={id ? `/edit-exercise/${id}` : '#'} className="flex items-center gap-1.5 px-4 py-2 bg-rose-50 text-rose-600 rounded-xl font-black text-xs hover:bg-rose-500 hover:text-white transition-all">
                         <Edit3 size={14} /> Editar
                     </Link>

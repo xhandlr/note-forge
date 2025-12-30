@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../../components/Dashboard/Navbar';
 import BgDecoration from '../../components/UI/BgDecoration';
 import Footer from '../../components/UI/Footer';
@@ -132,17 +132,33 @@ const SearchPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <button className="p-2.5 bg-white text-slate-400 rounded-xl border border-slate-100 hover:text-rose-500 hover:border-rose-200 hover:shadow-md transition-all" title="Vista rápida">
+                  <Link
+                    to={
+                      result.type === 'Asignatura' ? `/category/${result.id}` :
+                      result.type === 'Ejercicio' ? `/exercise/${result.id}` :
+                      `/guide/${result.id}`
+                    }
+                    className="p-2.5 bg-white text-slate-400 rounded-xl border border-slate-100 hover:text-rose-500 hover:border-rose-200 hover:shadow-md transition-all"
+                    title="Vista rápida"
+                  >
                     <Eye size={18} />
-                  </button>
+                  </Link>
                   {(result.type === 'Guía' || result.type === 'Ejercicio') && (
                     <button className="p-2.5 bg-white text-slate-400 rounded-xl border border-slate-100 hover:text-amber-500 hover:border-amber-200 hover:shadow-md transition-all" title="Descargar material">
                       <Download size={18} />
                     </button>
                   )}
-                  <button className="p-2.5 bg-slate-50 text-slate-400 rounded-xl hover:text-rose-500 hover:bg-rose-50 transition-all" title="Editar">
+                  <Link
+                    to={
+                      result.type === 'Asignatura' ? `/edit-category/${result.id}` :
+                      result.type === 'Ejercicio' ? `/edit-exercise/${result.id}` :
+                      `/edit-guide/${result.id}`
+                    }
+                    className="p-2.5 bg-slate-50 text-slate-400 rounded-xl hover:text-rose-500 hover:bg-rose-50 transition-all"
+                    title="Editar"
+                  >
                     <Edit size={18} strokeWidth={2.5} />
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))
@@ -174,13 +190,13 @@ const SearchPage: React.FC = () => {
             </div>
             <div className="flex gap-3">
               <button
-                onClick={() => navigate('/exercises/create')}
+                onClick={() => navigate('/create-exercise')}
                 className="bg-rose-500 text-white px-6 py-3 rounded-[1.5rem] font-black text-base hover:bg-rose-600 transition-all shadow-lg shadow-rose-900/20"
               >
                 Nuevo Ejercicio
               </button>
               <button
-                onClick={() => navigate('/categories/create')}
+                onClick={() => navigate('/create-category')}
                 className="bg-slate-100 text-slate-600 px-6 py-3 rounded-[1.5rem] font-black text-base hover:bg-slate-200 transition-all"
               >
                 Crear Asignatura
