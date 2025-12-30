@@ -21,6 +21,7 @@ import EditCategory from './pages/Categories/EditCategory';
 import EditExercise from './pages/Exercises/EditExercise';
 import Library from './pages/ResourceLibrary/Library';
 import Home from './pages/Auth/Home';
+import SearchPage from './pages/Search/SearchPage';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -39,6 +40,7 @@ root.render(
 
                     <Route path="/dashboard" element={<Dashboard /> } />
                     <Route path="/library" element={<Library />} />
+                    <Route path="/search" element={<SearchPage />} />
 
                     <Route path="/create-exercise" element={<CreateExercise />} />
                     <Route path="/edit-exercise/:id" element={<EditExercise />} />
