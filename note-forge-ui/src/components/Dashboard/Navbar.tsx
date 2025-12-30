@@ -1,7 +1,8 @@
 import React, { useState, useEffect} from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { useNotification } from '../../contexts/NotificationContext';
+import { Search, LogOut } from 'lucide-react';
 
 // UI Components
 import Icon from "../UI/Icon";
@@ -13,6 +14,7 @@ import { logoutUser } from "../../services/LoginService";
 
 function Navbar() {
     const navigate = useNavigate();
+    const location = useLocation();
     const { t } = useTranslation();
     const { showSuccess, showError } = useNotification();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -39,65 +41,79 @@ function Navbar() {
     };
 
     return (
-        <nav className="w-full fixed top-0 left-0 bg-white bg-opacity-98 backdrop-blur-sm text-slate-800 border-b border-slate-200 shadow-xl z-50">
+        <nav className="w-full fixed top-0 left-0 bg-white/90 backdrop-blur-md text-slate-800 border-b border-slate-100 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center h-20">
-                    {/* Logo and title - left side */}
-                    <div className="flex items-center space-x-4 flex-1">
+                <div className="flex justify-between items-center h-16 lg:h-20">
+                    {/* Logo - left side */}
+                    <Link to="/">
                         <Icon
                             size="w-8 h-8"
                             type="logotype"
                             fontSize="text-xl"
                         />
-                    </div>
+                    </Link>
 
                     {/* Navigation links - center (desktop only) */}
-                    {isLoggedIn && (
-                        <div className="hidden md:flex flex-1 justify-center">
-                            <div className="flex space-x-3">
+                    <div className="hidden md:flex items-center gap-8">
+                        {isLoggedIn && (
+                            <>
                                 <Link
                                     to="/dashboard"
-                                    className="text-slate-600 hover:text-white hover:bg-slate-900 px-6 py-3 rounded-[1.5rem] text-sm font-black transition-all duration-200 shadow-sm hover:shadow-lg transform active:scale-95"
+                                    className={`flex items-center gap-2 px-1 py-2 text-sm font-black transition-all border-b-2 ${
+                                        location.pathname === '/dashboard'
+                                            ? 'text-rose-600 border-rose-600'
+                                            : 'text-slate-500 border-transparent hover:text-rose-500'
+                                    }`}
                                 >
                                     {t('navbar.dashboard')}
                                 </Link>
                                 <Link
-                                    to="/export"
-                                    className="text-slate-600 hover:text-white hover:bg-slate-900 px-6 py-3 rounded-[1.5rem] text-sm font-black transition-all duration-200 shadow-sm hover:shadow-lg transform active:scale-95"
+                                    to="/create-guide"
+                                    className={`flex items-center gap-2 px-1 py-2 text-sm font-black transition-all border-b-2 ${
+                                        location.pathname === '/create-guide'
+                                            ? 'text-rose-600 border-rose-600'
+                                            : 'text-slate-500 border-transparent hover:text-rose-500'
+                                    }`}
                                 >
                                     {t('navbar.export-guides')}
                                 </Link>
                                 <Link
                                     to="/search"
-                                    className="text-slate-600 hover:text-white hover:bg-slate-900 px-6 py-3 rounded-[1.5rem] text-sm font-black transition-all duration-200 shadow-sm hover:shadow-lg transform active:scale-95"
+                                    className={`text-slate-500 hover:text-amber-600 px-1 py-2 text-sm font-black transition-all border-b-2 border-transparent flex items-center gap-2 ${
+                                        location.pathname === '/search'
+                                            ? 'text-amber-600'
+                                            : ''
+                                    }`}
                                 >
-                                    {t('navbar.search')}
+                                    <Search size={18} /> {t('navbar.search')}
                                 </Link>
-                            </div>
-                        </div>
-                    )}
+                            </>
+                        )}
+                    </div>
 
                     {/* Right side buttons */}
-                    <div className="flex items-center space-x-3 flex-1 justify-end">
-                        {/* Login button - only when not logged in */}
-                        {!isLoggedIn && (
-                            <Link
-                                to="/login"
-                                className="inline-block bg-slate-900 text-white text-sm px-8 py-3 rounded-[2rem] font-black hover:bg-rose-500 transition-all shadow-lg transform active:scale-95"
+                    <div className="flex items-center gap-4">
+                        {isLoggedIn ? (
+                            <button
+                                onClick={handleLogout}
+                                className="flex items-center gap-2 bg-slate-900 text-white px-5 py-2 rounded-xl text-sm font-black hover:bg-rose-600 transition-all shadow-sm"
                             >
-                                {t('navbar.login')}
-                            </Link>
-                        )}
-
-                        {/* Logout button - desktop only when logged in */}
-                        {isLoggedIn && (
-                            <div className="hidden md:block">
-                                <button
-                                    onClick={handleLogout}
-                                    className="bg-slate-100 text-slate-700 text-sm px-8 py-3 rounded-[2rem] font-black hover:bg-rose-500 hover:text-white transition-all shadow-lg transform active:scale-95"
+                                {t('navbar.logout')} <LogOut size={16} />
+                            </button>
+                        ) : (
+                            <div className="flex items-center gap-4">
+                                <Link
+                                    to="/login"
+                                    className="text-slate-600 text-sm font-black px-3 py-2 hover:text-slate-900 transition-colors"
                                 >
-                                    {t('navbar.logout')}
-                                </button>
+                                    {t('navbar.login')}
+                                </Link>
+                                <Link
+                                    to="/register"
+                                    className="bg-rose-500 text-white px-6 py-2.5 rounded-xl text-sm font-black hover:bg-rose-600 transition-all shadow-md"
+                                >
+                                    Registrarse
+                                </Link>
                             </div>
                         )}
 
@@ -134,7 +150,7 @@ function Navbar() {
                             {t('navbar.dashboard')}
                         </Link>
                         <Link
-                            to="/export"
+                            to="/create-guide"
                             className="block px-6 py-3 text-base font-black text-slate-700 hover:text-white hover:bg-slate-900 rounded-[2rem] transition-all shadow-lg"
                         >
                             {t('navbar.export-guides')}
