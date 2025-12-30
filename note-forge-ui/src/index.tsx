@@ -16,6 +16,7 @@ import Categories from './pages/Categories/CategoriesPage';
 import Exercises from './pages/Exercises/ExercisesPage';
 import Guides from './pages/Guides/GuidesPage';
 import CreateGuide from './pages/Guides/CreateGuide';
+import EditGuide from './pages/Guides/EditGuide';
 import CreateCategory from './pages/Categories/CreateCategory';
 import EditCategory from './pages/Categories/EditCategory';
 import EditExercise from './pages/Exercises/EditExercise';
@@ -52,6 +53,7 @@ root.render(
 
                     <Route path="/guides" element={<Guides />} />
                     <Route path="/create-guide" element={<CreateGuide />} />
+                    <Route path="/edit-guide/:id" element={<EditGuide />} />
 
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>

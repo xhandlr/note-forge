@@ -8,6 +8,7 @@ import Navbar from "../../components/Dashboard/Navbar";
 import Footer from "../../components/UI/Footer";
 
 interface SubjectCardProps {
+    id?: number;
     title: string;
     exercises: number;
     guides: number;
@@ -15,7 +16,7 @@ interface SubjectCardProps {
     pinned?: boolean;
 }
 
-const SubjectCard: React.FC<SubjectCardProps> = ({ title, exercises, guides, icon, pinned }) => (
+const SubjectCard: React.FC<SubjectCardProps> = ({ id, title, exercises, guides, icon, pinned }) => (
     <div className="bg-white rounded-[2rem] overflow-hidden border border-slate-200 shadow-2xl transition-all hover:shadow-xl hover:-translate-y-1 group relative">
         {pinned && (
             <div className="absolute top-3 left-3 z-20 bg-amber-500 text-white p-2 rounded-xl shadow-lg">
@@ -28,7 +29,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ title, exercises, guides, ico
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
             <div className="absolute top-3 right-3 z-20 flex gap-2">
-                <Link to={`/edit-category/${title}`} className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-rose-500 rounded-xl transition-all" title="Editar Asignatura">
+                <Link to={id ? `/edit-category/${id}` : '#'} className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-rose-500 rounded-xl transition-all" title="Editar Asignatura">
                     <Edit3 size={16} />
                 </Link>
                 <button className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-white/40 rounded-xl transition-all">
@@ -92,6 +93,7 @@ const GuideCard: React.FC<GuideCardProps> = ({ title, status, subject }) => (
 );
 
 interface ExerciseListItemProps {
+    id?: number;
     title: string;
     subject: string;
     difficulty: number;
@@ -99,7 +101,7 @@ interface ExerciseListItemProps {
     img: string;
 }
 
-const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ title, subject, difficulty, desc, img }) => (
+const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject, difficulty, desc, img }) => (
     <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden flex flex-col md:flex-row group hover:border-rose-300 transition-all text-left">
         <div className="md:w-1/3 lg:w-1/4 h-48 md:h-auto relative overflow-hidden">
             <img src={img} alt={title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -137,7 +139,7 @@ const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ title, subject, dif
                     <button className="flex items-center gap-1.5 px-4 py-2 bg-slate-50 text-slate-500 rounded-xl font-black text-xs hover:bg-slate-900 hover:text-white transition-all">
                         <Eye size={14} /> Ver
                     </button>
-                    <Link to={`/edit-exercise/${title}`} className="flex items-center gap-1.5 px-4 py-2 bg-rose-50 text-rose-600 rounded-xl font-black text-xs hover:bg-rose-500 hover:text-white transition-all">
+                    <Link to={id ? `/edit-exercise/${id}` : '#'} className="flex items-center gap-1.5 px-4 py-2 bg-rose-50 text-rose-600 rounded-xl font-black text-xs hover:bg-rose-500 hover:text-white transition-all">
                         <Edit3 size={14} /> Editar
                     </Link>
                     <button className="p-2 text-slate-300 hover:text-amber-600 transition-colors">
@@ -159,9 +161,10 @@ function Dashboard() {
         { id: 'guias', label: t('dashboard.study-material'), icon: <BookOpen size={18} /> },
     ];
 
-    // Datos falsos para ejercicios
+    // Datos falsos para ejercicios (con IDs)
     const mockExercises = [
         {
+            id: 1,
             title: "Movimiento Parabólico: Reto del Cañón",
             subject: "Física I",
             difficulty: 4,
@@ -169,6 +172,7 @@ function Dashboard() {
             img: "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?auto=format&fit=crop&q=80&w=800"
         },
         {
+            id: 2,
             title: "Integración por Partes: El Desafío Logarítmico",
             subject: "Cálculo II",
             difficulty: 3,
@@ -176,6 +180,7 @@ function Dashboard() {
             img: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800"
         },
         {
+            id: 3,
             title: "Equilibrio Ácido-Base: Titulación de Vinagre",
             subject: "Química General",
             difficulty: 2,
@@ -276,6 +281,7 @@ function Dashboard() {
                     {activeTab === 'asignaturas' && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             <SubjectCard
+                                id={1}
                                 title="Física Mecánica"
                                 exercises={24}
                                 guides={5}
@@ -283,6 +289,7 @@ function Dashboard() {
                                 pinned
                             />
                             <SubjectCard
+                                id={2}
                                 title="Cálculo II"
                                 exercises={18}
                                 guides={3}
@@ -318,9 +325,10 @@ function Dashboard() {
 
                     {activeTab === 'ejercicios' && (
                         <div className="space-y-6">
-                            {mockExercises.map((exercise, idx) => (
+                            {mockExercises.map((exercise) => (
                                 <ExerciseListItem
-                                    key={idx}
+                                    key={exercise.id}
+                                    id={exercise.id}
                                     title={exercise.title}
                                     subject={exercise.subject}
                                     difficulty={exercise.difficulty}
