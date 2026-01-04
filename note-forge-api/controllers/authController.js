@@ -48,4 +48,26 @@ const logout = (req, res) => {
     res.status(200).json({ message: "Sesión cerrada exitosamente" });
 };
 
-module.exports = { register, login, logout};
+const checkAuth = async (req, res) => {
+    try {
+        // El middleware authMiddleware ya verificó el token y agregó req.user
+        const user = await authService.getUserById(req.user.userId);
+
+        return res.status(200).json({
+            authenticated: true,
+            user: {
+                id: user.id,
+                email: user.email,
+                username: user.username,
+                role: user.role
+            }
+        });
+    } catch (error) {
+        return res.status(401).json({
+            authenticated: false,
+            message: 'Usuario no autenticado'
+        });
+    }
+};
+
+module.exports = { register, login, logout, checkAuth };

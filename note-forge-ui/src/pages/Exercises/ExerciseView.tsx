@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Edit3, Share2, Book, Link as LinkIcon, FileText, CheckCircle, ChevronDown, Download, Layers } from 'lucide-react';
-import { useExerciseService, useCategoryService } from '../../services/serviceFactory';
+import { useExerciseService, useCategoryService } from '../../services/ServiceFactory';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
 

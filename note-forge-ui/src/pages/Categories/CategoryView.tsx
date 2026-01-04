@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Coffee, BookOpen, Edit3, Plus, Share2, Calendar } from 'lucide-react';
-import { useCategoryService, useExerciseService, useGuideService } from '../../services/serviceFactory';
+import { useCategoryService, useExerciseService, useGuideService } from '../../services/ServiceFactory';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
 

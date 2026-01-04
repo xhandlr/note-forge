@@ -46,10 +46,20 @@ const getExercises = async () => {
     return sendRequest(`${API_BASE_URL}/exercises`, 'GET');
 };
 
-export { 
-    addExercise, 
-    updateExercise, 
-    deleteExercise, 
-    getExerciseById, 
-    getExercises 
+/**
+ * Get exercises by category ID
+ * @param {number|string} categoryId - ID of the category
+ * @returns {Promise<Object[]>} - Returns exercises for the category
+ */
+const getExercisesByCategory = async (categoryId) => {
+    return sendRequest(`${API_BASE_URL}/exercises/category/${categoryId}`, 'GET');
+};
+
+export {
+    addExercise,
+    updateExercise,
+    deleteExercise,
+    getExerciseById,
+    getExercises,
+    getExercisesByCategory
 };

@@ -5,4 +5,9 @@ const addExerciseCategory = async (exerciseId, categoryId) => {
     return { message: 'Categoría de ejercicio registrada con éxito', exerciseCategoryId };
 };
 
-module.exports = { addExerciseCategory };
+const getExercisesByCategory = async (categoryId) => {
+    const exercises = await ExerciseCategory.findByCategory(categoryId);
+    return exercises;
+};
+
+module.exports = { addExerciseCategory, getExercisesByCategory };

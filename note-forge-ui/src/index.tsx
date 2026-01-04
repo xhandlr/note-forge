@@ -8,6 +8,8 @@ import 'boxicons';
 import { NotificationProvider } from './contexts/NotificationContext';
 import NotificationContainer from './components/UI/NotificationContainer';
 import { DemoProvider } from './contexts/DemoContext';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 import Login from './pages/Auth/Login';
 import Registration from './pages/Auth/Registration';
@@ -36,36 +38,38 @@ const root = ReactDOM.createRoot(rootElement);
 root.render(
     <React.StrictMode>
         <DemoProvider>
-            <NotificationProvider>
-                <Router basename="/note-forge">
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Registration />} />
+            <AuthProvider>
+                <NotificationProvider>
+                    <Router basename="/note-forge">
+                        <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Registration />} />
 
-                        <Route path="/dashboard" element={<Dashboard /> } />
-                        <Route path="/library" element={<Library />} />
-                        <Route path="/search" element={<SearchPage />} />
+                        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                        <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
+                        <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
 
-                        <Route path="/create-exercise" element={<CreateExercise />} />
-                        <Route path="/edit-exercise/:id" element={<EditExercise />} />
-                        <Route path="/exercise/:id" element={<ExerciseView />} />
-                        <Route path="/exercises" element={<Exercises />} />
+                        <Route path="/create-exercise" element={<ProtectedRoute><CreateExercise /></ProtectedRoute>} />
+                        <Route path="/edit-exercise/:id" element={<ProtectedRoute><EditExercise /></ProtectedRoute>} />
+                        <Route path="/exercise/:id" element={<ProtectedRoute><ExerciseView /></ProtectedRoute>} />
+                        <Route path="/exercises" element={<ProtectedRoute><Exercises /></ProtectedRoute>} />
 
-                        <Route path="/create-category" element={<CreateCategory />} />
-                        <Route path="/edit-category/:id" element={<EditCategory />} />
-                        <Route path="/category/:id" element={<CategoryView />} />
-                        <Route path="/categories" element={<Categories />} />
+                        <Route path="/create-category" element={<ProtectedRoute><CreateCategory /></ProtectedRoute>} />
+                        <Route path="/edit-category/:id" element={<ProtectedRoute><EditCategory /></ProtectedRoute>} />
+                        <Route path="/category/:id" element={<ProtectedRoute><CategoryView /></ProtectedRoute>} />
+                        <Route path="/categories" element={<ProtectedRoute><Categories /></ProtectedRoute>} />
 
-                        <Route path="/guides" element={<Guides />} />
-                        <Route path="/create-guide" element={<CreateGuide />} />
-                        <Route path="/edit-guide/:id" element={<EditGuide />} />
+                        <Route path="/guides" element={<ProtectedRoute><Guides /></ProtectedRoute>} />
+                        <Route path="/create-guide" element={<ProtectedRoute><CreateGuide /></ProtectedRoute>} />
+                        <Route path="/edit-guide/:id" element={<ProtectedRoute><EditGuide /></ProtectedRoute>} />
 
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                     <NotificationContainer />
                 </Router>
             </NotificationProvider>
-        </DemoProvider>
-    </React.StrictMode>
+        </AuthProvider>
+    </DemoProvider>
+</React.StrictMode>
 );

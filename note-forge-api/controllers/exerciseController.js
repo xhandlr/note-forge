@@ -66,9 +66,9 @@ async function updateExerciseRequest(req, res) {
 async function deleteExerciseRequest(req, res) {
     try {
         const exerciseId = req.params.id;  // Obtener el id del ejercicio desde los parámetros de la ruta
-        
+
         const result = await exerciseService.deleteExercise(exerciseId);
-        
+
         if (result) {
             res.status(200).json({ message: 'Ejercicio eliminado con éxito' });
         } else {
@@ -79,4 +79,21 @@ async function deleteExerciseRequest(req, res) {
     }
 }
 
-module.exports = { createExerciseRequest, getExerciseByIdRequest, getExercisesRequest, updateExerciseRequest, deleteExerciseRequest };
+async function getExercisesByCategoryRequest(req, res) {
+    try {
+        const categoryId = req.params.categoryId;
+        const exercises = await exerciseCategoryService.getExercisesByCategory(categoryId);
+        res.status(200).json(exercises);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+
+module.exports = {
+    createExerciseRequest,
+    getExerciseByIdRequest,
+    getExercisesRequest,
+    updateExerciseRequest,
+    deleteExerciseRequest,
+    getExercisesByCategoryRequest
+};

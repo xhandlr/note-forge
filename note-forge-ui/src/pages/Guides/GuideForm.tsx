@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
-import { useExerciseService } from '../../services/serviceFactory';
+import { useExerciseService } from '../../services/ServiceFactory';
 import { addGuide, updateGuide, getGuideById } from "../../services/GuideService";
 import { FileText, GripVertical, Trash2, Download, Eye, ArrowLeft, Plus, Search, BookOpen, Code, Type } from 'lucide-react';
 import { useNotification } from '../../contexts/NotificationContext';

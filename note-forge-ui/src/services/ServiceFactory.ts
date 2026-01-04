@@ -18,7 +18,8 @@ import {
   updateExercise,
   deleteExercise,
   getExerciseById,
-  getExercises
+  getExercises,
+  getExercisesByCategory
 } from './ExerciseService';
 
 // Category Service Factory
@@ -62,11 +63,7 @@ export const useExerciseService = () => {
   return {
     getAll: getExercises,
     getById: getExerciseById,
-    getByCategoryId: async (categoryId: string | number) => {
-      // TODO: Implement real API endpoint for filtering by category
-      const all = await getExercises();
-      return all.filter((e: any) => e.categoryId === Number(categoryId));
-    },
+    getByCategoryId: getExercisesByCategory,
     create: addExercise,
     update: updateExercise,
     delete: deleteExercise
