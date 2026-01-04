@@ -1,8 +1,9 @@
-import React, { useState, useEffect} from "react";
+import React, { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { useNotification } from '../../contexts/NotificationContext';
 import { useDemoMode } from '../../contexts/DemoContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { Search, LogOut } from 'lucide-react';
 
 // UI Components
@@ -10,25 +11,17 @@ import Icon from "../UI/Icon";
 import Button from "../UI/Button";
 import LanguageToggle from "../UI/LanguageToggle";
 
-// Login Service
-import { logoutUser } from "../../services/LoginService";
-
 function Navbar() {
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
     const { showSuccess, showError } = useNotification();
     const { isDemoMode, disableDemoMode } = useDemoMode();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { isAuthenticated: isAuthenticatedReal, logout: authLogout } = useAuth();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        setIsLoggedIn(!!token);
-    }, []);
-
     // User is "authenticated" if logged in OR in demo mode
-    const isAuthenticated = isLoggedIn || isDemoMode;
+    const isAuthenticated = isAuthenticatedReal || isDemoMode;
 
     const handleLogout = async () => {
         // If in demo mode, just disable it and go home
@@ -39,10 +32,9 @@ function Navbar() {
             return;
         }
 
-        // Otherwise, normal logout
+        // Otherwise, normal logout using AuthContext
         try {
-            await logoutUser();
-            setIsLoggedIn(false);
+            await authLogout();
             showSuccess(t('messages.logoutSuccess'));
             navigate("/");
         } catch (error) {

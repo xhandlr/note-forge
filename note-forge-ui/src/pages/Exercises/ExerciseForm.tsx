@@ -5,8 +5,9 @@ import BgDecoration from '../../components/UI/BgDecoration';
 import Footer from '../../components/UI/Footer';
 import LatexEditor from '../../components/Exercises/LatexEditor';
 import { Book, Link as LinkIcon, FileText, Camera, ChevronLeft, ChevronRight, Check, X, Eye } from 'lucide-react';
-import { getExerciseById, updateExercise } from '../../services/ExerciseService';
+import { getExerciseById, updateExercise, addExercise } from '../../services/ExerciseService';
 import { useNotification } from '../../contexts/NotificationContext';
+import { useExerciseService } from '../../services/ServiceFactory';
 
 interface Reference {
   id: string;
@@ -102,22 +103,32 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
 
   const handleSubmit = async () => {
     try {
-      const exerciseData = {
-        title,
-        difficulty,
-        categoryId,
-        description: enunciado,
-        answer: resolucion,
-        imageUrl: imagePreview,
-        // Agregar otros campos según tu servicio
-      };
-
       if (mode === 'edit' && exerciseId) {
+        const exerciseData = {
+          title,
+          difficulty,
+          categoryId,
+          description: enunciado,
+          answer: resolucion,
+          imageUrl: imagePreview,
+        };
         await updateExercise(exerciseId, exerciseData);
         showSuccess('Ejercicio actualizado con éxito');
       } else {
-        // Llamar al servicio de crear ejercicio
-        // await createExercise(exerciseData);
+        // Modo create: usar FormData para soportar imagen
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('difficulty', difficulty.toString());
+        formData.append('categoryId', categoryId);
+        formData.append('description', enunciado);
+        formData.append('answer', resolucion);
+
+        // Agregar imagen si existe
+        if (image) {
+          formData.append('image', image);
+        }
+
+        await addExercise(formData);
         showSuccess('Ejercicio creado con éxito');
       }
       navigate('/dashboard');

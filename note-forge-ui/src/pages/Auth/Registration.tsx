@@ -1,8 +1,10 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useNotification } from '../../contexts/NotificationContext';
 
 // Registration service import
-import { registerUser, validateRegistration } from '../../services/RegistrationService';
+import { validateRegistration } from '../../services/RegistrationService';
 
 // UI Components
 import Button from '../../components/UI/Button';
@@ -15,16 +17,35 @@ import Select from '../../components/UI/Select';
  * Handles user registration by collecting form data and sending it to the backend.
  * Includes roles for students, teachers, and assistants.
  * Displays validation errors if any fields are incorrect.
- * 
+ *
  * @component
  * @returns {JSX.Element}
  */
-function Registration() { 
+
+interface RegistrationFormData {
+    username: string;
+    email: string;
+    password: string;
+    country: string;
+    role: string;
+}
+
+interface RegistrationErrors {
+    username?: string;
+    email?: string;
+    password?: string;
+    country?: string;
+    role?: string;
+}
+
+function Registration(): JSX.Element {
 
     const navigate = useNavigate();
+    const { register } = useAuth();
+    const { showSuccess, showError } = useNotification();
 
     // Hook for managing form data
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<RegistrationFormData>({
         username: '',
         email: '',
         password: '',
@@ -33,22 +54,22 @@ function Registration() {
     });
 
     // Hook for managing errors
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState<RegistrationErrors>({});
 
     /**
      * Handles changes to the form inputs.
      * Updates the formData state with the input values.
      *
-     * @param {React.ChangeEvent<HTMLInputElement | HTMLSelectElement>} e 
+     * @param {React.ChangeEvent<HTMLInputElement | HTMLSelectElement>} e
      */
-    const handleChange = (e) => { 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
     }
 
-    const handleBlur = (e) => {
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>): void => {
         const {name, value} = e.target;
         const errorMsg = validateRegistration(name, value);
         setErrors((prev) => ({
@@ -59,25 +80,24 @@ function Registration() {
 
     /**
      * This function is executed when the form is submitted.
-     * Calls the registration service with the form data.
-     * If there is an error, it shows an alert with the error message.
-     * 
-     * @param {React.ChangeEvent<HTMLFormElement>} e 
+     * Uses AuthContext to handle registration.
+     * If successful, redirects to login page.
+     * If there is an error, shows an error notification.
+     *
+     * @param {React.FormEvent<HTMLFormElement>} e
      */
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
 
         try {
-            const data = await registerUser(formData);    
-            if (data.message) {
-                alert('Registro exitoso');
-                navigate('/login');
-
-            } else {
-                alert(`Error: ${data.message}`);
-            }
+            await register(formData);
+            showSuccess('Registro exitoso. Por favor inicia sesión.');
+            navigate('/login');
         } catch (error) {
-            setErrors(error);
+            showError('Error al registrar usuario');
+            if (error && typeof error === 'object') {
+                setErrors(error as RegistrationErrors);
+            }
             console.error('Error en el registro:', error);
         }
     };
@@ -133,7 +153,6 @@ function Registration() {
                         name="role"
                         required
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         value={formData.role}
                         options={[
                             { value: 'student', label: 'Estudiante' },

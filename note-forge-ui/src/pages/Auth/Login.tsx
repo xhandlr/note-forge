@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { loginUser, validateLogin } from '../../services/LoginService';
+import { validateLogin } from '../../services/LoginService';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useNotification } from '../../contexts/NotificationContext';
 
 // UI Components
 import Button from '../../components/UI/Button';
@@ -41,6 +43,10 @@ function Login(): JSX.Element {
     // Hook for navigation
     const navigate = useNavigate();
 
+    // Auth and notification contexts
+    const { login } = useAuth();
+    const { showSuccess, showError } = useNotification();
+
     /**
      * Its executed when the user types in the input fields.
      * Updates the formData state with the input values.
@@ -57,24 +63,21 @@ function Login(): JSX.Element {
 
     /**
      * This function is executed when the form is submitted.
-     * Calls the login service with the form data.
-     * If the login is successful, it saves the token in localStorage and redirects the user to the dashboard.
-     * If there is an error, it shows an alert with the error message.
+     * Uses AuthContext to handle login.
+     * If the login is successful, redirects the user to the dashboard.
+     * If there is an error, shows an error notification.
      *
      * @param {React.FormEvent<HTMLFormElement>} e
      */
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         try {
-            const data = await loginUser(formData); 
-            if (data.token) {
-                localStorage.setItem('token', data.token);
-                navigate('/dashboard');
-            } else {
-                alert(`Error: ${data.message}`);
-            }
+            await login(formData.email, formData.password, formData.keepLoggedIn);
+            showSuccess('Inicio de sesión exitoso');
+            navigate('/dashboard');
         } catch (error) {
             setErrors({ auth: "Las credenciales no coinciden." });
+            showError('Error al iniciar sesión');
         }
     };    
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Coffee, Plus, MoreVertical, Pin, Search, Filter, BookOpen, Layers, Edit3, Eye } from "lucide-react";
-import { useCategoryService, useExerciseService, useGuideService } from "../../services/serviceFactory";
+import { useCategoryService, useExerciseService, useGuideService } from "../../services/ServiceFactory";
 
 // UI components
 import Navbar from "../../components/Dashboard/Navbar";

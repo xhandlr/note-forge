@@ -46,4 +46,16 @@ const loginUser = async (email, password) => {
     return { token }
 }
 
-module.exports = { registerUser, loginUser };
+const getUserById = async (userId) => {
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new Error('Usuario no encontrado');
+    }
+
+    // No retornar la contraseña
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
+}
+
+module.exports = { registerUser, loginUser, getUserById };
