@@ -1,12 +1,9 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-
-const SECRET_KEY = process.env.JWT_SECRET;
 
 const registerUser = async (username, email, password, country, role) => {
     if (!username || !email || !password || !country || !role) {
-        throw new Error('Todos los campos son obligatorios');    
+        throw new Error('Todos los campos son obligatorios');
     }
 
     const existingUser = await User.findByEmail(email);
@@ -22,7 +19,7 @@ const registerUser = async (username, email, password, country, role) => {
 const loginUser = async (email, password) => {
     if (!email || !password) {
         throw new Error('Todos los campos son obligatorios');
-    } 
+    }
 
     const user = await User.findByEmail(email);
 
@@ -36,14 +33,7 @@ const loginUser = async (email, password) => {
         throw new Error('Contraseña incorrecta');
     }
 
-    // Crear el token JWT
-    const token = jwt.sign(
-        { id: user.id, email: user.email, role: user.role },
-        SECRET_KEY,
-        { expiresIn: '12h' }
-    );
-
-    return { token }
+    return user;
 }
 
 const getUserById = async (userId) => {

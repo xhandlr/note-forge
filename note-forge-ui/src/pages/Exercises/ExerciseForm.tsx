@@ -4,10 +4,10 @@ import Navbar from '../../components/Dashboard/Navbar';
 import BgDecoration from '../../components/UI/BgDecoration';
 import Footer from '../../components/UI/Footer';
 import LatexEditor from '../../components/Exercises/LatexEditor';
-import { Book, Link as LinkIcon, FileText, Camera, ChevronLeft, ChevronRight, Check, X, Eye } from 'lucide-react';
+import { Book, Link as LinkIcon, FileText, Camera, ChevronLeft, ChevronRight, Check, X } from 'lucide-react';
 import { getExerciseById, updateExercise, addExercise } from '../../services/ExerciseService';
+import { getCategories } from '../../services/CategoryService';
 import { useNotification } from '../../contexts/NotificationContext';
-import { useExerciseService } from '../../services/ServiceFactory';
 
 interface Reference {
   id: string;
@@ -31,6 +31,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
   const [difficulty, setDifficulty] = useState(1);
   const [title, setTitle] = useState('');
   const [categoryId, setCategoryId] = useState('');
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
   const [enunciado, setEnunciado] = useState('');
   const [resolucion, setResolucion] = useState('');
   const [image, setImage] = useState<File | null>(null);
@@ -42,6 +43,13 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
   const [currentRefType, setCurrentRefType] = useState<'Libro' | 'Link' | 'Documento'>('Libro');
   const [newRef, setNewRef] = useState({ title: '', description: '' });
 
+  // Cargar categorías disponibles
+  useEffect(() => {
+    getCategories()
+      .then((data) => setCategories(data))
+      .catch(() => setCategories([]));
+  }, []);
+
   // Cargar datos si es modo edit
   useEffect(() => {
     if (mode === 'edit' && exerciseId) {
@@ -51,12 +59,11 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
           if (data) {
             setTitle(data.title || '');
             setDifficulty(data.difficulty || 1);
-            setCategoryId(data.categoryId || '');
+            setCategoryId(data.category_id ? String(data.category_id) : '');
             setEnunciado(data.description || '');
             setResolucion(data.answer || '');
-            // Si hay imagen URL, setearla como preview
-            if (data.imageUrl) {
-              setImagePreview(data.imageUrl);
+            if (data.image_url) {
+              setImagePreview(data.image_url);
             }
           }
           setLoading(false);
@@ -253,9 +260,10 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
                       onChange={(e) => setCategoryId(e.target.value)}
                       className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-rose-100 transition-all cursor-pointer font-black text-slate-700 text-base appearance-none"
                     >
-                      <option>Selecciona curso...</option>
-                      <option>Cálculo Vectorial</option>
-                      <option>Física General</option>
+                      <option value="">Selecciona asignatura...</option>
+                      {categories.map((cat) => (
+                        <option key={cat.id} value={String(cat.id)}>{cat.name}</option>
+                      ))}
                     </select>
                   </div>
                 </div>

@@ -8,8 +8,11 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const { isDemoMode } = useDemoMode();
+
+  // Esperar a que se restaure la sesión desde localStorage antes de redirigir
+  if (loading) return null;
 
   // Permitir acceso si está autenticado O si está en modo demo
   if (isAuthenticated || isDemoMode) {

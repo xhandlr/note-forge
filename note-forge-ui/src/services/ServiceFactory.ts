@@ -21,6 +21,13 @@ import {
   getExercises,
   getExercisesByCategory
 } from './ExerciseService';
+import {
+  addGuide,
+  updateGuide,
+  deleteGuide,
+  getGuideById,
+  getGuides
+} from './GuideService';
 
 // Category Service Factory
 export const useCategoryService = () => {
@@ -84,23 +91,12 @@ export const useGuideService = () => {
     };
   }
 
-  // TODO: Implement real guide services when backend is ready
   return {
-    getAll: async () => {
-      throw new Error('Guide API not implemented yet');
-    },
-    getById: async () => {
-      throw new Error('Guide API not implemented yet');
-    },
-    create: async () => {
-      throw new Error('Guide API not implemented yet');
-    },
-    update: async () => {
-      throw new Error('Guide API not implemented yet');
-    },
-    delete: async () => {
-      throw new Error('Guide API not implemented yet');
-    }
+    getAll: getGuides,
+    getById: getGuideById,
+    create: addGuide,
+    update: updateGuide,
+    delete: deleteGuide
   };
 };
 

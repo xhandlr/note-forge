@@ -23,14 +23,16 @@ const login = async (req, res) => {
     try {
         const user = await authService.loginUser(email, password);
 
-        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-            expiresIn: keepLoggedIn ? '30d' : '1h'
-        });
+        const token = jwt.sign(
+            { id: user.id, email: user.email, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: keepLoggedIn ? '30d' : '1h' }
+        );
 
         return res.status(200).json({
             message: 'Login exitoso',
-            token: token, 
-            user: { id: user.id, email: user.email }
+            token: token,
+            user: { id: user.id, email: user.email, username: user.username, role: user.role }
         });
     } catch (error) {
         if (
@@ -51,7 +53,7 @@ const logout = (req, res) => {
 const checkAuth = async (req, res) => {
     try {
         // El middleware authMiddleware ya verificó el token y agregó req.user
-        const user = await authService.getUserById(req.user.userId);
+        const user = await authService.getUserById(req.user.id);
 
         return res.status(200).json({
             authenticated: true,

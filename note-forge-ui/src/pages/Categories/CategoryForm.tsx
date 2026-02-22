@@ -38,8 +38,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
               image: null,
               isPinned: data.is_pinned || false
             });
-            if (data.imageUrl) {
-              setImagePreview(data.imageUrl);
+            if (data.image_url) {
+              setImagePreview(data.image_url);
             }
           }
           setLoading(false);
@@ -86,21 +86,17 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
 
     try {
       if (mode === 'edit' && categoryId) {
-        const response = await updateCategory(categoryId, formData);
-        if (response === true) {
-          showSuccess('Categoría actualizada con éxito!');
-          navigate('/dashboard');
-        }
+        await updateCategory(categoryId, formData);
+        showSuccess('Asignatura actualizada con éxito!');
+        navigate('/dashboard');
       } else {
-        const response = await addCategory(formData);
-        if (response.message) {
-          showSuccess(`Categoría ${categoryData.isPinned ? 'fijada y ' : ''}creada con éxito!`);
-          navigate('/dashboard');
-        }
+        await addCategory(formData);
+        showSuccess(`Asignatura ${categoryData.isPinned ? 'fijada y ' : ''}creada con éxito!`);
+        navigate('/dashboard');
       }
     } catch (error) {
       setErrors(error as {[key: string]: string});
-      showError('Error al guardar la categoría');
+      showError('Error al guardar la asignatura');
       console.error('Error al guardar categoría:', error);
     }
   };
@@ -110,7 +106,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-500 mx-auto mb-4"></div>
-          <p className="text-slate-600 font-semibold">Cargando categoría...</p>
+          <p className="text-slate-600 font-semibold">Cargando asignatura...</p>
         </div>
       </div>
     );
@@ -130,10 +126,10 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
             </div>
             <div>
               <h1 className="text-xl font-black text-slate-900 tracking-tight">
-                {mode === 'edit' ? 'Editar Categoría' : 'Nueva Categoría'}
+                {mode === 'edit' ? 'Editar Asignatura' : 'Nueva Asignatura'}
               </h1>
               <p className="text-slate-500 font-semibold text-xs">
-                {mode === 'edit' ? 'Actualiza la información de esta categoría.' : 'Define un nuevo espacio de aprendizaje.'}
+                {mode === 'edit' ? 'Actualiza la información de esta asignatura.' : 'Define un nuevo espacio de aprendizaje.'}
               </p>
             </div>
           </div>
@@ -151,7 +147,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
           {/* Título */}
           <div className="space-y-3">
             <label className="text-slate-900 font-black text-base ml-1 flex items-center gap-2">
-              Nombre de la categoría *
+              Nombre de la asignatura *
             </label>
             <input
               required
@@ -218,14 +214,14 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
 
           {/* Descripción */}
           <div className="space-y-6">
-            <label className="text-slate-900 font-black text-base ml-1">Descripción de la categoría</label>
+            <label className="text-slate-900 font-black text-base ml-1">Descripción de la asignatura</label>
             <textarea
               rows={3}
               name="description"
               maxLength={255}
               value={categoryData.description}
               onChange={handleChange}
-              placeholder="¿De qué trata esta categoría? Define objetivos o temas principales..."
+              placeholder="¿De qué trata esta asignatura? Define objetivos o temas principales..."
               className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-400 transition-all resize-none font-bold text-sm leading-relaxed text-slate-800 mt-3"
               required
             />
@@ -243,7 +239,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
               className="w-4 h-4 rounded accent-amber-500 cursor-pointer"
             />
             <label htmlFor="isPinned" className="text-slate-900 font-bold text-sm cursor-pointer flex-1">
-              Fijar esta categoría en la pantalla de Inicio
+              Fijar esta asignatura en la pantalla de Inicio
             </label>
           </div>
 
@@ -253,7 +249,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
               type="submit"
               className="flex-1 bg-rose-500 text-white py-3.5 rounded-[1.5rem] font-black text-base flex items-center justify-center gap-2 shadow-xl shadow-rose-900/20 hover:bg-rose-600 transition-all active:scale-95"
             >
-              <Check size={20} strokeWidth={3} /> {mode === 'edit' ? 'Actualizar' : 'Guardar'} Categoría
+              <Check size={20} strokeWidth={3} /> {mode === 'edit' ? 'Actualizar' : 'Guardar'} Asignatura
             </button>
             <button
               type="button"

@@ -47,5 +47,23 @@
   "counter": {
     "exercise": "ejercicio",
     "exercises": "ejercicios"
+  },
+  "subject": {
+    "new": "Nueva Asignatura",
+    "edit": "Editar Asignatura",
+    "name-label": "Nombre de la asignatura",
+    "name-placeholder": "Ej: Física Mecánica",
+    "description-label": "Descripción de la asignatura",
+    "description-placeholder": "¿De qué trata esta asignatura? Define objetivos o temas principales...",
+    "pin-label": "Fijar esta asignatura en la pantalla de Inicio",
+    "save": "Guardar Asignatura",
+    "update": "Actualizar Asignatura",
+    "subtitle-create": "Define un nuevo espacio de aprendizaje.",
+    "subtitle-edit": "Actualiza la información de esta asignatura.",
+    "success-create": "Asignatura creada con éxito!",
+    "success-update": "Asignatura actualizada con éxito!",
+    "error-load": "Error al cargar la asignatura",
+    "error-save": "Error al guardar la asignatura",
+    "loading": "Cargando asignatura..."
   }
 }

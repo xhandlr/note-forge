@@ -9,15 +9,24 @@ const Exercise = {
     },
 
     async findById(exerciseId) {
-        const query = 'SELECT * FROM exercises WHERE id = ?';
+        const query = `
+            SELECT e.*, ec.category_id
+            FROM exercises e
+            LEFT JOIN exercises_categories ec ON e.id = ec.exercise_id
+            WHERE e.id = ?
+        `;
         const [rows] = await pool.query(query, [exerciseId]);
-        return rows[0];  // Retorna el ejercicio si lo encuentra, o undefined si no
+        return rows[0];
     },
 
     async findAll() {
-        const query = 'SELECT * FROM exercises';  
+        const query = `
+            SELECT e.*, ec.category_id
+            FROM exercises e
+            LEFT JOIN exercises_categories ec ON e.id = ec.exercise_id
+        `;
         const [rows] = await pool.query(query);
-        return rows;  // Retorna todos los ejercicios en un array
+        return rows;
     },
 
     async update(exerciseData) {

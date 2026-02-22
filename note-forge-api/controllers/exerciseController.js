@@ -1,5 +1,6 @@
 const exerciseService = require('../services/exerciseService');
 const exerciseCategoryService = require('../services/exerciseCategoryService');
+const API_BASE_URL = process.env.BASE_URL;
 
 async function createExerciseRequest(req, res) {
     try {
@@ -9,8 +10,10 @@ async function createExerciseRequest(req, res) {
         // Get object from request body
         const exerciseData = req.body;
 
-        // Create a new exercise
+        // Set user and image
         exerciseData.userId = userId;
+        exerciseData.imageUrl = req.file ? `${API_BASE_URL}/uploads/${req.file.filename}` : null;
+
         let result = await exerciseService.createExercise(exerciseData);
         const exerciseId = result.exerciseId;
 

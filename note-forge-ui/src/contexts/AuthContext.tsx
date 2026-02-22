@@ -11,6 +11,7 @@ interface User {
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  loading: boolean;
   user: User | null;
   login: (email: string, password: string, keepLoggedIn?: boolean) => Promise<void>;
   logout: () => Promise<void>;
@@ -27,6 +28,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   // Cargar usuario desde localStorage al montar
   useEffect(() => {
@@ -44,6 +46,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         localStorage.removeItem('token');
       }
     }
+    setLoading(false);
   }, []);
 
   const login = async (email: string, password: string, keepLoggedIn: boolean = false) => {
@@ -97,6 +100,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const value = {
     isAuthenticated,
+    loading,
     user,
     login,
     logout,

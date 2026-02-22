@@ -43,15 +43,22 @@ async function getCategoriesRequest(req, res) {
 
 async function updateCategoryRequest(req, res) {
     try {
-        const categoryId = req.params.id;  
+        const categoryId = req.params.id;
         const { name, description, isPinned } = req.body;
 
         const pinned = Number(isPinned);
-        
-        const imageUrl = req.file ? `${API_BASE_URL}/uploads/${req.file.filename}` : null;
-        
-        const updatedCategory= await categoryService.updateCategory(categoryId, name, description, imageUrl, pinned);
-        
+
+        let imageUrl = null;
+        if (req.file) {
+            imageUrl = `${API_BASE_URL}/uploads/${req.file.filename}`;
+        } else {
+            // Mantener la imagen existente si no se sube una nueva
+            const existing = await categoryService.getCategoryById(categoryId);
+            imageUrl = existing ? existing.image_url : null;
+        }
+
+        const updatedCategory = await categoryService.updateCategory(categoryId, name, description, imageUrl, pinned);
+
         res.status(200).json(updatedCategory);
     } catch (error) {
         res.status(400).json({ message: error.message });

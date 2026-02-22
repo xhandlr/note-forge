@@ -8,21 +8,24 @@ const Guide = {
     },
 
     async findById(guideId) {
-        const query = `
-            SELECT g.*,
-                   GROUP_CONCAT(ge.exercise_id) as exercise_ids
-            FROM guides g
-            LEFT JOIN guide_exercises ge ON g.id = ge.guide_id
-            WHERE g.id = ?
-            GROUP BY g.id
+        // Fetch guide metadata
+        const [guideRows] = await pool.query('SELECT * FROM guides WHERE id = ?', [guideId]);
+        if (!guideRows[0]) return null;
+
+        const guide = guideRows[0];
+
+        // Fetch full exercise objects ordered by their position in the guide
+        const exercisesQuery = `
+            SELECT e.id, e.title, e.description, e.answer, e.difficulty, e.image_url
+            FROM guide_exercises ge
+            INNER JOIN exercises e ON ge.exercise_id = e.id
+            WHERE ge.guide_id = ?
+            ORDER BY ge.id ASC
         `;
-        const [rows] = await pool.query(query, [guideId]);
+        const [exerciseRows] = await pool.query(exercisesQuery, [guideId]);
 
-        if (rows[0] && rows[0].exercise_ids) {
-            rows[0].exercise_ids = rows[0].exercise_ids.split(',').map(Number);
-        }
-
-        return rows[0];
+        guide.exercises = exerciseRows;
+        return guide;
     },
 
     async findByUserId(userId) {

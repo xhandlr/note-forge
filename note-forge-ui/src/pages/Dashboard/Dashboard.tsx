@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Coffee, Plus, MoreVertical, Pin, Search, Filter, BookOpen, Layers, Edit3, Eye } from "lucide-react";
 import { useCategoryService, useExerciseService, useGuideService } from "../../services/ServiceFactory";
 
@@ -14,52 +14,72 @@ interface SubjectCardProps {
     exercises: number;
     guides: number;
     icon: React.ReactNode;
-    pinned?: boolean;
+    pinned?: number | boolean;
+    imageSrc?: string | null;
+    onTogglePin?: (e: React.MouseEvent) => void;
 }
 
-const SubjectCard: React.FC<SubjectCardProps> = ({ id, title, exercises, guides, icon, pinned }) => (
-    <Link to={id ? `/category/${id}` : '#'} className="bg-white rounded-[2rem] overflow-hidden border border-slate-200 shadow-2xl transition-all hover:shadow-xl hover:-translate-y-1 group relative block">
-        {pinned && (
-            <div className="absolute top-3 left-3 z-20 bg-amber-500 text-white p-2 rounded-xl shadow-lg">
-                <Pin size={14} fill="white" />
-            </div>
-        )}
-        <div className="h-40 bg-slate-900 relative overflow-hidden flex items-center justify-center">
-            <div className="text-white transform group-hover:scale-110 transition-transform duration-700">
-                {icon}
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
-            <div className="absolute top-3 right-3 z-20 flex gap-2">
-                <Link
-                    to={id ? `/edit-category/${id}` : '#'}
-                    className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-rose-500 rounded-xl transition-all"
-                    title="Editar Asignatura"
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <Edit3 size={16} />
-                </Link>
+const SubjectCard: React.FC<SubjectCardProps> = ({ id, title, exercises, guides, icon, pinned, imageSrc, onTogglePin }) => {
+    const navigate = useNavigate();
+    const isPinned = !!pinned;
+
+    return (
+        <Link to={id ? `/category/${id}` : '#'} className="bg-white rounded-[2rem] overflow-hidden border border-slate-200 shadow-2xl transition-all hover:shadow-xl hover:-translate-y-1 group relative block">
+            <div
+                className="h-40 bg-slate-900 relative overflow-hidden flex items-center justify-center"
+                style={imageSrc ? { backgroundImage: `url(${imageSrc})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+            >
+                {!imageSrc && (
+                    <div className="text-white/30 transform group-hover:scale-110 transition-transform duration-700">
+                        {icon}
+                    </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent" />
+
+                {/* Pin button — siempre visible, amber si fijada */}
                 <button
-                    className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-white/40 rounded-xl transition-all"
-                    onClick={(e) => e.stopPropagation()}
+                    className={`absolute top-3 left-3 z-20 p-2 rounded-xl transition-all shadow-lg ${
+                        isPinned
+                            ? 'bg-amber-500 text-white hover:bg-amber-600'
+                            : 'bg-white/20 backdrop-blur-md text-white hover:bg-amber-500'
+                    }`}
+                    title={isPinned ? 'Desfijar asignatura' : 'Fijar asignatura'}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); onTogglePin?.(e); }}
                 >
-                    <MoreVertical size={18} />
+                    <Pin size={14} fill={isPinned ? 'white' : 'none'} />
                 </button>
-            </div>
-            <div className="absolute bottom-4 left-4 text-white">
-                <h3 className="text-xl font-extrabold tracking-tight">{title}</h3>
-            </div>
-        </div>
-        <div className="p-6 flex items-center justify-between">
-            <div className="flex flex-col gap-1">
-                <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Contenido disponible</span>
-                <div className="flex gap-3">
-                    <span className="text-amber-600 font-bold text-sm">{exercises} Ejercicios</span>
-                    <span className="text-rose-600 font-bold text-sm">{guides} Guías</span>
+
+                <div className="absolute top-3 right-3 z-20 flex gap-2">
+                    <button
+                        className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-rose-500 rounded-xl transition-all"
+                        title="Editar Asignatura"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(id ? `/edit-category/${id}` : '#'); }}
+                    >
+                        <Edit3 size={16} />
+                    </button>
+                    <button
+                        className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-white/40 rounded-xl transition-all"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <MoreVertical size={18} />
+                    </button>
+                </div>
+                <div className="absolute bottom-4 left-4 text-white z-10">
+                    <h3 className="text-xl font-extrabold tracking-tight">{title}</h3>
                 </div>
             </div>
-        </div>
-    </Link>
-);
+            <div className="p-6 flex items-center justify-between">
+                <div className="flex flex-col gap-1">
+                    <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Contenido disponible</span>
+                    <div className="flex gap-3">
+                        <span className="text-amber-600 font-bold text-sm">{exercises} Ejercicios</span>
+                        <span className="text-rose-600 font-bold text-sm">{guides} Guías</span>
+                    </div>
+                </div>
+            </div>
+        </Link>
+    );
+};
 
 interface GuideCardProps {
     title: string;
@@ -197,6 +217,34 @@ function Dashboard() {
         loadData();
     }, []);
 
+    const handleTogglePin = async (category: any) => {
+        const newPinned = category.is_pinned ? 0 : 1;
+
+        // Actualización optimista
+        setCategories(prev =>
+            prev.map(c => c.id === category.id ? { ...c, is_pinned: newPinned } : c)
+        );
+
+        try {
+            const formData = new FormData();
+            formData.append('name', category.name);
+            formData.append('description', category.description || '');
+            formData.append('isPinned', String(newPinned));
+            await categoryService.update(category.id, formData);
+        } catch (error) {
+            // Revertir si falla
+            setCategories(prev =>
+                prev.map(c => c.id === category.id ? { ...c, is_pinned: category.is_pinned } : c)
+            );
+            console.error('Error al cambiar pin:', error);
+        }
+    };
+
+    // Fijadas primero, luego el resto en orden original
+    const sortedCategories = [...categories].sort((a, b) =>
+        (b.is_pinned ? 1 : 0) - (a.is_pinned ? 1 : 0)
+    );
+
     return (
         <div className="min-h-screen bg-white flex flex-col">
             <Navbar />
@@ -297,17 +345,17 @@ function Dashboard() {
                         <>
                             {activeTab === 'asignaturas' && (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                    {categories.map((category, index) => (
+                                    {sortedCategories.map((category) => (
                                         <SubjectCard
                                             key={category.id}
                                             id={category.id}
                                             title={category.name}
-                                            exercises={exercises.filter(e => e.categoryId === category.id).length}
-                                            guides={guides.filter(g => g.exerciseIds?.some((eId: number) =>
-                                                exercises.find(e => e.id === eId && e.categoryId === category.id)
-                                            )).length}
+                                            exercises={exercises.filter(e => e.category_id === category.id).length}
+                                            guides={0}
                                             icon={<BookOpen size={64} strokeWidth={2} />}
                                             pinned={category.is_pinned}
+                                            imageSrc={category.image_url}
+                                            onTogglePin={() => handleTogglePin(category)}
                                         />
                                     ))}
                                     <Link to="/create-category" className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[250px] flex flex-col items-center justify-center text-slate-300 hover:bg-amber-50 hover:border-amber-400 hover:text-amber-500 transition-all group shadow-2xl">
@@ -345,10 +393,10 @@ function Dashboard() {
                                             key={exercise.id}
                                             id={exercise.id}
                                             title={exercise.title}
-                                            subject={categories.find(c => c.id === exercise.categoryId)?.name || 'Sin categoría'}
+                                            subject={categories.find(c => c.id === exercise.category_id)?.name || 'Sin categoría'}
                                             difficulty={exercise.difficulty}
                                             desc={exercise.description}
-                                            img={exercise.imageUrl}
+                                            img={exercise.image_url}
                                         />
                                     ))}
 

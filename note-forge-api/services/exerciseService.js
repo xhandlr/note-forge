@@ -1,8 +1,6 @@
 const Exercise = require('../models/exerciseModel');
-const API_BASE_URL = process.env.BASE_URL;
 
 const createExercise = async (exerciseData) => {
-    exerciseData.file = exerciseData.file ? `${API_BASE_URL}/uploads/${exerciseData.file.filename}` : null;
     const exerciseId = await Exercise.create(exerciseData);
     return { message: 'Ejercicio creado con éxito', exerciseId };
 };
