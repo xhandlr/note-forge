@@ -1,181 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
-import { Coffee, Plus, MoreVertical, Pin, Search, Filter, BookOpen, Layers, Edit3, Eye } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Coffee, Plus, Search, Filter, BookOpen, Layers } from "lucide-react";
 import { useCategoryService, useExerciseService, useGuideService } from "../../services/ServiceFactory";
 
-// UI components
 import Navbar from "../../components/Dashboard/Navbar";
 import Footer from "../../components/UI/Footer";
-
-interface SubjectCardProps {
-    id?: number;
-    title: string;
-    exercises: number;
-    guides: number;
-    icon: React.ReactNode;
-    pinned?: number | boolean;
-    imageSrc?: string | null;
-    onTogglePin?: (e: React.MouseEvent) => void;
-}
-
-const SubjectCard: React.FC<SubjectCardProps> = ({ id, title, exercises, guides, icon, pinned, imageSrc, onTogglePin }) => {
-    const navigate = useNavigate();
-    const isPinned = !!pinned;
-
-    return (
-        <Link to={id ? `/category/${id}` : '#'} className="bg-white rounded-[2rem] overflow-hidden border border-slate-200 shadow-2xl transition-all hover:shadow-xl hover:-translate-y-1 group relative block">
-            <div
-                className="h-40 bg-slate-900 relative overflow-hidden flex items-center justify-center"
-                style={imageSrc ? { backgroundImage: `url(${imageSrc})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
-            >
-                {!imageSrc && (
-                    <div className="text-white/30 transform group-hover:scale-110 transition-transform duration-700">
-                        {icon}
-                    </div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent" />
-
-                {/* Pin button — siempre visible, amber si fijada */}
-                <button
-                    className={`absolute top-3 left-3 z-20 p-2 rounded-xl transition-all shadow-lg ${
-                        isPinned
-                            ? 'bg-amber-500 text-white hover:bg-amber-600'
-                            : 'bg-white/20 backdrop-blur-md text-white hover:bg-amber-500'
-                    }`}
-                    title={isPinned ? 'Desfijar asignatura' : 'Fijar asignatura'}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); onTogglePin?.(e); }}
-                >
-                    <Pin size={14} fill={isPinned ? 'white' : 'none'} />
-                </button>
-
-                <div className="absolute top-3 right-3 z-20 flex gap-2">
-                    <button
-                        className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-rose-500 rounded-xl transition-all"
-                        title="Editar Asignatura"
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(id ? `/edit-category/${id}` : '#'); }}
-                    >
-                        <Edit3 size={16} />
-                    </button>
-                    <button
-                        className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-white/40 rounded-xl transition-all"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <MoreVertical size={18} />
-                    </button>
-                </div>
-                <div className="absolute bottom-4 left-4 text-white z-10">
-                    <h3 className="text-xl font-extrabold tracking-tight">{title}</h3>
-                </div>
-            </div>
-            <div className="p-6 flex items-center justify-between">
-                <div className="flex flex-col gap-1">
-                    <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Contenido disponible</span>
-                    <div className="flex gap-3">
-                        <span className="text-amber-600 font-bold text-sm">{exercises} Ejercicios</span>
-                        <span className="text-rose-600 font-bold text-sm">{guides} Guías</span>
-                    </div>
-                </div>
-            </div>
-        </Link>
-    );
-};
-
-interface GuideCardProps {
-    title: string;
-    status: string;
-    subject: string;
-}
-
-const GuideCard: React.FC<GuideCardProps> = ({ title, status, subject }) => (
-    <div className="bg-white rounded-[2rem] p-6 border border-slate-200 shadow-2xl flex flex-col gap-5 group hover:border-rose-300 transition-all">
-        <div className="aspect-[3/4] bg-slate-50 rounded-2xl relative overflow-hidden flex flex-col items-center justify-center p-8 border border-slate-100">
-            <div className="w-full space-y-4">
-                <div className="h-4 bg-amber-200/40 rounded-full w-4/5" />
-                <div className="flex gap-2">
-                    <div className="h-10 bg-rose-100/30 rounded-xl w-1/2" />
-                    <div className="h-10 bg-rose-100/30 rounded-xl w-1/2" />
-                </div>
-                <div className="space-y-2">
-                    <div className="h-2 bg-slate-100 rounded-full w-full" />
-                    <div className="h-2 bg-slate-100 rounded-full w-full" />
-                    <div className="h-2 bg-slate-100 rounded-full w-3/4" />
-                </div>
-                <div className="pt-4 space-y-2">
-                    <div className="h-2 bg-amber-100/40 rounded-full w-full" />
-                    <div className="h-2 bg-amber-100/40 rounded-full w-5/6" />
-                </div>
-            </div>
-            <div className="absolute inset-0 bg-rose-500/0 group-hover:bg-rose-500/5 transition-colors" />
-        </div>
-        <div className="space-y-4">
-            <h4 className="font-extrabold text-slate-900 text-lg leading-tight line-clamp-2 group-hover:text-rose-600 transition-colors">{title}</h4>
-            <div className="flex items-center justify-between">
-                <span className="px-3 py-1 bg-amber-100 text-amber-700 text-[9px] font-black rounded-lg uppercase tracking-wider border border-amber-200">{status}</span>
-                <span className="text-slate-400 text-[10px] font-bold">{subject}</span>
-            </div>
-        </div>
-    </div>
-);
-
-interface ExerciseListItemProps {
-    id?: number;
-    title: string;
-    subject: string;
-    difficulty: number;
-    desc: string;
-    img: string;
-}
-
-const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject, difficulty, desc, img }) => (
-    <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden flex flex-col md:flex-row group hover:border-rose-300 transition-all text-left">
-        <div className="md:w-1/3 lg:w-1/4 h-48 md:h-auto relative overflow-hidden">
-            <img src={img} alt={title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-            <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition-colors" />
-            <div className="absolute top-4 left-4">
-                <span className="px-3 py-1.5 bg-white/90 backdrop-blur-md rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-900 border border-white/20 shadow-lg">
-                    {subject}
-                </span>
-            </div>
-        </div>
-        <div className="flex-grow p-6 lg:p-7 flex flex-col justify-between">
-            <div className="space-y-3">
-                <div className="flex justify-between items-start">
-                    <h3 className="text-lg font-black text-slate-900 tracking-tight group-hover:text-rose-600 transition-colors">{title}</h3>
-                    <div className="flex gap-1.5">
-                        {[...Array(5)].map((_, i) => (
-                            <div key={i} className={`w-1.5 h-1.5 rounded-full ${i < difficulty ? 'bg-amber-400' : 'bg-slate-100'}`} />
-                        ))}
-                    </div>
-                </div>
-                <p className="text-slate-500 font-medium text-sm leading-relaxed line-clamp-2 max-w-2xl">{desc}</p>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-between gap-4 mt-5 pt-5 border-t border-slate-50">
-                <div className="flex gap-3">
-                    <span className="flex items-center gap-2 text-slate-400 text-[10px] font-bold bg-slate-50 px-3 py-1.5 rounded-xl">
-                        <Layers size={12} /> ID: #FX-2023
-                    </span>
-                    <span className="flex items-center gap-2 text-slate-400 text-[10px] font-bold bg-slate-50 px-3 py-1.5 rounded-xl">
-                        <Coffee size={12} /> 15 min
-                    </span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                    <Link to={id ? `/exercise/${id}` : '#'} className="flex items-center gap-1.5 px-4 py-2 bg-slate-50 text-slate-500 rounded-xl font-black text-xs hover:bg-slate-900 hover:text-white transition-all">
-                        <Eye size={14} /> Ver
-                    </Link>
-                    <Link to={id ? `/edit-exercise/${id}` : '#'} className="flex items-center gap-1.5 px-4 py-2 bg-rose-50 text-rose-600 rounded-xl font-black text-xs hover:bg-rose-500 hover:text-white transition-all">
-                        <Edit3 size={14} /> Editar
-                    </Link>
-                    <button className="p-2 text-slate-300 hover:text-amber-600 transition-colors">
-                        <MoreVertical size={16} />
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-);
+import SubjectCard from "../../components/Dashboard/SubjectCard";
+import GuideCard from "../../components/Dashboard/GuideCard";
+import ExerciseListItem from "../../components/Dashboard/ExerciseListItem";
+import DeleteDialog from "../../components/Dashboard/DeleteDialog";
 
 function Dashboard() {
     const { t } = useTranslation();
@@ -184,6 +18,8 @@ function Dashboard() {
     const [exercises, setExercises] = useState<any[]>([]);
     const [guides, setGuides] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [deletingCategory, setDeletingCategory] = useState<{ id: number; name: string; exercisesCount: number } | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const categoryService = useCategoryService();
     const exerciseService = useExerciseService();
@@ -220,7 +56,6 @@ function Dashboard() {
     const handleTogglePin = async (category: any) => {
         const newPinned = category.is_pinned ? 0 : 1;
 
-        // Actualización optimista
         setCategories(prev =>
             prev.map(c => c.id === category.id ? { ...c, is_pinned: newPinned } : c)
         );
@@ -232,7 +67,6 @@ function Dashboard() {
             formData.append('isPinned', String(newPinned));
             await categoryService.update(category.id, formData);
         } catch (error) {
-            // Revertir si falla
             setCategories(prev =>
                 prev.map(c => c.id === category.id ? { ...c, is_pinned: category.is_pinned } : c)
             );
@@ -240,7 +74,28 @@ function Dashboard() {
         }
     };
 
-    // Fijadas primero, luego el resto en orden original
+    const handleDeleteCategory = async (deleteExercises: boolean) => {
+        if (!deletingCategory) return;
+        setIsDeleting(true);
+
+        try {
+            if (deleteExercises) {
+                const categoryExercises = exercises.filter(e => e.category_id === deletingCategory.id);
+                await Promise.all(categoryExercises.map(e => exerciseService.delete(e.id)));
+            }
+            await categoryService.delete(deletingCategory.id);
+            setCategories(prev => prev.filter(c => c.id !== deletingCategory.id));
+            if (deleteExercises) {
+                setExercises(prev => prev.filter(e => e.category_id !== deletingCategory.id));
+            }
+            setDeletingCategory(null);
+        } catch (error) {
+            console.error('Error al eliminar asignatura:', error);
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
     const sortedCategories = [...categories].sort((a, b) =>
         (b.is_pinned ? 1 : 0) - (a.is_pinned ? 1 : 0)
     );
@@ -249,9 +104,19 @@ function Dashboard() {
         <div className="min-h-screen bg-white flex flex-col">
             <Navbar />
 
+            {deletingCategory && (
+                <DeleteDialog
+                    categoryName={deletingCategory.name}
+                    exercisesCount={deletingCategory.exercisesCount}
+                    onConfirm={handleDeleteCategory}
+                    onCancel={() => !isDeleting && setDeletingCategory(null)}
+                    deleting={isDeleting}
+                />
+            )}
+
             <div className="w-[70%] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 mt-16">
 
-                {/* Banner con contraste agresivo y moderno */}
+                {/* Banner */}
                 <div className="relative overflow-hidden bg-slate-900 p-8 lg:p-12 rounded-[3rem] shadow-2xl text-white">
                     <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-500/20 blur-[150px] rounded-full -translate-y-1/2 translate-x-1/2" />
                     <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-rose-500/20 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/4" />
@@ -292,7 +157,7 @@ function Dashboard() {
                     </div>
                 </div>
 
-                {/* Tab Selection CENTRADO de ALTO CONTRASTE */}
+                {/* Tabs */}
                 <div className="flex flex-col items-center gap-8">
                     <div className="bg-slate-100/80 p-2 rounded-[2rem] flex items-center gap-2 border border-slate-200">
                         {tabs.map((tab) => (
@@ -332,7 +197,7 @@ function Dashboard() {
                     </div>
                 </div>
 
-                {/* Zona de Renderizado con Blanco Sólido */}
+                {/* Contenido */}
                 <div className="min-h-[500px]">
                     {loading ? (
                         <div className="flex items-center justify-center h-[500px]">
@@ -345,19 +210,23 @@ function Dashboard() {
                         <>
                             {activeTab === 'asignaturas' && (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                    {sortedCategories.map((category) => (
-                                        <SubjectCard
-                                            key={category.id}
-                                            id={category.id}
-                                            title={category.name}
-                                            exercises={exercises.filter(e => e.category_id === category.id).length}
-                                            guides={0}
-                                            icon={<BookOpen size={64} strokeWidth={2} />}
-                                            pinned={category.is_pinned}
-                                            imageSrc={category.image_url}
-                                            onTogglePin={() => handleTogglePin(category)}
-                                        />
-                                    ))}
+                                    {sortedCategories.map((category) => {
+                                        const categoryExercisesCount = exercises.filter(e => e.category_id === category.id).length;
+                                        return (
+                                            <SubjectCard
+                                                key={category.id}
+                                                id={category.id}
+                                                title={category.name}
+                                                exercises={categoryExercisesCount}
+                                                guides={0}
+                                                icon={<BookOpen size={64} strokeWidth={2} />}
+                                                pinned={category.is_pinned}
+                                                imageSrc={category.image_url}
+                                                onTogglePin={() => handleTogglePin(category)}
+                                                onDelete={() => setDeletingCategory({ id: category.id, name: category.name, exercisesCount: categoryExercisesCount })}
+                                            />
+                                        );
+                                    })}
                                     <Link to="/create-category" className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[250px] flex flex-col items-center justify-center text-slate-300 hover:bg-amber-50 hover:border-amber-400 hover:text-amber-500 transition-all group shadow-2xl">
                                         <div className="bg-slate-50 p-5 rounded-full group-hover:bg-white group-hover:scale-110 transition-all mb-3">
                                             <Plus size={40} strokeWidth={3} className="text-slate-200 group-hover:text-amber-500" />

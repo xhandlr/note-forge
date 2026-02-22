@@ -26,9 +26,11 @@ const Category = {
     },
 
     async delete(categoryId) {
+        // Eliminar asociaciones en 'exercises_categories' antes para evitar FK constraint
+        await pool.query('DELETE FROM exercises_categories WHERE category_id = ?', [categoryId]);
         const query = 'DELETE FROM categories WHERE id = ?';
         const [result] = await pool.query(query, [categoryId]);
-        return result.affectedRows > 0;  // Retorna true si se eliminó el ejercicio
+        return result.affectedRows > 0;
     }
 };
 
