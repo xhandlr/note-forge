@@ -21,7 +21,7 @@ function applyTextCommands(text: string): string {
     .replace(/\\emph\{([^}]*)\}/g, '<em>$1</em>')
     // Tamaños de fuente → tags semánticos aproximados
     .replace(/\\(section|chapter)\*?\{([^}]*)\}/g, '<strong class="text-lg">$2</strong>')
-    .replace(/\\subsection\*?\{([^}]*)\}/g, '<strong>$2</strong>')
+    .replace(/\\subsection\*?\{([^}]*)\}/g, '<strong>$1</strong>')
     // Saltos de línea LaTeX
     .replace(/\\\\/g, '<br/>')
     .replace(/\\newline/g, '<br/>')
