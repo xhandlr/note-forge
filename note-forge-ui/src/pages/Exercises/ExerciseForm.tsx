@@ -308,11 +308,11 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
                     </div>
                   </button>
                 ) : (
-                  <div className="relative w-full h-64 rounded-[1.5rem] overflow-hidden border-4 border-slate-200 shadow-lg group">
+                  <div className="relative w-full rounded-[1.5rem] overflow-hidden border-4 border-slate-200 shadow-lg group">
                     <img
                       src={imagePreview}
                       alt="Preview"
-                      className="w-full h-full object-cover"
+                      className="w-full max-h-[400px] object-contain block"
                     />
                     <button
                       type="button"

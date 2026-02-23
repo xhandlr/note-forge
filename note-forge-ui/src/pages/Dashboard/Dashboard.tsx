@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Coffee, Plus, Search, Filter, BookOpen, Layers } from "lucide-react";
 import { useCategoryService, useExerciseService, useGuideService } from "../../services/ServiceFactory";
 
@@ -13,7 +13,16 @@ import DeleteDialog from "../../components/Dashboard/DeleteDialog";
 
 function Dashboard() {
     const { t } = useTranslation();
-    const [activeTab, setActiveTab] = useState('asignaturas');
+    const location = useLocation();
+    const [activeTab, setActiveTab] = useState((location.state as any)?.tab || 'asignaturas');
+
+    useEffect(() => {
+        if ((location.state as any)?.tab) {
+            setTimeout(() => {
+                document.getElementById('tabs-section')?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+    }, []);
     const [categories, setCategories] = useState<any[]>([]);
     const [exercises, setExercises] = useState<any[]>([]);
     const [guides, setGuides] = useState<any[]>([]);
@@ -96,6 +105,15 @@ function Dashboard() {
         }
     };
 
+    const handleDeleteExercise = async (exerciseId: number) => {
+        try {
+            await exerciseService.delete(exerciseId);
+            setExercises(prev => prev.filter(e => e.id !== exerciseId));
+        } catch (error) {
+            console.error('Error al eliminar ejercicio:', error);
+        }
+    };
+
     const sortedCategories = [...categories].sort((a, b) =>
         (b.is_pinned ? 1 : 0) - (a.is_pinned ? 1 : 0)
     );
@@ -158,7 +176,7 @@ function Dashboard() {
                 </div>
 
                 {/* Tabs */}
-                <div className="flex flex-col items-center gap-8">
+                <div id="tabs-section" className="flex flex-col items-center gap-8">
                     <div className="bg-slate-100/80 p-2 rounded-[2rem] flex items-center gap-2 border border-slate-200">
                         {tabs.map((tab) => (
                             <button
@@ -266,6 +284,7 @@ function Dashboard() {
                                             difficulty={exercise.difficulty}
                                             desc={exercise.description}
                                             img={exercise.image_url}
+                                            onDelete={() => handleDeleteExercise(exercise.id)}
                                         />
                                     ))}
 

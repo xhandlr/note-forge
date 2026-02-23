@@ -119,7 +119,7 @@ const CategoryView: React.FC = () => {
         {/* Top Navigation */}
         <div className="flex justify-between items-center">
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/dashboard', { state: { tab: 'asignaturas' } })}
             className="flex items-center gap-2 text-slate-500 font-black text-sm hover:text-slate-900 transition-colors"
           >
             <ArrowLeft size={20} strokeWidth={2.5} /> Volver al Tablero

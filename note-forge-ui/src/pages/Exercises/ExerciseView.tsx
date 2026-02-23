@@ -1,9 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Edit3, Share2, Book, Link as LinkIcon, FileText, CheckCircle, ChevronDown, Download, Layers } from 'lucide-react';
+import { ArrowLeft, Edit3, Book, FileText, CheckCircle, ChevronDown, Layers, Download } from 'lucide-react';
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
 import { useExerciseService, useCategoryService } from '../../services/ServiceFactory';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
+
+function renderLatex(text: string): string {
+  if (!text) return '';
+  const latexRegex = /(\\(?:\(|\[)[\s\S]*?\\(?:\)|\])|\$\$[\s\S]*?\$\$)/g;
+  const segments = text.split(latexRegex);
+  let processed = '';
+  for (const segment of segments) {
+    if (!segment) continue;
+    if (segment.startsWith('\\(') || segment.startsWith('\\[') || segment.startsWith('$$')) {
+      try {
+        const displayMode = segment.startsWith('\\[') || segment.startsWith('$$');
+        const content = segment
+          .replace(/^(\\[\(\[]|\$\$)/, '')
+          .replace(/(\\[\)\]]|\$\$)$/, '');
+        processed += katex.renderToString(content, { displayMode, throwOnError: false });
+      } catch {
+        processed += segment;
+      }
+    } else {
+      processed += segment
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\n/g, '<br/>');
+    }
+  }
+  return processed;
+}
 
 const ExerciseView: React.FC = () => {
   const { id } = useParams();
@@ -25,8 +55,8 @@ const ExerciseView: React.FC = () => {
         const exerciseData = await exerciseService.getById(id);
         setExercise(exerciseData);
 
-        if (exerciseData.categoryId) {
-          const categoryData = await categoryService.getById(exerciseData.categoryId);
+        if (exerciseData.category_id) {
+          const categoryData = await categoryService.getById(exerciseData.category_id);
           setCategory(categoryData);
         }
       } catch (error) {
@@ -85,7 +115,7 @@ const ExerciseView: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-6">
           <div className="space-y-3">
             <button
-              onClick={() => navigate(-1)}
+              onClick={() => navigate('/dashboard', { state: { tab: 'ejercicios' } })}
               className="flex items-center gap-2 text-slate-400 font-black hover:text-slate-900 transition-colors text-sm mb-2"
             >
               <ArrowLeft size={16} strokeWidth={3} /> Regresar
@@ -129,12 +159,13 @@ const ExerciseView: React.FC = () => {
                 <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Enunciado del Problema</h2>
               </div>
               <div className="p-7 lg:p-9 space-y-8">
-                <p className="text-xl font-black text-slate-700 leading-relaxed italic">
-                  "{exercise.description}"
-                </p>
-                {exercise.imageUrl && (
+                <div
+                  className="text-base text-slate-700 leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: renderLatex(exercise.description) }}
+                />
+                {exercise.image_url && (
                   <div className="rounded-[1.5rem] overflow-hidden border border-slate-100 bg-slate-50">
-                    <img src={exercise.imageUrl} className="w-full h-auto max-h-[400px] object-contain mx-auto" alt="Diagrama" />
+                    <img src={exercise.image_url} className="w-full h-auto max-h-[500px] object-contain mx-auto block" alt="Diagrama" />
                   </div>
                 )}
               </div>
@@ -168,7 +199,10 @@ const ExerciseView: React.FC = () => {
                           <span className="w-8 h-8 shrink-0 bg-rose-500/20 text-rose-400 rounded-lg flex items-center justify-center font-black text-xs">
                             {i + 1}
                           </span>
-                          <p className="text-slate-300 font-semibold text-base pt-1">{line.trim()}</p>
+                          <div
+                            className="text-slate-300 font-semibold text-base pt-1"
+                            dangerouslySetInnerHTML={{ __html: renderLatex(line.trim()) }}
+                          />
                         </div>
                       ))}
                     </div>
@@ -221,9 +255,6 @@ const ExerciseView: React.FC = () => {
                         <span className="text-white font-black text-xs">#{exercise.id}</span>
                      </div>
                   </div>
-                  <button className="w-full py-3 bg-white text-slate-900 rounded-xl font-black text-xs hover:bg-rose-500 hover:text-white transition-all shadow-lg">
-                     Compartir Reto
-                  </button>
                </div>
             </div>
           </div>

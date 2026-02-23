@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Coffee, MoreVertical, Layers, Edit3, Eye } from "lucide-react";
 
 interface ExerciseListItemProps {
@@ -9,56 +9,139 @@ interface ExerciseListItemProps {
     difficulty: number;
     desc: string;
     img: string;
+    onDelete?: () => void;
 }
 
-const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject, difficulty, desc, img }) => (
-    <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden flex flex-col md:flex-row group hover:border-rose-300 transition-all text-left">
-        <div className="md:w-1/3 lg:w-1/4 h-48 md:h-auto relative overflow-hidden">
-            <img src={img} alt={title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-            <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition-colors" />
-            <div className="absolute top-4 left-4">
-                <span className="px-3 py-1.5 bg-white/90 backdrop-blur-md rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-900 border border-white/20 shadow-lg">
-                    {subject}
-                </span>
-            </div>
-        </div>
-        <div className="flex-grow p-6 lg:p-7 flex flex-col justify-between">
-            <div className="space-y-3">
-                <div className="flex justify-between items-start">
-                    <h3 className="text-lg font-black text-slate-900 tracking-tight group-hover:text-rose-600 transition-colors">{title}</h3>
-                    <div className="flex gap-1.5">
-                        {[...Array(5)].map((_, i) => (
-                            <div key={i} className={`w-1.5 h-1.5 rounded-full ${i < difficulty ? 'bg-amber-400' : 'bg-slate-100'}`} />
-                        ))}
+const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject, difficulty, desc, img, onDelete }) => {
+    const navigate = useNavigate();
+    const [showMenu, setShowMenu] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!showMenu) return;
+        const handler = (e: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+                setShowMenu(false);
+            }
+        };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+    }, [showMenu]);
+
+    return (
+        <>
+            <div
+                className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden flex flex-col md:flex-row group hover:border-rose-300 transition-all text-left cursor-pointer"
+                onClick={() => id && navigate(`/exercise/${id}`)}
+            >
+                <div className="md:w-1/3 lg:w-1/4 h-48 md:h-auto relative overflow-hidden">
+                    {img ? (
+                        <img src={img} alt={title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    ) : (
+                        <div className="w-full h-full bg-slate-900 flex items-center justify-center">
+                            <Coffee size={40} className="text-white/20" strokeWidth={1.5} />
+                        </div>
+                    )}
+                    <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition-colors" />
+                    <div className="absolute top-4 left-4">
+                        <span className="px-3 py-1.5 bg-white/90 backdrop-blur-md rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-900 border border-white/20 shadow-lg">
+                            {subject}
+                        </span>
                     </div>
                 </div>
-                <p className="text-slate-500 font-medium text-sm leading-relaxed line-clamp-2 max-w-2xl">{desc}</p>
+                <div className="flex-grow p-6 lg:p-7 flex flex-col justify-between">
+                    <div className="space-y-3">
+                        <div className="flex justify-between items-start">
+                            <h3 className="text-lg font-black text-slate-900 tracking-tight group-hover:text-rose-600 transition-colors">{title}</h3>
+                            <div className="flex gap-1.5">
+                                {[...Array(5)].map((_, i) => (
+                                    <div key={i} className={`w-1.5 h-1.5 rounded-full ${i < difficulty ? 'bg-amber-400' : 'bg-slate-100'}`} />
+                                ))}
+                            </div>
+                        </div>
+                        <p className="text-slate-500 font-medium text-sm leading-relaxed line-clamp-2 max-w-2xl">{desc}</p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-between gap-4 mt-5 pt-5 border-t border-slate-50">
+                        <div className="flex gap-3">
+                            <span className="flex items-center gap-2 text-slate-400 text-[10px] font-bold bg-slate-50 px-3 py-1.5 rounded-xl">
+                                <Layers size={12} /> ID: #{id}
+                            </span>
+                            <span className="flex items-center gap-2 text-slate-400 text-[10px] font-bold bg-slate-50 px-3 py-1.5 rounded-xl">
+                                <Coffee size={12} /> 15 min
+                            </span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <Link
+                                to={id ? `/exercise/${id}` : '#'}
+                                onClick={e => e.stopPropagation()}
+                                className="flex items-center gap-1.5 px-4 py-2 bg-slate-50 text-slate-500 rounded-xl font-black text-xs hover:bg-slate-900 hover:text-white transition-all"
+                            >
+                                <Eye size={14} /> Ver
+                            </Link>
+                            <Link
+                                to={id ? `/edit-exercise/${id}` : '#'}
+                                onClick={e => e.stopPropagation()}
+                                className="flex items-center gap-1.5 px-4 py-2 bg-rose-50 text-rose-600 rounded-xl font-black text-xs hover:bg-rose-500 hover:text-white transition-all"
+                            >
+                                <Edit3 size={14} /> Editar
+                            </Link>
+                            {/* 3-dots + dropdown */}
+                            <div className="relative" ref={menuRef}>
+                                <button
+                                    className="p-2 text-slate-300 hover:text-rose-500 transition-colors"
+                                    onClick={e => { e.stopPropagation(); setShowMenu(v => !v); }}
+                                >
+                                    <MoreVertical size={16} />
+                                </button>
+                                {showMenu && (
+                                    <div className="absolute bottom-full right-0 mb-2 z-50 bg-white rounded-xl shadow-2xl border border-slate-100 py-1 min-w-[120px] overflow-hidden">
+                                        <button
+                                            className="w-full text-left px-4 py-2.5 text-sm text-rose-600 hover:bg-rose-50 font-black transition-colors"
+                                            onClick={e => { e.stopPropagation(); setShowMenu(false); setShowConfirm(true); }}
+                                        >
+                                            Eliminar
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-4 mt-5 pt-5 border-t border-slate-50">
-                <div className="flex gap-3">
-                    <span className="flex items-center gap-2 text-slate-400 text-[10px] font-bold bg-slate-50 px-3 py-1.5 rounded-xl">
-                        <Layers size={12} /> ID: #FX-2023
-                    </span>
-                    <span className="flex items-center gap-2 text-slate-400 text-[10px] font-bold bg-slate-50 px-3 py-1.5 rounded-xl">
-                        <Coffee size={12} /> 15 min
-                    </span>
+            {showConfirm && (
+                <div
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100]"
+                    onClick={() => setShowConfirm(false)}
+                >
+                    <div
+                        className="bg-white rounded-[2rem] p-8 max-w-sm w-full mx-4 shadow-2xl"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <h2 className="text-xl font-black text-slate-900 mb-2">¿Estás seguro?</h2>
+                        <p className="text-slate-500 text-sm font-medium mb-8">Esta acción eliminará el ejercicio permanentemente.</p>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setShowConfirm(false)}
+                                className="flex-1 py-3 rounded-[1.5rem] border-2 border-slate-200 text-slate-600 font-black text-sm hover:bg-slate-50 transition-all"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={() => { setShowConfirm(false); onDelete?.(); }}
+                                className="flex-1 py-3 rounded-[1.5rem] bg-rose-500 text-white font-black text-sm hover:bg-rose-600 transition-all shadow-xl shadow-rose-200"
+                            >
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
                 </div>
-
-                <div className="flex items-center gap-2">
-                    <Link to={id ? `/exercise/${id}` : '#'} className="flex items-center gap-1.5 px-4 py-2 bg-slate-50 text-slate-500 rounded-xl font-black text-xs hover:bg-slate-900 hover:text-white transition-all">
-                        <Eye size={14} /> Ver
-                    </Link>
-                    <Link to={id ? `/edit-exercise/${id}` : '#'} className="flex items-center gap-1.5 px-4 py-2 bg-rose-50 text-rose-600 rounded-xl font-black text-xs hover:bg-rose-500 hover:text-white transition-all">
-                        <Edit3 size={14} /> Editar
-                    </Link>
-                    <button className="p-2 text-slate-300 hover:text-amber-600 transition-colors">
-                        <MoreVertical size={16} />
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-);
+            )}
+        </>
+    );
+};
 
 export default ExerciseListItem;
