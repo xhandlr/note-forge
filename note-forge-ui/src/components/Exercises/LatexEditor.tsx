@@ -8,39 +8,54 @@ interface LatexEditorProps {
     name: string;
 }
 
+function applyTextCommands(text: string): string {
+    return text
+        .replace(/\\(begin|end)\{document\}/g, '')
+        .replace(/\\documentclass(\[.*?\])?\{.*?\}/g, '')
+        .replace(/\\usepackage(\[.*?\])?\{.*?\}/g, '')
+        .replace(/\\textbf\{([^}]*)\}/g, '<strong>$1</strong>')
+        .replace(/\\textit\{([^}]*)\}/g, '<em>$1</em>')
+        .replace(/\\underline\{([^}]*)\}/g, '<u>$1</u>')
+        .replace(/\\text\{([^}]*)\}/g, '$1')
+        .replace(/\\emph\{([^}]*)\}/g, '<em>$1</em>')
+        .replace(/\\(section|chapter)\*?\{([^}]*)\}/g, '<strong class="text-lg">$2</strong>')
+        .replace(/\\subsection\*?\{([^}]*)\}/g, '<strong>$2</strong>')
+        .replace(/\\\\/g, '<br/>')
+        .replace(/\\newline/g, '<br/>')
+        .replace(/\\par\b/g, '<br/><br/>');
+}
+
 function LatexEditor({ value, onChange, name }: LatexEditorProps) {
     const [latexPreview, setLatexPreview] = useState('');
 
     useEffect(() => {
         if (value) {
-            const content = value;
-            const latexRegex = /(\\(?:\(|\[|\$\$?)[\s\S]*?\\(?:\)|\]|\$\$?))/g;
-            const segments = content.split(latexRegex);
+            const latexRegex = /(\\(?:\(|\[)[\s\S]*?\\(?:\)|\])|\$\$[\s\S]*?\$\$)/g;
+            const segments = value.split(latexRegex);
 
             let processedContent = '';
             segments.forEach(segment => {
                 if (!segment) return;
 
-                if (latexRegex.test(segment)) {
+                if (segment.startsWith('\\(') || segment.startsWith('\\[') || segment.startsWith('$$')) {
                     try {
-                        const latexContent = segment
-                            .replace(/^\\(\(|\[|\$\$?)/, '')
-                            .replace(/\\(\)|\]|\$\$?)$/, '');
-
                         const displayMode = segment.startsWith('\\[') || segment.startsWith('$$');
+                        const latexContent = segment
+                            .replace(/^(\\[\(\[]|\$\$)/, '')
+                            .replace(/(\\[\)\]]|\$\$)$/, '');
                         processedContent += katex.renderToString(latexContent, {
-                            displayMode: displayMode,
+                            displayMode,
                             throwOnError: false
                         });
-                    } catch (error) {
+                    } catch {
                         processedContent += `<span style="color: red;">Error en LaTeX: ${segment}</span>`;
                     }
                 } else {
-                    processedContent += segment
+                    const escaped = segment
                         .replace(/&/g, '&amp;')
                         .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;')
-                        .replace(/\n/g, '<br/>');
+                        .replace(/>/g, '&gt;');
+                    processedContent += applyTextCommands(escaped).replace(/\n/g, '<br/>');
                 }
             });
 

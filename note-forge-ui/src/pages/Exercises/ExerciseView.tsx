@@ -7,14 +7,37 @@ import { useExerciseService, useCategoryService } from '../../services/ServiceFa
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
 
+function applyTextCommands(text: string): string {
+  return text
+    // Eliminar comandos de documento
+    .replace(/\\(begin|end)\{document\}/g, '')
+    .replace(/\\documentclass(\[.*?\])?\{.*?\}/g, '')
+    .replace(/\\usepackage(\[.*?\])?\{.*?\}/g, '')
+    // Formato de texto
+    .replace(/\\textbf\{([^}]*)\}/g, '<strong>$1</strong>')
+    .replace(/\\textit\{([^}]*)\}/g, '<em>$1</em>')
+    .replace(/\\underline\{([^}]*)\}/g, '<u>$1</u>')
+    .replace(/\\text\{([^}]*)\}/g, '$1')
+    .replace(/\\emph\{([^}]*)\}/g, '<em>$1</em>')
+    // Tamaños de fuente → tags semánticos aproximados
+    .replace(/\\(section|chapter)\*?\{([^}]*)\}/g, '<strong class="text-lg">$2</strong>')
+    .replace(/\\subsection\*?\{([^}]*)\}/g, '<strong>$2</strong>')
+    // Saltos de línea LaTeX
+    .replace(/\\\\/g, '<br/>')
+    .replace(/\\newline/g, '<br/>')
+    .replace(/\\par\b/g, '<br/><br/>');
+}
+
 function renderLatex(text: string): string {
   if (!text) return '';
+  // Separar bloques matemáticos del texto plano
   const latexRegex = /(\\(?:\(|\[)[\s\S]*?\\(?:\)|\])|\$\$[\s\S]*?\$\$)/g;
   const segments = text.split(latexRegex);
   let processed = '';
   for (const segment of segments) {
     if (!segment) continue;
     if (segment.startsWith('\\(') || segment.startsWith('\\[') || segment.startsWith('$$')) {
+      // Bloque matemático → KaTeX
       try {
         const displayMode = segment.startsWith('\\[') || segment.startsWith('$$');
         const content = segment
@@ -25,11 +48,14 @@ function renderLatex(text: string): string {
         processed += segment;
       }
     } else {
-      processed += segment
+      // Texto plano → escapar HTML y luego aplicar comandos de texto LaTeX
+      const escaped = segment
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
+        .replace(/>/g, '&gt;');
+      const withCommands = applyTextCommands(escaped)
         .replace(/\n/g, '<br/>');
+      processed += withCommands;
     }
   }
   return processed;
