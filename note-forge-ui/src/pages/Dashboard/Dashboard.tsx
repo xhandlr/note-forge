@@ -27,6 +27,7 @@ function Dashboard() {
     const [exercises, setExercises] = useState<any[]>([]);
     const [guides, setGuides] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
     const [deletingCategory, setDeletingCategory] = useState<{ id: number; name: string; exercisesCount: number } | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -114,8 +115,23 @@ function Dashboard() {
         }
     };
 
-    const sortedCategories = [...categories].sort((a, b) =>
-        (b.is_pinned ? 1 : 0) - (a.is_pinned ? 1 : 0)
+    const q = searchTerm.toLowerCase().trim();
+
+    const sortedCategories = [...categories]
+        .filter(c => !q || c.name.toLowerCase().includes(q))
+        .sort((a, b) => (b.is_pinned ? 1 : 0) - (a.is_pinned ? 1 : 0));
+
+    const filteredExercises = exercises.filter(e =>
+        !q ||
+        e.title?.toLowerCase().includes(q) ||
+        e.description?.toLowerCase().includes(q) ||
+        categories.find(c => c.id === e.category_id)?.name.toLowerCase().includes(q)
+    );
+
+    const filteredGuides = guides.filter(g =>
+        !q ||
+        g.title?.toLowerCase().includes(q) ||
+        g.author?.toLowerCase().includes(q)
     );
 
     return (
@@ -208,6 +224,8 @@ function Dashboard() {
                                 <input
                                     type="text"
                                     placeholder="Buscar..."
+                                    value={searchTerm}
+                                    onChange={e => setSearchTerm(e.target.value)}
                                     className="bg-white border border-slate-200 pl-10 pr-4 py-3 rounded-xl outline-none focus:ring-4 focus:ring-rose-100 shadow-sm font-bold text-sm w-48 focus:w-64 transition-all"
                                 />
                             </div>
@@ -256,7 +274,7 @@ function Dashboard() {
 
                             {activeTab === 'guias' && (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                    {guides.map((guide) => (
+                                    {filteredGuides.map((guide) => (
                                         <GuideCard
                                             key={guide.id}
                                             title={guide.title}
@@ -275,7 +293,7 @@ function Dashboard() {
 
                             {activeTab === 'ejercicios' && (
                                 <div className="space-y-6">
-                                    {exercises.map((exercise) => (
+                                    {filteredExercises.map((exercise) => (
                                         <ExerciseListItem
                                             key={exercise.id}
                                             id={exercise.id}
