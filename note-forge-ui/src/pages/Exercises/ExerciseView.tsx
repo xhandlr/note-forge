@@ -238,11 +238,13 @@ const ExerciseView: React.FC = () => {
                   <Layers size={80} strokeWidth={2} />
                </div>
                <div className="relative z-10 space-y-4">
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rose-400">Información de Forja</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rose-400">Información del ejercicio</p>
                   <div className="space-y-3">
                      <div className="flex justify-between items-center border-b border-white/5 pb-2">
                         <span className="text-slate-400 text-xs font-black">Dificultad</span>
-                        <span className="text-amber-400 font-black text-xs">Alto Impacto</span>
+                        <span className="text-amber-400 font-black text-xs">
+                          {['Introductorio','Elemental','Intermedio','Avanzado','Especializado'][exercise.difficulty - 1] ?? exercise.difficulty}
+                        </span>
                      </div>
                      {exercise.duration && (
                        <div className="flex justify-between items-center border-b border-white/5 pb-2">
