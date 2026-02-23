@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Coffee, BookOpen, Edit3, Plus, Share2, Calendar } from 'lucide-react';
+import { ArrowLeft, Coffee, BookOpen, Edit3, Plus, Trash2, Calendar } from 'lucide-react';
 import { useCategoryService, useExerciseService, useGuideService } from '../../services/ServiceFactory';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
+import DeleteDialog from '../../components/Dashboard/DeleteDialog';
 
 const CategoryView: React.FC = () => {
   const { id } = useParams();
@@ -13,6 +14,8 @@ const CategoryView: React.FC = () => {
   const [exercises, setExercises] = useState<any[]>([]);
   const [guides, setGuides] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deletingCategory, setDeletingCategory] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const categoryService = useCategoryService();
   const exerciseService = useExerciseService();
@@ -46,6 +49,23 @@ const CategoryView: React.FC = () => {
 
     loadData();
   }, [id]);
+
+  const handleDeleteCategory = async (deleteExercises: boolean) => {
+    if (!category) return;
+    setIsDeleting(true);
+
+    try {
+      if (deleteExercises) {
+        await Promise.all(exercises.map(e => exerciseService.delete(e.id)));
+      }
+      await categoryService.delete(category.id);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error al eliminar asignatura:', error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -84,6 +104,16 @@ const CategoryView: React.FC = () => {
     <div className="min-h-screen bg-white flex flex-col">
       <Navbar />
 
+      {deletingCategory && (
+        <DeleteDialog
+          categoryName={category.name}
+          exercisesCount={exercises.length}
+          onConfirm={handleDeleteCategory}
+          onCancel={() => !isDeleting && setDeletingCategory(false)}
+          deleting={isDeleting}
+        />
+      )}
+
       <div className="w-[70%] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left mt-16">
 
         {/* Top Navigation */}
@@ -95,8 +125,12 @@ const CategoryView: React.FC = () => {
             <ArrowLeft size={20} strokeWidth={2.5} /> Volver al Tablero
           </button>
           <div className="flex gap-3">
-            <button className="p-3 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-rose-500 transition-all shadow-sm">
-              <Share2 size={18} />
+            <button
+              onClick={() => setDeletingCategory(true)}
+              className="p-3 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-rose-500 hover:border-rose-200 transition-all shadow-sm"
+              title="Eliminar asignatura"
+            >
+              <Trash2 size={18} />
             </button>
             <Link
               to={`/edit-category/${id}`}
@@ -109,8 +143,14 @@ const CategoryView: React.FC = () => {
 
         {/* Hero Area */}
         <div className="bg-white rounded-[2.5rem] overflow-hidden border border-slate-200 shadow-xl">
-          <div className="relative h-64 md:h-80 overflow-hidden">
-            <img src={category.imageUrl} className="w-full h-full object-cover" alt={category.name} />
+          <div className="relative h-64 md:h-80 bg-slate-900 flex items-center justify-center overflow-hidden">
+            {category.image_url ? (
+              <img src={category.image_url} alt={category.name} className="absolute inset-0 w-full h-full object-cover" />
+            ) : (
+              <div className="text-white/20">
+                <BookOpen size={96} strokeWidth={1.5} />
+              </div>
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent" />
             <div className="absolute bottom-8 left-8 right-8">
               <span className="px-3 py-1 bg-amber-500 text-white text-[10px] font-black uppercase tracking-wider rounded-lg mb-3 inline-block">
@@ -180,11 +220,17 @@ const CategoryView: React.FC = () => {
                     className="bg-white rounded-[2.5rem] border border-slate-200 p-7 flex flex-col md:flex-row items-center gap-6 group hover:border-rose-400 hover:shadow-xl transition-all"
                   >
                     <div className="w-full md:w-32 h-32 bg-slate-100 rounded-[1.5rem] overflow-hidden shrink-0">
-                      <img
-                        src={exercise.imageUrl}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                        alt={exercise.title}
-                      />
+                      {exercise.image_url ? (
+                        <img
+                          src={exercise.image_url}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                          alt={exercise.title}
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-slate-900 flex items-center justify-center">
+                          <Coffee size={32} className="text-white/30" strokeWidth={1.5} />
+                        </div>
+                      )}
                     </div>
                     <div className="flex-grow space-y-3 text-center md:text-left">
                       <div className="flex items-center justify-center md:justify-start gap-3">
@@ -210,7 +256,7 @@ const CategoryView: React.FC = () => {
               ) : (
                 <div className="py-20 text-center space-y-4 bg-slate-50/50 rounded-[2.5rem] border-4 border-dashed border-slate-200">
                   <Coffee size={40} className="mx-auto text-slate-200" strokeWidth={2} />
-                  <h3 className="text-xl font-black text-slate-400 uppercase tracking-tight">No hay ejercicios aún</h3>
+                  <h3 className="text-xl font-black text-slate-400 tracking-tight">No hay ejercicios aún</h3>
                   <Link
                     to="/create-exercise"
                     className="inline-block bg-slate-900 text-white px-8 py-3 rounded-xl font-black text-sm hover:bg-rose-500 transition-all shadow-lg"
@@ -236,7 +282,7 @@ const CategoryView: React.FC = () => {
               ) : (
                 <div className="py-20 text-center space-y-4 bg-slate-50/50 rounded-[2.5rem] border-4 border-dashed border-slate-200">
                   <BookOpen size={40} className="mx-auto text-slate-200" strokeWidth={2} />
-                  <h3 className="text-xl font-black text-slate-400 uppercase tracking-tight">No hay guías aún</h3>
+                  <h3 className="text-xl font-black text-slate-400 tracking-tight">No hay guías aún</h3>
                   <Link
                     to="/create-guide"
                     className="inline-block bg-slate-900 text-white px-8 py-3 rounded-xl font-black text-sm hover:bg-rose-500 transition-all shadow-lg"

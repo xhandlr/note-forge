@@ -88,7 +88,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
       if (mode === 'edit' && categoryId) {
         await updateCategory(categoryId, formData);
         showSuccess('Asignatura actualizada con éxito!');
-        navigate('/dashboard');
+        navigate(`/category/${categoryId}`);
       } else {
         await addCategory(formData);
         showSuccess(`Asignatura ${categoryData.isPinned ? 'fijada y ' : ''}creada con éxito!`);
@@ -134,7 +134,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
             </div>
           </div>
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate(-1)}
             className="p-3 bg-slate-50 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all hover:cursor-pointer"
           >
             <ArrowLeft size={20} strokeWidth={3} />
@@ -253,7 +253,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
             </button>
             <button
               type="button"
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate(-1)}
               className="flex-1 bg-slate-100 text-slate-500 py-3.5 rounded-[1.5rem] font-black text-base hover:bg-slate-200 transition-all"
             >
               Cancelar
