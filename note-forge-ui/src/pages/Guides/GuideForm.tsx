@@ -264,7 +264,7 @@ ${guideExercises
                                 <div className="flex justify-between items-center">
                                     <div className="flex items-center gap-2 text-amber-500">
                                         <GripVertical size={18} strokeWidth={2.5} />
-                                        <h2 className="text-sm font-black uppercase tracking-widest">Orden de los Retos</h2>
+                                        <h2 className="text-sm font-black uppercase tracking-widest">Orden de los Ejercicios</h2>
                                     </div>
                                     <span className="px-3 py-1 bg-slate-100 text-slate-500 text-[10px] font-black rounded-lg uppercase tracking-widest">
                                         {guideExercises.length} Ejercicios
@@ -322,7 +322,7 @@ ${guideExercises
                             <div className="p-8 flex-grow flex flex-col gap-6 border-b border-slate-100">
                                 <div className="flex items-center gap-2 text-slate-900">
                                     <BookOpen size={18} strokeWidth={2.5} />
-                                    <h3 className="text-sm font-black uppercase tracking-widest">Biblioteca de Retos</h3>
+                                    <h3 className="text-sm font-black uppercase tracking-widest">Biblioteca de Ejercicios</h3>
                                 </div>
 
                                 <div className="relative">

@@ -48,6 +48,8 @@ function highlightTextPart(text: string): string {
 }
 
 function highlightLatex(raw: string): string {
+    // Normalizar \r\n → \n para evitar doble salto con pre-wrap
+    raw = raw.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
     const mathRegex = /(\\(?:\(|\[)[\s\S]*?\\(?:\)|\]))/g;
     const parts: string[] = [];
     let last = 0;
@@ -105,8 +107,10 @@ function LatexEditor({ value, onChange, name }: LatexEditorProps) {
     useEffect(() => {
         const el = textareaRef.current;
         if (!el) return;
-        el.style.height = 'auto';
-        el.style.height = el.scrollHeight + 'px';
+        requestAnimationFrame(() => {
+            el.style.height = 'auto';
+            el.style.height = el.scrollHeight + 'px';
+        });
     }, [value]);
 
     // Render preview

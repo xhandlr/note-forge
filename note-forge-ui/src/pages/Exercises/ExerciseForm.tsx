@@ -58,7 +58,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
           const data = await getExerciseById(exerciseId);
           if (data) {
             setTitle(data.title || '');
-            setDifficulty(data.difficulty || 1);
+            setDifficulty(Number(data.difficulty) || 1);
             setCategoryId(data.category_id ? String(data.category_id) : '');
             setEnunciado(data.description || '');
             setResolucion(data.answer || '');
