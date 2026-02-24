@@ -4,10 +4,17 @@ import Navbar from '../../components/Dashboard/Navbar';
 import BgDecoration from '../../components/UI/BgDecoration';
 import Footer from '../../components/UI/Footer';
 import LatexEditor from '../../components/Exercises/LatexEditor';
+import DurationInput from '../../components/Exercises/DurationInput';
+import TagsInput from '../../components/Exercises/TagsInput';
 import { Book, Link as LinkIcon, FileText, Camera, ChevronLeft, ChevronRight, Check, X } from 'lucide-react';
 import { getExerciseById, updateExercise, addExercise } from '../../services/ExerciseService';
 import { getCategories } from '../../services/CategoryService';
 import { useNotification } from '../../contexts/NotificationContext';
+
+interface Tag {
+  text: string;
+  color: string;
+}
 
 interface Reference {
   id: string;
@@ -37,6 +44,11 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
+  // Campos adicionales
+  const [duration, setDuration] = useState('');
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [details, setDetails] = useState('');
+
   // Referencias
   const [references, setReferences] = useState<Reference[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -62,6 +74,9 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
             setCategoryId(data.category_id ? String(data.category_id) : '');
             setEnunciado(data.description || '');
             setResolucion(data.answer || '');
+            setDuration(data.duration || '');
+            setDetails(data.details || '');
+            try { setTags(JSON.parse(data.tags || '[]')); } catch { setTags([]); }
             if (data.image_url) {
               setImagePreview(data.image_url);
             }
@@ -118,6 +133,9 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
           description: enunciado,
           answer: resolucion,
           imageUrl: imagePreview,
+          duration,
+          tags: JSON.stringify(tags),
+          details,
         };
         await updateExercise(exerciseId, exerciseData);
         showSuccess('Ejercicio actualizado con éxito');
@@ -129,6 +147,9 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
         formData.append('categoryId', categoryId);
         formData.append('description', enunciado);
         formData.append('answer', resolucion);
+        formData.append('duration', duration);
+        formData.append('tags', JSON.stringify(tags));
+        formData.append('details', details);
 
         // Agregar imagen si existe
         if (image) {
@@ -267,6 +288,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
                     </select>
                   </div>
                 </div>
+
               </div>
             )}
 
@@ -383,6 +405,33 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
                     value={resolucion}
                     onChange={(e) => setResolucion(e.target.value)}
                   />
+                </div>
+
+                {/* Duración estimada */}
+                <div className="w-full">
+                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">Duración estimada</label>
+                  <DurationInput
+                    value={duration}
+                    onChange={(e) => setDuration(e.target.value)}
+                  />
+                </div>
+
+                {/* Detalles opcionales */}
+                <div className="w-full">
+                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">Detalles opcionales</label>
+                  <textarea
+                    value={details}
+                    onChange={(e) => setDetails(e.target.value)}
+                    placeholder="Notas extra, contexto o aclaraciones..."
+                    rows={3}
+                    className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-400 transition-all font-semibold text-slate-700 text-sm resize-none"
+                  />
+                </div>
+
+                {/* Etiquetas */}
+                <div className="w-full">
+                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">Etiquetas</label>
+                  <TagsInput value={tags} onChange={setTags} />
                 </div>
               </div>
             )}

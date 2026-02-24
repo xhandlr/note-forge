@@ -15,7 +15,7 @@ function DurationInput({ value, onChange }: DurationInputProps) {
                 onChange={onChange}
                 min="1"
                 step="1"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-400 transition-all font-semibold text-slate-700"
                 placeholder="Escribe los minutos"
             />
             <div className="flex flex-wrap gap-2">
@@ -28,10 +28,10 @@ function DurationInput({ value, onChange }: DurationInputProps) {
                                 target: { name: "duration", value: time.toString() },
                             } as React.ChangeEvent<HTMLInputElement>)
                         }
-                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                        className={`px-4 py-2 rounded-xl font-black text-sm transition-all border-2 ${
                             value === time.toString()
-                                ? "bg-purple-600 text-white"
-                                : "bg-purple-100 text-purple-700 hover:bg-purple-200"
+                                ? "bg-rose-500 text-white border-rose-500 shadow-lg shadow-rose-200"
+                                : "bg-white text-slate-900 border-slate-200 hover:border-rose-300"
                         }`}
                     >
                         {time} min

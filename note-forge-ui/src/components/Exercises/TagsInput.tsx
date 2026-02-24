@@ -13,7 +13,7 @@ interface Tag {
 
 function TagsInput({ value = [], onChange }: TagsInputProps) {
     const [currentTag, setCurrentTag] = useState('');
-    const [selectedColor, setSelectedColor] = useState<ColorName>('purple');
+    const [selectedColor, setSelectedColor] = useState<ColorName>('rose');
 
     const addTag = () => {
         const newTag = currentTag.trim();
@@ -48,7 +48,7 @@ function TagsInput({ value = [], onChange }: TagsInputProps) {
                     onChange={(e) => setCurrentTag(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Agregar etiqueta"
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                    className="flex-1 px-5 py-3 bg-slate-50 border-2 border-slate-100 rounded-xl outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-400 transition-all font-semibold text-slate-700"
                 />
 
                 <ColorPicker
@@ -59,7 +59,7 @@ function TagsInput({ value = [], onChange }: TagsInputProps) {
                 <button
                     type="button"
                     onClick={addTag}
-                    className="px-6 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 hover:cursor-pointer transition-colors font-medium flex items-center gap-2"
+                    className="px-6 py-3 bg-slate-900 text-white rounded-xl hover:bg-rose-500 cursor-pointer transition-all font-black text-sm flex items-center gap-2 shadow-md"
                 >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -93,7 +93,7 @@ function TagsInput({ value = [], onChange }: TagsInputProps) {
                 </div>
             )}
 
-            <p className="text-xs text-gray-500">Presiona Enter o haz clic en Agregar para añadir etiquetas</p>
+            <p className="text-xs text-slate-400 font-semibold ml-1">Presiona Enter o clic en Agregar para añadir etiquetas</p>
         </div>
     );
 }

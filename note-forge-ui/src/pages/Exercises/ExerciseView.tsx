@@ -131,6 +131,14 @@ const ExerciseView: React.FC = () => {
   // Parse answer as resolution steps
   const resolutionSteps = exercise.answer ? exercise.answer.split('\\n') : [];
 
+  // Parse tags JSON (stored as '[{"text":"...","color":"..."}]' or legacy string[])
+  const parsedTags: { text: string; color: string }[] = (() => {
+    const raw = exercise.tags;
+    if (!raw) return [];
+    if (Array.isArray(raw)) return raw;
+    try { return JSON.parse(raw); } catch { return []; }
+  })();
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Navbar />
@@ -197,6 +205,19 @@ const ExerciseView: React.FC = () => {
               </div>
             </div>
 
+            {/* Detalles opcionales */}
+            {exercise.details && (
+              <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden">
+                <div className="px-8 py-5 border-b border-slate-100 flex items-center gap-2">
+                  <FileText size={18} className="text-slate-400" strokeWidth={2} />
+                  <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Detalles</h2>
+                </div>
+                <div className="p-7 lg:p-9 text-sm text-slate-600 font-semibold leading-relaxed whitespace-pre-wrap">
+                  {exercise.details}
+                </div>
+              </div>
+            )}
+
             {/* Resolución Section */}
             <div className={`rounded-[2.5rem] border transition-all shadow-xl ${showResolution ? 'bg-slate-900 border-slate-900' : 'bg-white border-slate-200'}`}>
                <button
@@ -240,7 +261,7 @@ const ExerciseView: React.FC = () => {
           {/* Sidebar Area */}
           <div className="lg:col-span-1 space-y-6">
             {/* Tags Card */}
-            {exercise.tags && exercise.tags.length > 0 && (
+            {parsedTags.length > 0 && (
               <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden">
                  <div className="px-6 py-4 border-b border-slate-100 bg-slate-50 flex items-center gap-2">
                     <Book size={16} className="text-amber-500" strokeWidth={2} />
@@ -248,9 +269,9 @@ const ExerciseView: React.FC = () => {
                  </div>
                  <div className="p-4 space-y-3">
                     <div className="flex flex-wrap gap-2">
-                      {exercise.tags.map((tag: string, i: number) => (
+                      {parsedTags.map((tag, i) => (
                         <span key={i} className="px-3 py-1.5 bg-slate-100 text-slate-700 text-[10px] font-black rounded-lg uppercase tracking-wider hover:bg-amber-100 hover:text-amber-700 transition-colors">
-                          {tag}
+                          {tag.text}
                         </span>
                       ))}
                     </div>
