@@ -28,8 +28,22 @@ function Dashboard() {
     const [guides, setGuides] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [showFilter, setShowFilter] = useState(false);
+    const [filterCategories, setFilterCategories] = useState<number[]>([]);
+    const [filterDifficulties, setFilterDifficulties] = useState<number[]>([]);
+    const [filterHasImage, setFilterHasImage] = useState<boolean | null>(null);
     const [deletingCategory, setDeletingCategory] = useState<{ id: number; name: string; exercisesCount: number } | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+
+    const activeFiltersCount = filterCategories.length + filterDifficulties.length + (filterHasImage !== null ? 1 : 0);
+
+    const toggleCategory = (id: number) =>
+        setFilterCategories(prev => prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]);
+
+    const toggleDifficulty = (d: number) =>
+        setFilterDifficulties(prev => prev.includes(d) ? prev.filter(x => x !== d) : [...prev, d]);
+
+    const clearFilters = () => { setFilterCategories([]); setFilterDifficulties([]); setFilterHasImage(null); };
 
     const categoryService = useCategoryService();
     const exerciseService = useExerciseService();
@@ -121,12 +135,16 @@ function Dashboard() {
         .filter(c => !q || c.name.toLowerCase().includes(q))
         .sort((a, b) => (b.is_pinned ? 1 : 0) - (a.is_pinned ? 1 : 0));
 
-    const filteredExercises = exercises.filter(e =>
-        !q ||
-        e.title?.toLowerCase().includes(q) ||
-        e.description?.toLowerCase().includes(q) ||
-        categories.find(c => c.id === e.category_id)?.name.toLowerCase().includes(q)
-    );
+    const filteredExercises = exercises.filter(e => {
+        const matchesSearch = !q ||
+            e.title?.toLowerCase().includes(q) ||
+            e.description?.toLowerCase().includes(q) ||
+            categories.find(c => c.id === e.category_id)?.name.toLowerCase().includes(q);
+        const matchesCategory = filterCategories.length === 0 || filterCategories.includes(e.category_id);
+        const matchesDifficulty = filterDifficulties.length === 0 || filterDifficulties.includes(Number(e.difficulty));
+        const matchesImage = filterHasImage === null || (filterHasImage ? !!e.image_url : !e.image_url);
+        return matchesSearch && matchesCategory && matchesDifficulty && matchesImage;
+    });
 
     const filteredGuides = guides.filter(g =>
         !q ||
@@ -216,9 +234,23 @@ function Dashboard() {
                             {activeTab === 'guias' && 'Gestión de Guías'}
                         </h2>
                         <div className="flex gap-3">
-                            <button className="p-3 bg-white rounded-xl border border-slate-200 text-slate-400 hover:text-slate-900 transition-all shadow-lg">
-                                <Filter size={18} />
-                            </button>
+                            {activeTab === 'ejercicios' && (
+                                <button
+                                    onClick={() => setShowFilter(v => !v)}
+                                    className={`relative p-3 rounded-xl border transition-all shadow-lg ${
+                                        showFilter || activeFiltersCount > 0
+                                            ? 'bg-rose-500 border-rose-500 text-white'
+                                            : 'bg-white border-slate-200 text-slate-400 hover:text-slate-900'
+                                    }`}
+                                >
+                                    <Filter size={18} />
+                                    {activeFiltersCount > 0 && (
+                                        <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-amber-400 text-slate-900 rounded-full text-[9px] font-black flex items-center justify-center">
+                                            {activeFiltersCount}
+                                        </span>
+                                    )}
+                                </button>
+                            )}
                             <div className="relative group">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-rose-500 transition-colors" size={18} />
                                 <input
@@ -232,6 +264,82 @@ function Dashboard() {
                         </div>
                     </div>
                 </div>
+
+                {/* Panel de filtros — solo ejercicios */}
+                {showFilter && activeTab === 'ejercicios' && (
+                    <div className="bg-white border border-slate-200 rounded-[2rem] p-6 shadow-xl space-y-5 -mt-2">
+                        {/* Asignatura */}
+                        <div className="space-y-3">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Asignatura</span>
+                            <div className="flex flex-wrap gap-2">
+                                {categories.map(cat => (
+                                    <button
+                                        key={cat.id}
+                                        onClick={() => toggleCategory(cat.id)}
+                                        className={`px-4 py-2 rounded-xl font-black text-xs transition-all ${
+                                            filterCategories.includes(cat.id)
+                                                ? 'bg-amber-500 text-white shadow-lg'
+                                                : 'bg-slate-50 text-slate-500 hover:bg-amber-50 hover:text-amber-600'
+                                        }`}
+                                    >
+                                        {cat.name}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Dificultad */}
+                        <div className="space-y-3">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Dificultad</span>
+                            <div className="flex flex-wrap gap-2">
+                                {[1,2,3,4,5].map(d => {
+                                    const active = filterDifficulties.includes(d);
+                                    const label = ['Introductorio','Elemental','Intermedio','Avanzado','Especializado'][d-1];
+                                    return (
+                                        <button
+                                            key={d}
+                                            onClick={() => toggleDifficulty(d)}
+                                            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-black text-xs transition-all ${
+                                                active ? 'bg-rose-500 text-white shadow-lg' : 'bg-slate-50 text-slate-500 hover:bg-rose-50 hover:text-rose-500'
+                                            }`}
+                                        >
+                                            <div className="flex gap-0.5">
+                                                {[...Array(5)].map((_,i) => (
+                                                    <div key={i} className={`w-1.5 h-1.5 rounded-full ${i < d ? (active ? 'bg-white' : 'bg-amber-400') : (active ? 'bg-white/30' : 'bg-slate-200')}`} />
+                                                ))}
+                                            </div>
+                                            {label}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Imagen */}
+                        <div className="space-y-3">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Imagen</span>
+                            <div className="flex gap-2">
+                                {[{ label: 'Con imagen', val: true }, { label: 'Sin imagen', val: false }].map(({ label, val }) => (
+                                    <button
+                                        key={label}
+                                        onClick={() => setFilterHasImage(prev => prev === val ? null : val)}
+                                        className={`px-4 py-2 rounded-xl font-black text-xs transition-all ${
+                                            filterHasImage === val ? 'bg-violet-500 text-white shadow-lg' : 'bg-slate-50 text-slate-500 hover:bg-violet-50 hover:text-violet-500'
+                                        }`}
+                                    >
+                                        {label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {activeFiltersCount > 0 && (
+                            <button onClick={clearFilters} className="text-xs font-black text-slate-400 hover:text-rose-500 transition-colors">
+                                Limpiar filtros
+                            </button>
+                        )}
+                    </div>
+                )}
 
                 {/* Contenido */}
                 <div className="min-h-[500px]">
