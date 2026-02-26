@@ -381,13 +381,14 @@ function Dashboard() {
                             )}
 
                             {activeTab === 'guias' && (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                                     {filteredGuides.map((guide) => (
                                         <GuideCard
                                             key={guide.id}
+                                            id={guide.id}
                                             title={guide.title}
-                                            status={guide.status}
                                             subject={guide.author}
+                                            exerciseCount={guide.exercise_count}
                                         />
                                     ))}
                                     <Link to="/create-guide" className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[300px] flex flex-col items-center justify-center text-slate-300 hover:bg-rose-50 hover:border-rose-400 hover:text-rose-500 transition-all group shadow-2xl">

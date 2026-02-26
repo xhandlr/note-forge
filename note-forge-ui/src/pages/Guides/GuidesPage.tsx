@@ -95,58 +95,57 @@ function GuidesPage() {
                         )}
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {filteredGuides.map(guide => (
                             <div
                                 key={guide.id}
-                                className="bg-white rounded-[2rem] border border-slate-200 shadow-xl overflow-hidden group hover:border-rose-200 transition-all"
+                                className="bg-white rounded-[1.5rem] border border-slate-200 shadow-lg overflow-hidden group hover:border-rose-200 hover:shadow-xl transition-all cursor-pointer"
+                                onClick={() => navigate(`/guide/${guide.id}`)}
                             >
                                 {/* Cover */}
                                 <div
-                                    className="aspect-[3/2] bg-slate-900 relative overflow-hidden flex flex-col items-center justify-center p-8 cursor-pointer"
-                                    onClick={() => navigate(`/edit-guide/${guide.id}`)}
+                                    className="aspect-[4/3] bg-slate-900 relative overflow-hidden flex flex-col items-center justify-center p-5"
+                                    onClick={() => navigate(`/guide/${guide.id}`)}
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900" />
-                                    <div className="relative z-10 text-center space-y-2 w-full">
-                                        <div className="w-10 h-10 bg-rose-500 rounded-xl flex items-center justify-center mx-auto mb-3">
-                                            <FileText size={20} className="text-white" />
+                                    <div className="relative z-10 text-center space-y-1.5 w-full">
+                                        <div className="w-8 h-8 bg-rose-500 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                            <FileText size={15} className="text-white" />
                                         </div>
-                                        <p className="text-white font-black text-sm leading-tight line-clamp-2">{guide.title}</p>
+                                        <p className="text-white font-black text-xs leading-tight line-clamp-2">{guide.title}</p>
                                         {guide.author && (
-                                            <p className="text-slate-400 text-[10px] font-bold">{guide.author}</p>
+                                            <p className="text-slate-400 text-[9px] font-bold">{guide.author}</p>
                                         )}
                                     </div>
-                                    {/* Decorative lines */}
-                                    <div className="absolute bottom-4 left-4 right-4 space-y-1.5 opacity-20">
-                                        <div className="h-1 bg-white rounded-full w-full" />
-                                        <div className="h-1 bg-white rounded-full w-4/5" />
-                                        <div className="h-1 bg-white rounded-full w-3/5" />
+                                    <div className="absolute bottom-3 left-3 right-3 space-y-1 opacity-20">
+                                        <div className="h-0.5 bg-white rounded-full w-full" />
+                                        <div className="h-0.5 bg-white rounded-full w-4/5" />
+                                        <div className="h-0.5 bg-white rounded-full w-3/5" />
                                     </div>
                                     <div className="absolute inset-0 bg-rose-500/0 group-hover:bg-rose-500/10 transition-colors" />
                                 </div>
 
                                 {/* Info */}
-                                <div className="p-5 space-y-4">
+                                <div className="p-3.5 space-y-3" onClick={e => e.stopPropagation()}>
                                     <div>
-                                        <h4 className="font-black text-slate-900 text-sm leading-tight line-clamp-1">{guide.title}</h4>
-                                        <p className="text-slate-400 text-xs font-semibold mt-1 flex items-center gap-1.5">
-                                            <BookOpen size={12} />
+                                        <h4 className="font-black text-slate-900 text-xs leading-tight line-clamp-1">{guide.title}</h4>
+                                        <p className="text-slate-400 text-[10px] font-semibold mt-0.5 flex items-center gap-1">
+                                            <BookOpen size={10} />
                                             {guide.exercise_count ?? 0} ejercicio{(guide.exercise_count ?? 0) !== 1 ? 's' : ''}
-                                            {guide.author && <><span>·</span>{guide.author}</>}
                                         </p>
                                     </div>
-                                    <div className="flex gap-2">
+                                    <div className="flex gap-1.5">
                                         <button
                                             onClick={() => navigate(`/edit-guide/${guide.id}`)}
-                                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-slate-50 text-slate-700 rounded-xl font-black text-xs hover:bg-slate-900 hover:text-white transition-all"
+                                            className="flex-1 flex items-center justify-center gap-1 py-2 bg-slate-50 text-slate-700 rounded-lg font-black text-[10px] hover:bg-slate-900 hover:text-white transition-all"
                                         >
-                                            <Edit3 size={14} /> Editar
+                                            <Edit3 size={11} /> Editar
                                         </button>
                                         <button
                                             onClick={() => handleDelete(guide.id)}
-                                            className="p-2.5 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
+                                            className="p-2 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
                                         >
-                                            <Trash2 size={16} />
+                                            <Trash2 size={13} />
                                         </button>
                                     </div>
                                 </div>

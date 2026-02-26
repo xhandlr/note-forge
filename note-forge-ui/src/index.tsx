@@ -20,6 +20,7 @@ import Exercises from './pages/Exercises/ExercisesPage';
 import Guides from './pages/Guides/GuidesPage';
 import CreateGuide from './pages/Guides/CreateGuide';
 import EditGuide from './pages/Guides/EditGuide';
+import GuideView from './pages/Guides/GuideView';
 import CreateCategory from './pages/Categories/CreateCategory';
 import EditCategory from './pages/Categories/EditCategory';
 import CategoryView from './pages/Categories/CategoryView';
@@ -62,6 +63,7 @@ root.render(
 
                         <Route path="/guides" element={<ProtectedRoute><Guides /></ProtectedRoute>} />
                         <Route path="/create-guide" element={<ProtectedRoute><CreateGuide /></ProtectedRoute>} />
+                        <Route path="/guide/:id" element={<ProtectedRoute><GuideView /></ProtectedRoute>} />
                         <Route path="/edit-guide/:id" element={<ProtectedRoute><EditGuide /></ProtectedRoute>} />
 
                         <Route path="*" element={<Navigate to="/" replace />} />
