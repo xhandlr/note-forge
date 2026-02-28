@@ -160,9 +160,16 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
         showSuccess('Ejercicio creado con éxito');
       }
       navigate('/dashboard');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error al guardar ejercicio:', error);
-      showError('Error al guardar el ejercicio');
+
+      // Detectar error de tags muy largo
+      const errorMessage = error?.message || error?.toString() || '';
+      if (errorMessage.includes('Data too long') || errorMessage.includes('tags')) {
+        showError('⚠️ Las etiquetas son muy largas. Intenta reducir la cantidad o la longitud de los tags');
+      } else {
+        showError('Error al guardar el ejercicio');
+      }
     }
   };
 
