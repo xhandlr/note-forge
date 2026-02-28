@@ -67,6 +67,21 @@ const Guide = {
     async removeAllExercises(guideId) {
         const query = 'DELETE FROM guide_exercises WHERE guide_id = ?';
         await pool.query(query, [guideId]);
+    },
+
+    async addCategories(guideId, categoryIds) {
+        if (!categoryIds || categoryIds.length === 0) {
+            return;
+        }
+
+        const values = categoryIds.map(categoryId => [guideId, categoryId]);
+        const query = 'INSERT INTO guides_categories (guide_id, category_id) VALUES ?';
+        await pool.query(query, [values]);
+    },
+
+    async removeAllCategories(guideId) {
+        const query = 'DELETE FROM guides_categories WHERE guide_id = ?';
+        await pool.query(query, [guideId]);
     }
 };
 

@@ -3,9 +3,9 @@ const guideService = require('../services/guideService');
 async function createGuideRequest(req, res) {
     try {
         const userId = req.user.id; // Obtener el id del usuario desde el token
-        const { title, author, description, exerciseIds } = req.body;
+        const { title, author, description, exerciseIds, categoryIds } = req.body;
 
-        const result = await guideService.createGuide(title, author, description, userId, exerciseIds);
+        const result = await guideService.createGuide(title, author, description, userId, exerciseIds, categoryIds);
         res.status(201).json(result);
     } catch (error) {
         console.log(error);
@@ -41,9 +41,9 @@ async function getGuidesRequest(req, res) {
 async function updateGuideRequest(req, res) {
     try {
         const guideId = req.params.id;
-        const { title, author, description, exerciseIds } = req.body;
+        const { title, author, description, exerciseIds, categoryIds } = req.body;
 
-        const updatedGuide = await guideService.updateGuide(guideId, title, author, description, exerciseIds);
+        const updatedGuide = await guideService.updateGuide(guideId, title, author, description, exerciseIds, categoryIds);
 
         res.status(200).json(updatedGuide);
     } catch (error) {

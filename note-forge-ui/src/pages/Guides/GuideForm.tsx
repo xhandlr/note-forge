@@ -87,6 +87,8 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
     const [showPreview, setShowPreview] = useState(false);
     const [previewTab, setPreviewTab] = useState<'render' | 'latex'>('render');
     const [showExportModal, setShowExportModal] = useState(false);
+    const [categories, setCategories] = useState<any[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -99,6 +101,24 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
             }
         };
         fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                // Assuming you have access to the categories through exerciseService or a categoryService
+                // For now, using exerciseService if it has a getCategories method
+                // Otherwise, you'll need to use a fetch or create a categoryService
+                const response = await fetch('/api/categories');
+                if (response.ok) {
+                    const data = await response.json();
+                    setCategories(data);
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        };
+        fetchCategories();
     }, []);
 
     useEffect(() => {
@@ -213,6 +233,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
             author: guideAuthor,
             description: generateLatex(),
             exerciseIds: guideExercises.map(ex => ex.id),
+            categoryIds: selectedCategories,
         };
         try {
             if (mode === 'edit' && guideId) {
@@ -313,6 +334,58 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                                             className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-rose-100 focus:border-rose-400 transition-all font-bold text-slate-700"
                                         />
                                     </div>
+                                </div>
+                            </section>
+
+                            <section className="space-y-6">
+                                <div className="flex items-center gap-2 text-blue-500">
+                                    <BookOpen size={18} strokeWidth={2.5} />
+                                    <h2 className="text-sm font-black uppercase tracking-widest">Asignaturas</h2>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-slate-400 ml-1">Selecciona asignaturas (opcional)</label>
+                                    <div className="w-full max-h-48 overflow-y-auto bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2">
+                                        {categories.length === 0 ? (
+                                            <p className="text-slate-400 text-sm">No hay asignaturas disponibles</p>
+                                        ) : (
+                                            categories.map(category => (
+                                                <label key={category.id} className="flex items-center gap-3 p-2 hover:bg-white rounded-lg cursor-pointer transition-all">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedCategories.includes(category.id)}
+                                                        onChange={(e) => {
+                                                            if (e.target.checked) {
+                                                                setSelectedCategories([...selectedCategories, category.id]);
+                                                            } else {
+                                                                setSelectedCategories(selectedCategories.filter(id => id !== category.id));
+                                                            }
+                                                        }}
+                                                        className="w-4 h-4 cursor-pointer accent-blue-500"
+                                                    />
+                                                    <span className="font-bold text-slate-700">{category.name}</span>
+                                                </label>
+                                            ))
+                                        )}
+                                    </div>
+                                    {selectedCategories.length > 0 && (
+                                        <div className="flex flex-wrap gap-2 mt-2">
+                                            {selectedCategories.map(catId => {
+                                                const cat = categories.find(c => c.id === catId);
+                                                return (
+                                                    <span key={catId} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-black flex items-center gap-2">
+                                                        {cat?.name}
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setSelectedCategories(selectedCategories.filter(id => id !== catId))}
+                                                            className="hover:text-blue-900 font-black"
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    </span>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
                                 </div>
                             </section>
 

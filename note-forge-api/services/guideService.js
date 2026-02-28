@@ -1,7 +1,7 @@
 const Guide = require('../models/guideModel');
 const pool = require('../config/db');
 
-const createGuide = async (title, author, description, userId, exerciseIds) => {
+const createGuide = async (title, author, description, userId, exerciseIds, categoryIds) => {
     const connection = await pool.getConnection();
 
     try {
@@ -13,6 +13,11 @@ const createGuide = async (title, author, description, userId, exerciseIds) => {
         // Agregar ejercicios si existen
         if (exerciseIds && exerciseIds.length > 0) {
             await Guide.addExercises(guideId, exerciseIds);
+        }
+
+        // Agregar categorías si existen
+        if (categoryIds && categoryIds.length > 0) {
+            await Guide.addCategories(guideId, categoryIds);
         }
 
         await connection.commit();
@@ -34,7 +39,7 @@ const getGuides = async (userId) => {
     return await Guide.findByUserId(userId);
 };
 
-const updateGuide = async (guideId, title, author, description, exerciseIds) => {
+const updateGuide = async (guideId, title, author, description, exerciseIds, categoryIds) => {
     const connection = await pool.getConnection();
 
     try {
@@ -52,6 +57,13 @@ const updateGuide = async (guideId, title, author, description, exerciseIds) => 
 
         if (exerciseIds && exerciseIds.length > 0) {
             await Guide.addExercises(guideId, exerciseIds);
+        }
+
+        // Actualizar categorías: eliminar todas y agregar las nuevas
+        await Guide.removeAllCategories(guideId);
+
+        if (categoryIds && categoryIds.length > 0) {
+            await Guide.addCategories(guideId, categoryIds);
         }
 
         await connection.commit();
