@@ -71,6 +71,7 @@ interface Guide {
     author?: string;
     exercises?: Exercise[];
     exercise_count?: number;
+    categories?: Array<{ id: number; name: string }>;
 }
 
 const GuideView: React.FC = () => {
@@ -215,21 +216,32 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                 {/* Stats + Tabs */}
                 <div className="w-[70%] mx-auto px-4 sm:px-6 lg:px-8 py-5">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                        <div className="flex items-center gap-5">
-                            <div className="flex items-center gap-1.5 text-slate-500 text-sm font-bold">
-                                <BookOpen size={14} className="text-slate-400" />
-                                {exercises.length} ejercicio{exercises.length !== 1 ? 's' : ''}
-                            </div>
-                            {totalTime > 0 && (
+                        <div className="flex flex-col gap-3 flex-1">
+                            <div className="flex items-center gap-5 flex-wrap">
                                 <div className="flex items-center gap-1.5 text-slate-500 text-sm font-bold">
-                                    <Clock size={14} className="text-slate-400" />
-                                    ~ {totalTime} min
+                                    <BookOpen size={14} className="text-slate-400" />
+                                    {exercises.length} ejercicio{exercises.length !== 1 ? 's' : ''}
                                 </div>
-                            )}
-                            {avgDiff > 0 && (
-                                <div className="flex items-center gap-1">
-                                    {[...Array(5)].map((_, i) => (
-                                        <div key={i} className={`w-2 h-2 rounded-full ${i < avgDiff ? 'bg-amber-400' : 'bg-slate-200'}`} />
+                                {totalTime > 0 && (
+                                    <div className="flex items-center gap-1.5 text-slate-500 text-sm font-bold">
+                                        <Clock size={14} className="text-slate-400" />
+                                        ~ {totalTime} min
+                                    </div>
+                                )}
+                                {avgDiff > 0 && (
+                                    <div className="flex items-center gap-1">
+                                        {[...Array(5)].map((_, i) => (
+                                            <div key={i} className={`w-2 h-2 rounded-full ${i < avgDiff ? 'bg-amber-400' : 'bg-slate-200'}`} />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            {guide.categories && guide.categories.length > 0 && (
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    {guide.categories.map(cat => (
+                                        <span key={cat.id} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-bold">
+                                            {cat.name}
+                                        </span>
                                     ))}
                                 </div>
                             )}

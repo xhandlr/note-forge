@@ -4,6 +4,7 @@ import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
 import { useExerciseService } from '../../services/ServiceFactory';
 import { addGuide, updateGuide, getGuideById } from "../../services/GuideService";
+import { getCategories } from "../../services/CategoryService";
 import { FileText, GripVertical, Trash2, Eye, ArrowLeft, Plus, Search, BookOpen, Code, Type, X, Save, Download } from 'lucide-react';
 import { useNotification } from '../../contexts/NotificationContext';
 import ExportGuideModal from '../../components/Guides/ExportGuideModal';
@@ -106,14 +107,8 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                // Assuming you have access to the categories through exerciseService or a categoryService
-                // For now, using exerciseService if it has a getCategories method
-                // Otherwise, you'll need to use a fetch or create a categoryService
-                const response = await fetch('/api/categories');
-                if (response.ok) {
-                    const data = await response.json();
-                    setCategories(data);
-                }
+                const data = await getCategories();
+                setCategories(data);
             } catch (error) {
                 console.error('Error loading categories:', error);
             }
@@ -130,6 +125,9 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
                         setGuideTitle(data.title || '');
                         setGuideAuthor(data.author || '');
                         if (data.exercises) setGuideExercises(data.exercises);
+                        if (data.categories) {
+                            setSelectedCategories(data.categories.map((cat: any) => cat.id));
+                        }
                     }
                     setLoading(false);
                 } catch {
@@ -337,57 +335,6 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                                 </div>
                             </section>
 
-                            <section className="space-y-6">
-                                <div className="flex items-center gap-2 text-blue-500">
-                                    <BookOpen size={18} strokeWidth={2.5} />
-                                    <h2 className="text-sm font-black uppercase tracking-widest">Asignaturas</h2>
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-slate-400 ml-1">Selecciona asignaturas (opcional)</label>
-                                    <div className="w-full max-h-48 overflow-y-auto bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2">
-                                        {categories.length === 0 ? (
-                                            <p className="text-slate-400 text-sm">No hay asignaturas disponibles</p>
-                                        ) : (
-                                            categories.map(category => (
-                                                <label key={category.id} className="flex items-center gap-3 p-2 hover:bg-white rounded-lg cursor-pointer transition-all">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={selectedCategories.includes(category.id)}
-                                                        onChange={(e) => {
-                                                            if (e.target.checked) {
-                                                                setSelectedCategories([...selectedCategories, category.id]);
-                                                            } else {
-                                                                setSelectedCategories(selectedCategories.filter(id => id !== category.id));
-                                                            }
-                                                        }}
-                                                        className="w-4 h-4 cursor-pointer accent-blue-500"
-                                                    />
-                                                    <span className="font-bold text-slate-700">{category.name}</span>
-                                                </label>
-                                            ))
-                                        )}
-                                    </div>
-                                    {selectedCategories.length > 0 && (
-                                        <div className="flex flex-wrap gap-2 mt-2">
-                                            {selectedCategories.map(catId => {
-                                                const cat = categories.find(c => c.id === catId);
-                                                return (
-                                                    <span key={catId} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-black flex items-center gap-2">
-                                                        {cat?.name}
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => setSelectedCategories(selectedCategories.filter(id => id !== catId))}
-                                                            className="hover:text-blue-900 font-black"
-                                                        >
-                                                            ×
-                                                        </button>
-                                                    </span>
-                                                );
-                                            })}
-                                        </div>
-                                    )}
-                                </div>
-                            </section>
 
                             <section className="space-y-6 pt-4">
                                 <div className="flex justify-between items-center">
@@ -441,53 +388,109 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                             </section>
                         </div>
 
-                        {/* Right — Biblioteca */}
+                        {/* Right — Biblioteca + Asignaturas */}
                         <div className="lg:w-1/3 bg-slate-50/50 flex flex-col overflow-hidden">
-                            <div className="p-8 flex-grow flex flex-col gap-6">
-                                <div className="flex items-center gap-2 text-slate-900">
-                                    <BookOpen size={18} strokeWidth={2.5} />
-                                    <h3 className="text-sm font-black uppercase tracking-widest">Biblioteca de Ejercicios</h3>
-                                </div>
+                            <div className="p-8 flex-grow flex flex-col gap-6 overflow-y-auto">
+                                {/* Biblioteca */}
+                                <div className="flex-shrink-0">
+                                    <div className="flex items-center gap-2 text-slate-900 mb-4">
+                                        <BookOpen size={18} strokeWidth={2.5} />
+                                        <h3 className="text-sm font-black uppercase tracking-widest">Biblioteca de Ejercicios</h3>
+                                    </div>
 
-                                <div className="relative">
-                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
-                                    <input
-                                        type="text"
-                                        placeholder="Buscar retos..."
-                                        value={searchQuery}
-                                        onChange={(e) => handleSearch(e.target.value)}
-                                        className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-rose-100 text-sm font-bold"
-                                    />
-                                </div>
+                                    <div className="relative mb-4">
+                                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
+                                        <input
+                                            type="text"
+                                            placeholder="Buscar retos..."
+                                            value={searchQuery}
+                                            onChange={(e) => handleSearch(e.target.value)}
+                                            className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-rose-100 text-sm font-bold"
+                                        />
+                                    </div>
 
-                                <div className="flex-grow overflow-y-auto space-y-2 pr-1 custom-scrollbar">
-                                    {filteredExercises.map(exercise => (
-                                        <div
-                                            key={exercise.id}
-                                            draggable
-                                            onDragStart={(e) => handleDragStart(e, exercise.id)}
-                                            className="bg-white p-4 rounded-xl border border-slate-200 hover:border-amber-400 transition-all flex items-center justify-between group cursor-grab shadow-sm"
-                                        >
-                                            <div className="min-w-0">
-                                                <p className="font-bold text-slate-900 text-xs truncate">{exercise.title}</p>
-                                                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
-                                                    Nivel {exercise.difficulty || 'N/A'}
-                                                    {exercise.duration ? ` · ${exercise.duration} min` : ''}
-                                                </p>
-                                            </div>
-                                            <button
-                                                onClick={() => handleAddToGuide(exercise)}
-                                                className="p-2 bg-slate-50 text-slate-400 rounded-lg group-hover:bg-amber-500 group-hover:text-white transition-all"
+                                    <div className="space-y-2 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+                                        {filteredExercises.map(exercise => (
+                                            <div
+                                                key={exercise.id}
+                                                draggable
+                                                onDragStart={(e) => handleDragStart(e, exercise.id)}
+                                                className="bg-white p-4 rounded-xl border border-slate-200 hover:border-amber-400 transition-all flex items-center justify-between group cursor-grab shadow-sm"
                                             >
-                                                <Plus size={16} strokeWidth={3} />
-                                            </button>
+                                                <div className="min-w-0">
+                                                    <p className="font-bold text-slate-900 text-xs truncate">{exercise.title}</p>
+                                                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
+                                                        Nivel {exercise.difficulty || 'N/A'}
+                                                        {exercise.duration ? ` · ${exercise.duration} min` : ''}
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleAddToGuide(exercise)}
+                                                    className="p-2 bg-slate-50 text-slate-400 rounded-lg group-hover:bg-amber-500 group-hover:text-white transition-all"
+                                                >
+                                                    <Plus size={16} strokeWidth={3} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                        {filteredExercises.length === 0 && (
+                                            <div className="py-8 text-center">
+                                                <p className="text-slate-400 font-semibold text-sm">No hay ejercicios disponibles</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Asignaturas */}
+                                <div className="flex-shrink-0 border-t border-slate-200 pt-6">
+                                    <div className="flex items-center gap-2 text-blue-500 mb-4">
+                                        <BookOpen size={18} strokeWidth={2.5} />
+                                        <h3 className="text-sm font-black uppercase tracking-widest">Asignaturas</h3>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-slate-400 ml-1">Selecciona (opcional)</label>
+                                        <div className="max-h-48 overflow-y-auto bg-white border border-slate-200 rounded-2xl p-3 space-y-2 custom-scrollbar">
+                                            {categories.length === 0 ? (
+                                                <p className="text-slate-400 text-sm">No hay asignaturas disponibles</p>
+                                            ) : (
+                                                categories.map(category => (
+                                                    <label key={category.id} className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer transition-all">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedCategories.includes(category.id)}
+                                                            onChange={(e) => {
+                                                                if (e.target.checked) {
+                                                                    setSelectedCategories([...selectedCategories, category.id]);
+                                                                } else {
+                                                                    setSelectedCategories(selectedCategories.filter(id => id !== category.id));
+                                                                }
+                                                            }}
+                                                            className="w-4 h-4 cursor-pointer accent-blue-500"
+                                                        />
+                                                        <span className="font-bold text-slate-700 text-sm">{category.name}</span>
+                                                    </label>
+                                                ))
+                                            )}
                                         </div>
-                                    ))}
-                                    {filteredExercises.length === 0 && (
-                                        <div className="py-8 text-center">
-                                            <p className="text-slate-400 font-semibold text-sm">No hay ejercicios disponibles</p>
-                                        </div>
-                                    )}
+                                        {selectedCategories.length > 0 && (
+                                            <div className="flex flex-wrap gap-2 mt-2">
+                                                {selectedCategories.map(catId => {
+                                                    const cat = categories.find(c => c.id === catId);
+                                                    return (
+                                                        <span key={catId} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-black flex items-center gap-2">
+                                                            {cat?.name}
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setSelectedCategories(selectedCategories.filter(id => id !== catId))}
+                                                                className="hover:text-blue-900 font-black"
+                                                            >
+                                                                ×
+                                                            </button>
+                                                        </span>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>

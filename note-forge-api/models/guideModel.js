@@ -24,7 +24,17 @@ const Guide = {
         `;
         const [exerciseRows] = await pool.query(exercisesQuery, [guideId]);
 
+        // Fetch categories for this guide
+        const categoriesQuery = `
+            SELECT c.id, c.name
+            FROM guides_categories gc
+            INNER JOIN categories c ON gc.category_id = c.id
+            WHERE gc.guide_id = ?
+        `;
+        const [categoryRows] = await pool.query(categoriesQuery, [guideId]);
+
         guide.exercises = exerciseRows;
+        guide.categories = categoryRows;
         return guide;
     },
 
