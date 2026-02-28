@@ -14,9 +14,19 @@ const Category = {
     },
 
     async findAll() {
-        const query = 'SELECT * FROM categories';  
+        const query = `
+            SELECT
+                c.*,
+                COUNT(DISTINCT ec.exercise_id) as exercise_count,
+                COUNT(DISTINCT gc.guide_id) as guide_count
+            FROM categories c
+            LEFT JOIN exercises_categories ec ON c.id = ec.category_id
+            LEFT JOIN guides_categories gc ON c.id = gc.category_id
+            GROUP BY c.id
+            ORDER BY c.is_pinned DESC, c.name ASC
+        `;
         const [rows] = await pool.query(query);
-        return rows;  // Retorna todos los ejercicios en un array
+        return rows;  // Retorna todas las categorías con contadores
     },
 
     async update(categoryId, name, description, imageUrl, pinned) {

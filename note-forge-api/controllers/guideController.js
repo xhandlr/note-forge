@@ -67,10 +67,21 @@ async function deleteGuideRequest(req, res) {
     }
 }
 
+async function getGuidesByCategoryRequest(req, res) {
+    try {
+        const categoryId = req.params.categoryId;
+        const guides = await guideService.getGuidesByCategory(categoryId);
+        res.status(200).json(guides);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+
 module.exports = {
     createGuideRequest,
     getGuideByIdRequest,
     getGuidesRequest,
     updateGuideRequest,
-    deleteGuideRequest
+    deleteGuideRequest,
+    getGuidesByCategoryRequest
 };

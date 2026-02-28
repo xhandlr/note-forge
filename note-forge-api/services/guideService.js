@@ -82,4 +82,8 @@ const deleteGuide = async (guideId) => {
     return await Guide.delete(guideId);
 };
 
-module.exports = { createGuide, getGuideById, getGuides, updateGuide, deleteGuide };
+const getGuidesByCategory = async (categoryId) => {
+    return await Guide.findByCategoryId(categoryId);
+};
+
+module.exports = { createGuide, getGuideById, getGuides, updateGuide, deleteGuide, getGuidesByCategory };

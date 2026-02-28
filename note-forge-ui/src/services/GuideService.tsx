@@ -43,13 +43,23 @@ const getGuideById = async (id) => {
  * @returns {Promise<Object[]>} - Returns a list of guides
  */
 const getGuides = async () => {
-    return sendRequest(`${API_BASE_URL}/guides`, 'GET');  
+    return sendRequest(`${API_BASE_URL}/guides`, 'GET');
 };
 
-export { 
-    addGuide, 
-    updateGuide, 
-    deleteGuide, 
-    getGuideById, 
-    getGuides 
+/**
+ * Get guides by category ID
+ * @param {number|string} categoryId - ID of the category
+ * @returns {Promise<Object[]>} - Returns a list of guides in that category
+ */
+const getGuidesByCategory = async (categoryId) => {
+    return sendRequest(`${API_BASE_URL}/guides/category/${categoryId}`, 'GET');
+};
+
+export {
+    addGuide,
+    updateGuide,
+    deleteGuide,
+    getGuideById,
+    getGuides,
+    getGuidesByCategory
 };

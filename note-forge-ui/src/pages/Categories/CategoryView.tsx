@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Coffee, BookOpen, Edit3, Plus, Trash2, Calendar } from 'lucide-react';
-import { useCategoryService, useExerciseService, useGuideService } from '../../services/ServiceFactory';
+import { useCategoryService, useExerciseService } from '../../services/ServiceFactory';
+import { getGuidesByCategory } from '../../services/GuideService';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
 import DeleteDialog from '../../components/Dashboard/DeleteDialog';
@@ -19,7 +20,6 @@ const CategoryView: React.FC = () => {
 
   const categoryService = useCategoryService();
   const exerciseService = useExerciseService();
-  const guideService = useGuideService();
 
   useEffect(() => {
     const loadData = async () => {
@@ -33,12 +33,7 @@ const CategoryView: React.FC = () => {
         const exercisesData = await exerciseService.getByCategoryId(id);
         setExercises(exercisesData);
 
-        const allGuides = await guideService.getAll();
-        const categoryGuides = allGuides.filter((guide: any) =>
-          guide.exerciseIds?.some((exerciseId: number) =>
-            exercisesData.some((ex: any) => ex.id === exerciseId)
-          )
-        );
+        const categoryGuides = await getGuidesByCategory(id);
         setGuides(categoryGuides);
       } catch (error) {
         console.error('Error loading category data:', error);

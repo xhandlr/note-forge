@@ -355,14 +355,15 @@ function Dashboard() {
                             {activeTab === 'asignaturas' && (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                     {sortedCategories.map((category) => {
-                                        const categoryExercisesCount = exercises.filter(e => e.category_id === category.id).length;
+                                        const categoryExercisesCount = category.exercise_count || exercises.filter(e => e.category_id === category.id).length;
+                                        const categoryGuidesCount = category.guide_count || 0;
                                         return (
                                             <SubjectCard
                                                 key={category.id}
                                                 id={category.id}
                                                 title={category.name}
                                                 exercises={categoryExercisesCount}
-                                                guides={0}
+                                                guides={categoryGuidesCount}
                                                 icon={<BookOpen size={64} strokeWidth={2} />}
                                                 pinned={category.is_pinned}
                                                 imageSrc={category.image_url}

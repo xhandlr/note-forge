@@ -92,6 +92,21 @@ const Guide = {
     async removeAllCategories(guideId) {
         const query = 'DELETE FROM guides_categories WHERE guide_id = ?';
         await pool.query(query, [guideId]);
+    },
+
+    async findByCategoryId(categoryId) {
+        const query = `
+            SELECT g.*,
+                   COUNT(ge.exercise_id) as exercise_count
+            FROM guides g
+            INNER JOIN guides_categories gc ON g.id = gc.guide_id
+            LEFT JOIN guide_exercises ge ON g.id = ge.guide_id
+            WHERE gc.category_id = ?
+            GROUP BY g.id
+            ORDER BY g.created_at DESC
+        `;
+        const [rows] = await pool.query(query, [categoryId]);
+        return rows;
     }
 };
 

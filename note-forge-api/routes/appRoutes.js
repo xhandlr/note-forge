@@ -44,6 +44,7 @@ router.delete('/delete-category/:id', authMiddleware, categoryController.deleteC
 router.post('/create-guide', authMiddleware, guideController.createGuideRequest);
 router.get('/guide/:id', authMiddleware, guideController.getGuideByIdRequest);
 router.get('/guides', authMiddleware, guideController.getGuidesRequest);
+router.get('/guides/category/:categoryId', authMiddleware, guideController.getGuidesByCategoryRequest);
 router.put('/update-guide/:id', authMiddleware, guideController.updateGuideRequest);
 router.delete('/delete-guide/:id', authMiddleware, guideController.deleteGuideRequest);
 
