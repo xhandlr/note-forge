@@ -5,9 +5,9 @@ import { getGuideById } from '../../services/GuideService';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
 import { useNotification } from '../../contexts/NotificationContext';
+import ExportGuideModal from '../../components/Guides/ExportGuideModal';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
-import JSZip from 'jszip';
 
 function applyTextCommands(text: string): string {
     return text
@@ -79,8 +79,8 @@ const GuideView: React.FC = () => {
     const { showSuccess, showError } = useNotification();
     const [guide, setGuide] = useState<Guide | null>(null);
     const [loading, setLoading] = useState(true);
-    const [exporting, setExporting] = useState(false);
     const [activeTab, setActiveTab] = useState<'render' | 'latex'>('render');
+    const [showExportModal, setShowExportModal] = useState(false);
 
     useEffect(() => {
         if (!id) return;
@@ -129,52 +129,9 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
 \\end{document}`;
     };
 
-    const handleExportZip = async () => {
-        if (!guide) return;
-        setExporting(true);
-        try {
-            const zip = new JSZip();
-            const folderName = (guide.title || 'guia').replace(/\s+/g, '_');
-
-            // Add the .tex file
-            zip.file(`${folderName}.tex`, generateLatex());
-
-            // Collect images
-            const imageExercises = exercises.filter(ex => ex.image_url || ex.imageUrl);
-            if (imageExercises.length > 0) {
-                const imgFolder = zip.folder('images')!;
-                await Promise.all(
-                    imageExercises.map(async (ex) => {
-                        const url = ex.image_url || ex.imageUrl;
-                        if (!url) return;
-                        const fileName = url.split('/').pop() || `image_${ex.id}.png`;
-                        try {
-                            const response = await fetch(url);
-                            const blob = await response.blob();
-                            imgFolder.file(fileName, blob);
-                        } catch {
-                            // If image can't be fetched, skip it
-                        }
-                    })
-                );
-            }
-
-            // Generate and download the ZIP
-            const blob = await zip.generateAsync({ type: 'blob' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${folderName}.zip`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showSuccess('Archivo ZIP descargado');
-        } catch {
-            showError('Error al generar el archivo ZIP');
-        } finally {
-            setExporting(false);
-        }
+    const handleExportComplete = async () => {
+        // No need to do anything after export in GuideView
+        // The modal handles everything
     };
 
     if (loading) {
@@ -239,16 +196,11 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
 
                         <div className="flex items-center gap-2 shrink-0">
                             <button
-                                onClick={handleExportZip}
-                                disabled={exporting}
-                                className="flex items-center gap-1.5 px-4 py-2 bg-amber-500 text-white rounded-xl font-black text-xs hover:bg-amber-600 transition-all shadow-lg shadow-amber-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                                onClick={() => setShowExportModal(true)}
+                                className="flex items-center gap-1.5 px-4 py-2 bg-amber-500 text-white rounded-xl font-black text-xs hover:bg-amber-600 transition-all"
                             >
-                                {exporting ? (
-                                    <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                ) : (
-                                    <Package size={13} />
-                                )}
-                                {exporting ? 'Exportando...' : 'Exportar ZIP'}
+                                <Package size={13} />
+                                Exportar ZIP
                             </button>
                             <button
                                 onClick={() => navigate(`/edit-guide/${id}`)}
@@ -371,6 +323,16 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                 </div>
 
             </div>
+
+            {/* Export Modal */}
+            <ExportGuideModal
+                isOpen={showExportModal}
+                onClose={() => setShowExportModal(false)}
+                onExportComplete={handleExportComplete}
+                guideTitle={guide?.title || 'Guía'}
+                guideAuthor={guide?.author}
+                exercises={exercises}
+            />
 
             <Footer />
         </div>
