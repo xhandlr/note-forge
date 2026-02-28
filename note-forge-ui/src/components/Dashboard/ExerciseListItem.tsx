@@ -1,6 +1,58 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Coffee, MoreVertical, Layers, Edit3, Eye } from "lucide-react";
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
+
+function applyTextCommands(text: string): string {
+    return text
+        .replace(/\\(begin|end)\{document\}/g, '')
+        .replace(/\\documentclass(\[.*?\])?\{.*?\}/g, '')
+        .replace(/\\usepackage(\[.*?\])?\{.*?\}/g, '')
+        .replace(/\\textbf\{([^}]*)\}/g, '<strong>$1</strong>')
+        .replace(/\\textit\{([^}]*)\}/g, '<em>$1</em>')
+        .replace(/\\underline\{([^}]*)\}/g, '<u>$1</u>')
+        .replace(/\\text\{([^}]*)\}/g, '$1')
+        .replace(/\\emph\{([^}]*)\}/g, '<em>$1</em>')
+        .replace(/\\(section|chapter)\*?\{([^}]*)\}/g, '<strong class="text-lg">$2</strong>')
+        .replace(/\\subsection\*?\{([^}]*)\}/g, '<strong>$1</strong>')
+        .replace(/\\\\/g, '<br/>')
+        .replace(/\\newline/g, '<br/>')
+        .replace(/\\par\b/g, '<br/><br/>');
+}
+
+function renderLatex(text: string): string {
+    if (!text) return '';
+    const latexRegex = /(\\(?:\(|\[)[\s\S]*?\\(?:\)|\])|\$\$[\s\S]*?\$\$)/g;
+    const segments = text.split(latexRegex);
+    let processed = '';
+    for (const segment of segments) {
+        if (!segment) continue;
+        if (segment.startsWith('\\(') || segment.startsWith('\\[') || segment.startsWith('$$')) {
+            try {
+                const displayMode = segment.startsWith('\\[') || segment.startsWith('$$');
+                const content = segment
+                    .replace(/^(\\[\(\[]|\$\$)/, '')
+                    .replace(/(\\[\)\]]|\$\$)$/, '');
+                processed += katex.renderToString(content, { displayMode, throwOnError: false });
+            } catch {
+                processed += segment;
+            }
+        } else {
+            const escaped = segment
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+            processed += applyTextCommands(escaped).replace(/\n/g, '<br/>');
+        }
+    }
+    return processed;
+}
+
+interface Tag {
+    text: string;
+    color: string;
+}
 
 interface ExerciseListItemProps {
     id?: number;
@@ -9,14 +61,46 @@ interface ExerciseListItemProps {
     difficulty: number;
     desc: string;
     img: string;
+    duration?: string;
+    tags?: Tag[];
     onDelete?: () => void;
 }
 
-const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject, difficulty, desc, img, onDelete }) => {
+const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject, difficulty, desc, img, duration, tags = [], onDelete }) => {
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
+    const [showAllTags, setShowAllTags] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+
+    const displayedTags = showAllTags ? tags : tags.slice(0, 2);
+    const hasMoreTags = tags.length > 2;
+
+    const getTagBgColor = (color: string) => {
+        const colorMap: { [key: string]: string } = {
+            'rose': 'bg-rose-50',
+            'amber': 'bg-amber-50',
+            'slate': 'bg-slate-50',
+            'blue': 'bg-blue-50',
+            'green': 'bg-green-50',
+            'violet': 'bg-violet-50',
+            'pink': 'bg-pink-50',
+        };
+        return colorMap[color] || 'bg-slate-50';
+    };
+
+    const getTagTextColor = (color: string) => {
+        const colorMap: { [key: string]: string } = {
+            'rose': 'text-rose-700',
+            'amber': 'text-amber-700',
+            'slate': 'text-slate-700',
+            'blue': 'text-blue-700',
+            'green': 'text-green-700',
+            'violet': 'text-violet-700',
+            'pink': 'text-pink-700',
+        };
+        return colorMap[color] || 'text-slate-700';
+    };
 
     useEffect(() => {
         if (!showMenu) return;
@@ -60,17 +144,47 @@ const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject,
                                 ))}
                             </div>
                         </div>
-                        <p className="text-slate-500 font-medium text-sm leading-relaxed line-clamp-2 max-w-2xl">{desc}</p>
+                        <div
+                            className="text-slate-500 font-medium text-sm leading-relaxed line-clamp-2 max-w-2xl"
+                            dangerouslySetInnerHTML={{ __html: renderLatex(desc) }}
+                        />
                     </div>
 
                     <div className="flex flex-wrap items-center justify-between gap-4 mt-5 pt-5 border-t border-slate-50">
-                        <div className="flex gap-3">
-                            <span className="flex items-center gap-2 text-slate-400 text-[10px] font-bold bg-slate-50 px-3 py-1.5 rounded-xl">
-                                <Layers size={12} /> ID: #{id}
-                            </span>
-                            <span className="flex items-center gap-2 text-slate-400 text-[10px] font-bold bg-slate-50 px-3 py-1.5 rounded-xl">
-                                <Coffee size={12} /> 15 min
-                            </span>
+                        <div className="flex flex-wrap items-center gap-2">
+                            {duration && (
+                                <span className="flex items-center gap-1.5 text-slate-500 text-xs font-bold bg-slate-50 px-3 py-1.5 rounded-xl">
+                                    <Coffee size={12} /> {duration} min
+                                </span>
+                            )}
+                            {displayedTags.length > 0 && (
+                                <div className="flex flex-wrap gap-1.5 items-center">
+                                    {displayedTags.map((tag, idx) => (
+                                        <span
+                                            key={idx}
+                                            className={`px-2.5 py-1 rounded-lg text-xs font-black ${getTagBgColor(tag.color)} ${getTagTextColor(tag.color)}`}
+                                        >
+                                            {tag.text}
+                                        </span>
+                                    ))}
+                                    {hasMoreTags && !showAllTags && (
+                                        <button
+                                            onClick={() => setShowAllTags(true)}
+                                            className="text-xs font-black text-slate-400 hover:text-slate-600 transition-colors px-2 py-1"
+                                        >
+                                            +{tags.length - 2} más
+                                        </button>
+                                    )}
+                                    {showAllTags && hasMoreTags && (
+                                        <button
+                                            onClick={() => setShowAllTags(false)}
+                                            className="text-xs font-black text-slate-400 hover:text-slate-600 transition-colors px-2 py-1"
+                                        >
+                                            Ver menos
+                                        </button>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         <div className="flex items-center gap-2">

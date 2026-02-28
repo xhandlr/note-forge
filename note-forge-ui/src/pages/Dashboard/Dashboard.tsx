@@ -402,18 +402,32 @@ function Dashboard() {
 
                             {activeTab === 'ejercicios' && (
                                 <div className="space-y-6">
-                                    {filteredExercises.map((exercise) => (
-                                        <ExerciseListItem
-                                            key={exercise.id}
-                                            id={exercise.id}
-                                            title={exercise.title}
-                                            subject={categories.find(c => c.id === exercise.category_id)?.name || 'Sin categoría'}
-                                            difficulty={exercise.difficulty}
-                                            desc={exercise.description}
-                                            img={exercise.image_url}
-                                            onDelete={() => handleDeleteExercise(exercise.id)}
-                                        />
-                                    ))}
+                                    {filteredExercises.map((exercise) => {
+                                        let parsedTags = [];
+                                        try {
+                                            if (exercise.tags && typeof exercise.tags === 'string') {
+                                                parsedTags = JSON.parse(exercise.tags);
+                                            } else if (Array.isArray(exercise.tags)) {
+                                                parsedTags = exercise.tags;
+                                            }
+                                        } catch (e) {
+                                            console.error('Error parsing tags:', e);
+                                        }
+                                        return (
+                                            <ExerciseListItem
+                                                key={exercise.id}
+                                                id={exercise.id}
+                                                title={exercise.title}
+                                                subject={categories.find(c => c.id === exercise.category_id)?.name || 'Sin categoría'}
+                                                difficulty={exercise.difficulty}
+                                                desc={exercise.description}
+                                                img={exercise.image_url}
+                                                duration={exercise.duration}
+                                                tags={parsedTags}
+                                                onDelete={() => handleDeleteExercise(exercise.id)}
+                                            />
+                                        );
+                                    })}
 
                                     <Link to="/create-exercise" className="w-full py-8 bg-white border-4 border-dashed border-slate-200 rounded-[2.5rem] flex items-center justify-center gap-3 text-slate-300 hover:bg-rose-50 hover:border-rose-400 hover:text-rose-500 transition-all group shadow-xl">
                                         <div className="p-3 bg-slate-50 rounded-xl group-hover:bg-rose-500 group-hover:text-white transition-all">
