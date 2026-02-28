@@ -74,14 +74,12 @@ function Home() {
                     </div>
                 </div>
                 <div className="lg:w-1/2 relative">
-                    <div className="absolute inset-0 bg-amber-400 blur-[80px] opacity-15 -rotate-12 rounded-full" />
-                    <div className="relative z-10 bg-slate-900 rounded-[3rem] p-5 shadow-[0_30px_60px_rgba(0,0,0,0.3)] flex items-center justify-center border-10 border-rose-500">
+                    <div className="relative z-10 bg-slate-900 rounded-[3rem] p-5 flex items-center justify-center border-10 border-rose-500">
                         <img
                             src={heroImage}
                             alt="Note Forge"
                             className="w-2/3 h-auto rounded-[2rem]"
                         />
-                        <div className="absolute -bottom-8 -right-8 w-40 h-40 bg-rose-400/20 rounded-full blur-[60px] animate-pulse" />
                     </div>
                 </div>
             </section>
