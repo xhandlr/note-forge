@@ -217,15 +217,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
 \\end{document}`;
     };
 
-    const handleSave = () => {
-        if (!guideTitle.trim()) {
-            showError('El título de la guía es obligatorio');
-            return;
-        }
-        setShowExportModal(true);
-    };
-
-    const handleExportComplete = async () => {
+    const saveGuide = async () => {
         const guideData = {
             title: guideTitle,
             author: guideAuthor,
@@ -245,6 +237,26 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
         } catch {
             showError('Error al guardar la guía');
         }
+    };
+
+    const handleSave = () => {
+        if (!guideTitle.trim()) {
+            showError('El título de la guía es obligatorio');
+            return;
+        }
+        saveGuide();
+    };
+
+    const handleSaveAndExport = () => {
+        if (!guideTitle.trim()) {
+            showError('El título de la guía es obligatorio');
+            return;
+        }
+        setShowExportModal(true);
+    };
+
+    const handleExportComplete = async () => {
+        await saveGuide();
     };
 
     const calculateTotalTime = () =>
@@ -524,9 +536,15 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                             </button>
                             <button
                                 onClick={handleSave}
-                                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-10 py-4 bg-rose-500 text-white rounded-2xl font-black shadow-xl shadow-rose-200 hover:bg-rose-600 transition-all active:scale-95 text-sm"
+                                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-amber-500 text-white rounded-2xl font-black hover:bg-amber-600 transition-all active:scale-95 text-sm"
                             >
-                                <Download size={18} strokeWidth={3} /> {mode === 'edit' ? 'Actualizar y Exportar' : 'Guardar y Exportar'}
+                                <Save size={18} strokeWidth={3} /> {mode === 'edit' ? 'Actualizar' : 'Guardar'}
+                            </button>
+                            <button
+                                onClick={handleSaveAndExport}
+                                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-rose-500 text-white rounded-2xl font-black shadow-xl shadow-rose-200 hover:bg-rose-600 transition-all active:scale-95 text-sm"
+                            >
+                                <Download size={18} strokeWidth={3} /> {mode === 'edit' ? 'Actualizar + Exportar' : 'Guardar + Exportar'}
                             </button>
                         </div>
                     </div>
