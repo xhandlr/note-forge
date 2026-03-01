@@ -197,12 +197,12 @@ function Dashboard() {
                         <div className="hidden lg:grid grid-cols-2 gap-6">
                             <div className="bg-white/10 backdrop-blur-xl p-6 rounded-[3rem] border border-white/20 flex flex-col items-center text-center">
                                 <BookOpen size={32} className="text-amber-400 mb-3" />
-                                <span className="text-3xl font-black">12</span>
+                                <span className="text-3xl font-black">{guides.length}</span>
                                 <p className="text-[10px] font-black uppercase text-slate-400 mt-2 tracking-widest">Guías</p>
                             </div>
                             <div className="bg-white/10 backdrop-blur-xl p-6 rounded-[3rem] border border-white/20 flex flex-col items-center text-center">
                                 <Coffee size={32} className="text-rose-400 mb-3" />
-                                <span className="text-3xl font-black">45</span>
+                                <span className="text-3xl font-black">{exercises.length}</span>
                                 <p className="text-[10px] font-black uppercase text-slate-400 mt-2 tracking-widest">Ejercicios</p>
                             </div>
                         </div>
