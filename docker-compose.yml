@@ -1,15 +1,14 @@
-version: "3.8"
-
 services:
   db:
     image: mysql:8.0
+    container_name: note-forge-db
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword123
-      MYSQL_DATABASE: note_forge
-      MYSQL_USER: noteforge_user
-      MYSQL_PASSWORD: strongpassword123
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "127.0.0.1:3306:3306"
+      - "127.0.0.1:3307:3306"
     volumes:
       - db_data:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:Z
@@ -18,26 +17,49 @@ services:
       interval: 5s
       timeout: 10s
       retries: 10
+    restart: unless-stopped
 
   api:
     build:
       context: ./note-forge-api
+    container_name: note-forge-api
     depends_on:
       db:
         condition: service_healthy
     ports:
       - "5000:5000"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=${DB_USER}
+      - DB_NAME=${DB_NAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - NODE_ENV=development
+      - BASE_URL=http://api:5000
+      - FRONTEND_URL=http://localhost:5173
+    restart: unless-stopped
     command: ["npm", "start"]
 
   ui:
     build: ./note-forge-ui
+    container_name: note-forge-ui
+    depends_on:
+      - api
     ports:
       - "5173:5173"
     volumes:
-      - ./note-forge-ui:/app:Z  
-      - /app/node_modules   
+      - ./note-forge-ui:/app:Z
+      - /app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - VITE_API_BASE_URL=http://localhost:5000
+    restart: unless-stopped
 
 volumes:
   db_data:
+    driver: local
+
+networks:
+  default:
+    name: note_forge_network

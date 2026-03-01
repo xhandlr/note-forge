@@ -1,9 +1,12 @@
-FROM node:22
+FROM node:22-alpine
 
 WORKDIR /app
 
+# Instalar curl para health checks
+RUN apk add --no-cache curl
+
 COPY package*.json ./
-RUN npm install
+RUN npm ci --only=production && npm install
 
 COPY . .
 
