@@ -9,12 +9,14 @@
 const sendRequest = async (route, method, body = null) => {
     const token = localStorage.getItem('token');
 
-    const options = {
+    const options: any = {
         method,
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
+        headers: {}
     };
+
+    if (token) {
+        options.headers['Authorization'] = `Bearer ${token}`;
+    }
 
     if (body) {
         if (body instanceof FormData) {

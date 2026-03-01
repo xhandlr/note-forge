@@ -21,14 +21,16 @@ const validateLogin = (name, value) => {
 };
 
 /**
- * Validates the login form fields
- * @param {Object} formData 
- * @returns {Object} - An object containing validation error messages
+ * Logs in the user
+ * @param {Object} formData
+ * @returns {Promise<Object>} - User data and token
  */
 const loginUser = async (formData) => {
-  const validationErrors = validateLogin(formData);
-  if (Object.keys(validationErrors).length > 0) {
-      throw validationErrors;
+  const emailError = validateLogin('email', formData.email);
+  const passwordError = validateLogin('password', formData.password);
+
+  if (emailError || passwordError) {
+      throw new Error(emailError || passwordError);
   }
 
   try {
@@ -84,9 +86,13 @@ const logoutUser = async () => {
  */
 const checkAuth = async () => {
     try {
+        const token = localStorage.getItem('token');
         const response = await fetch(`${API_BASE_URL}/check-auth`, {
             method: "GET",
-            credentials: "include", 
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            credentials: "include",
         });
 
         const data = await response.json();
@@ -94,7 +100,7 @@ const checkAuth = async () => {
             throw new Error(data.message || "No autenticado");
         }
 
-        return data.authenticated; 
+        return data.authenticated;
     } catch (error) {
         console.error("Error verificando autenticación", error);
         return false;

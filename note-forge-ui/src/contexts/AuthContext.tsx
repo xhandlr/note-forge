@@ -53,23 +53,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const validateTokenWithBackend = async () => {
       const token = localStorage.getItem('token');
+      const keepLoggedIn = localStorage.getItem('keepLoggedIn') === 'true';
 
       if (token && isAuthenticated) {
         try {
           const isValid = await checkAuth();
           if (!isValid) {
-            // Token inválido, limpiar
+            // Token inválido
+            if (keepLoggedIn) {
+              // Si keepLoggedIn está activo, mantener sesión (backend la mantendrá)
+              console.warn('Token validación falló pero keepLoggedIn está activo');
+            } else {
+              // Limpiar sesión si no está marcado keepLoggedIn
+              localStorage.removeItem('token');
+              localStorage.removeItem('user');
+              setUser(null);
+              setIsAuthenticated(false);
+            }
+          }
+        } catch (error) {
+          console.error('Error validando token:', error);
+          if (!keepLoggedIn) {
+            // Solo limpiar si NO está keepLoggedIn
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             setUser(null);
             setIsAuthenticated(false);
           }
-        } catch (error) {
-          console.error('Error validando token:', error);
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          setUser(null);
-          setIsAuthenticated(false);
         }
       }
     };
@@ -86,6 +96,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Guardar token
       localStorage.setItem('token', data.token);
+
+      // Guardar flag keepLoggedIn
+      localStorage.setItem('keepLoggedIn', keepLoggedIn ? 'true' : 'false');
 
       // Guardar usuario básico (el backend retorna user parcial)
       const userData: User = {
@@ -113,6 +126,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Limpiar estado y localStorage
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      localStorage.removeItem('keepLoggedIn');
       setUser(null);
       setIsAuthenticated(false);
     }

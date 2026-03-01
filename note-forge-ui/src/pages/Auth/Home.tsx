@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { GraduationCap, Megaphone, UserRound } from 'lucide-react';
 import { useTranslation } from "react-i18next";
 import { useDemoMode } from '../../contexts/DemoContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 // UI Components
 import Navbar from '../../components/Dashboard/Navbar';
@@ -35,8 +36,26 @@ function Home() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { enableDemoMode } = useDemoMode();
+    const { isAuthenticated, loading } = useAuth();
     const images = import.meta.glob('/src/assets/*', { eager: true, query: '?url', import: 'default' });
     const heroImage = images['/src/assets/home-image.png'] as string;
+
+    // Si el usuario está autenticado, redirigir al dashboard
+    useEffect(() => {
+        if (!loading && isAuthenticated) {
+            navigate('/dashboard', { replace: true });
+        }
+    }, [isAuthenticated, loading, navigate]);
+
+    // No renderizar nada mientras se verifica autenticación
+    if (loading) {
+        return null;
+    }
+
+    // Si está autenticado, no renderizar (el useEffect redirigirá)
+    if (isAuthenticated) {
+        return null;
+    }
 
     const handleDemoMode = () => {
         enableDemoMode();
