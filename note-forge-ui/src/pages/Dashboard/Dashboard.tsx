@@ -390,6 +390,7 @@ function Dashboard() {
                                             title={guide.title}
                                             subject={guide.author}
                                             exerciseCount={guide.exercise_count}
+                                            exercises={guide.exercises}
                                         />
                                     ))}
                                     <Link to="/create-guide" className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[300px] flex flex-col items-center justify-center text-slate-300 hover:bg-rose-50 hover:border-rose-400 hover:text-rose-500 transition-all group shadow-2xl">

@@ -43,7 +43,7 @@ const getGuideById = async (id) => {
  * @returns {Promise<Object[]>} - Returns a list of guides
  */
 const getGuides = async () => {
-    return sendRequest(`${API_BASE_URL}/guides`, 'GET');
+    return sendRequest(`${API_BASE_URL}/guides?_=${Date.now()}`, 'GET');
 };
 
 /**

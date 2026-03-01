@@ -49,7 +49,25 @@ const Guide = {
             ORDER BY g.created_at DESC
         `;
         const [rows] = await pool.query(query, [userId]);
-        return rows;
+
+        // Fetch exercises for each guide
+        const guidesWithExercises = [];
+        for (const guide of rows) {
+            const exercisesQuery = `
+                SELECT e.id, e.title, e.description, e.answer, e.difficulty, e.duration, e.image_url
+                FROM guide_exercises ge
+                INNER JOIN exercises e ON ge.exercise_id = e.id
+                WHERE ge.guide_id = ?
+                ORDER BY ge.id ASC
+            `;
+            const [exercises] = await pool.query(exercisesQuery, [guide.id]);
+            guidesWithExercises.push({
+                ...guide,
+                exercises: exercises || []
+            });
+        }
+
+        return guidesWithExercises;
     },
 
     async update(guideId, title, author, description) {
