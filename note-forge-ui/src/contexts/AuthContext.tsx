@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { loginUser, logoutUser } from '../services/LoginService';
+import { loginUser, logoutUser, checkAuth } from '../services/LoginService';
 import { registerUser } from '../services/RegistrationService';
 
 interface User {
@@ -48,6 +48,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
     setLoading(false);
   }, []);
+
+  // Validar token contra backend después de cargar (solo al montar)
+  useEffect(() => {
+    const validateTokenWithBackend = async () => {
+      const token = localStorage.getItem('token');
+
+      if (token && isAuthenticated) {
+        try {
+          const isValid = await checkAuth();
+          if (!isValid) {
+            // Token inválido, limpiar
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            setUser(null);
+            setIsAuthenticated(false);
+          }
+        } catch (error) {
+          console.error('Error validando token:', error);
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          setUser(null);
+          setIsAuthenticated(false);
+        }
+      }
+    };
+
+    if (!loading && isAuthenticated) {
+      validateTokenWithBackend();
+    }
+  }, [loading]);
 
   const login = async (email: string, password: string, keepLoggedIn: boolean = false) => {
     try {
