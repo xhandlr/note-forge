@@ -129,6 +129,7 @@ ${ex.description || ''}`;
     };
 
     const handleExport = async () => {
+
         try {
             setExporting(true);
             const zip = new JSZip();
