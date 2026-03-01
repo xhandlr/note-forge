@@ -1,11 +1,12 @@
 import React from 'react';
-import { GripVertical, Trash2, Eye } from 'lucide-react';
-import { renderLatex } from '../../utils/latexRenderer';
+import { GripVertical, Trash2 } from 'lucide-react';
 
 interface Exercise {
     id: number;
     title: string;
     description: string;
+    difficulty?: number;
+    duration?: string;
 }
 
 interface GuideExercisesListProps {
@@ -26,62 +27,56 @@ const GuideExercisesList: React.FC<GuideExercisesListProps> = ({
     onPreview
 }) => {
     return (
-        <div className="flex-1 flex flex-col">
-            <h3 className="font-bold text-slate-900 mb-4">Ejercicios en la guía ({exercises.length})</h3>
+        <section className="space-y-6 pt-4">
+            <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2 text-amber-500">
+                    <GripVertical size={18} strokeWidth={2.5} />
+                    <h2 className="text-sm font-black uppercase tracking-widest">Orden de los Ejercicios</h2>
+                </div>
+                <span className="px-3 py-1 bg-slate-100 text-slate-500 text-[10px] font-black rounded-lg uppercase tracking-widest">
+                    {exercises.length} Ejercicios
+                </span>
+            </div>
 
-            {exercises.length === 0 ? (
-                <div className="flex-1 flex items-center justify-center text-slate-400 text-sm">
-                    Arrastra ejercicios aquí o búscalos
-                </div>
-            ) : (
-                <div className="flex-1 overflow-y-auto space-y-2">
-                    {exercises.map((exercise, idx) => (
+            <div className="space-y-3" onDrop={(e) => onDrop(e, -1)} onDragOver={onDragOver}>
+                {exercises.length === 0 ? (
+                    <div className="py-20 text-center border-2 border-dashed border-slate-100 rounded-3xl bg-slate-50/30">
+                        <p className="text-slate-300 font-bold">No hay retos seleccionados aún.</p>
+                    </div>
+                ) : (
+                    exercises.map((item, idx) => (
                         <div
-                            key={exercise.id}
+                            key={item.id}
                             draggable
-                            onDragStart={(e) => onDragStart(e, exercise.id)}
-                            onDragOver={onDragOver}
+                            onDragStart={(e) => onDragStart(e, item.id)}
                             onDrop={(e) => onDrop(e, idx)}
-                            className="p-3 bg-white border border-slate-200 rounded-lg hover:border-rose-300 transition-colors group cursor-move"
+                            onDragOver={onDragOver}
+                            className="flex items-center gap-4 p-4 bg-white border border-slate-100 rounded-2xl hover:border-rose-200 hover:shadow-sm transition-all group cursor-grab active:cursor-grabbing"
                         >
-                            <div className="flex items-start gap-3">
-                                <GripVertical className="text-slate-400 shrink-0 mt-1" size={16} />
-                                <div className="flex-1 min-w-0">
-                                    <span className="font-bold text-slate-900">{idx + 1}.</span>
-                                    <h4 className="font-bold text-slate-900 text-sm line-clamp-1 inline-block ml-2">
-                                        {exercise.title}
-                                    </h4>
-                                    {exercise.description && (
-                                        <p
-                                            className="text-slate-500 text-xs line-clamp-2 mt-1"
-                                            dangerouslySetInnerHTML={{
-                                                __html: renderLatex(exercise.description).substring(0, 100) + '...'
-                                            }}
-                                        />
-                                    )}
-                                </div>
-                                <div className="flex gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button
-                                        onClick={() => onPreview(exercise)}
-                                        className="p-1.5 bg-blue-500 text-white rounded hover:bg-blue-600"
-                                        title="Ver vista previa"
-                                    >
-                                        <Eye size={14} />
-                                    </button>
-                                    <button
-                                        onClick={() => onRemove(exercise.id)}
-                                        className="p-1.5 bg-red-500 text-white rounded hover:bg-red-600"
-                                        title="Eliminar"
-                                    >
-                                        <Trash2 size={14} />
-                                    </button>
-                                </div>
+                            <div className="cursor-grab text-slate-200 group-hover:text-slate-400 p-1">
+                                <GripVertical size={20} />
                             </div>
+                            <div className="w-10 h-10 shrink-0 bg-slate-900 text-white rounded-xl flex items-center justify-center font-black text-sm">
+                                {idx + 1}
+                            </div>
+                            <div className="flex-grow min-w-0">
+                                <h4 className="font-bold text-slate-900 text-sm truncate">{item.title}</h4>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                    Dificultad: {item.difficulty || 'N/A'}
+                                    {item.duration ? ` · ${item.duration} min` : ''}
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => onRemove(item.id)}
+                                className="p-2.5 text-slate-300 hover:text-rose-500 transition-colors"
+                            >
+                                <Trash2 size={18} />
+                            </button>
                         </div>
-                    ))}
-                </div>
-            )}
-        </div>
+                    ))
+                )}
+            </div>
+        </section>
     );
 };
 

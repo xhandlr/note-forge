@@ -1,4 +1,5 @@
 import React from 'react';
+import { Type } from 'lucide-react';
 
 interface Category {
     id: number;
@@ -25,52 +26,34 @@ const GuideMetadata: React.FC<GuideMetadataProps> = ({
     onCategoriesChange
 }) => {
     return (
-        <div className="space-y-4">
-            <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">Título de la guía</label>
-                <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => onTitleChange(e.target.value)}
-                    placeholder="Ej: Guía de Física Cuántica"
-                    className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
-                />
+        <section className="space-y-6">
+            <div className="flex items-center gap-2 text-rose-500">
+                <Type size={18} strokeWidth={2.5} />
+                <h2 className="text-sm font-black uppercase tracking-widest">Configuración General</h2>
             </div>
-
-            <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">Autor</label>
-                <input
-                    type="text"
-                    value={author}
-                    onChange={(e) => onAuthorChange(e.target.value)}
-                    placeholder="Tu nombre"
-                    className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
-                />
-            </div>
-
-            <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">Asignaturas</label>
-                <div className="space-y-2 max-h-32 overflow-y-auto">
-                    {categories.map(category => (
-                        <label key={category.id} className="flex items-center gap-2 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={selectedCategories.includes(category.id)}
-                                onChange={(e) => {
-                                    if (e.target.checked) {
-                                        onCategoriesChange([...selectedCategories, category.id]);
-                                    } else {
-                                        onCategoriesChange(selectedCategories.filter(id => id !== category.id));
-                                    }
-                                }}
-                                className="w-4 h-4 text-rose-500 rounded"
-                            />
-                            <span className="text-sm text-slate-700">{category.name}</span>
-                        </label>
-                    ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-400 ml-1">Título de la Guía *</label>
+                    <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => onTitleChange(e.target.value)}
+                        placeholder="Ej: Guía #4 - Cinemática"
+                        className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-rose-100 focus:border-rose-400 transition-all font-bold text-slate-700"
+                    />
+                </div>
+                <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-400 ml-1">Autor / Institución</label>
+                    <input
+                        type="text"
+                        value={author}
+                        onChange={(e) => onAuthorChange(e.target.value)}
+                        placeholder="Ej: Facultad de Ciencias"
+                        className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-rose-100 focus:border-rose-400 transition-all font-bold text-slate-700"
+                    />
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 

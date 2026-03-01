@@ -5,17 +5,24 @@ import Footer from '../../components/UI/Footer';
 import { useExerciseService } from '../../services/ServiceFactory';
 import { addGuide, updateGuide, getGuideById } from "../../services/GuideService";
 import { getCategories } from "../../services/CategoryService";
-import { ArrowLeft, Save, Download } from 'lucide-react';
+import { FileText, ArrowLeft, Eye, Save, Download, BookOpen } from 'lucide-react';
 import { useNotification } from '../../contexts/NotificationContext';
 import ExportGuideModal from '../../components/Guides/ExportGuideModal';
-import ExerciseSearch from '../../components/Guides/ExerciseSearch';
-import GuideExercisesList from '../../components/Guides/GuideExercisesList';
 import GuideMetadata from '../../components/Guides/GuideMetadata';
+import GuideExercisesList from '../../components/Guides/GuideExercisesList';
+import ExerciseSearch from '../../components/Guides/ExerciseSearch';
+import GuidePreviewModal from '../../components/Guides/GuidePreviewModal';
 
 interface Exercise {
     id: number;
     title: string;
     description: string;
+    answer?: string;
+    image_url?: string;
+    imageUrl?: string;
+    difficulty?: number;
+    categoryId?: number;
+    duration?: string;
 }
 
 interface GuideFormProps {
@@ -27,7 +34,6 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
     const navigate = useNavigate();
     const { showSuccess, showError } = useNotification();
     const exerciseService = useExerciseService();
-
     const [loading, setLoading] = useState(mode === 'edit');
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([]);
@@ -35,27 +41,35 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
     const [guideTitle, setGuideTitle] = useState("");
     const [guideAuthor, setGuideAuthor] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
+    const [showPreview, setShowPreview] = useState(false);
+    const [previewTab, setPreviewTab] = useState<'render' | 'latex'>('render');
     const [showExportModal, setShowExportModal] = useState(false);
     const [categories, setCategories] = useState<any[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-    const [draggedExerciseId, setDraggedExerciseId] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [exercisesData, categoriesData] = await Promise.all([
-                    exerciseService.getAll(),
-                    getCategories()
-                ]);
+                const exercisesData = await exerciseService.getAll();
                 setExercises(exercisesData);
                 setFilteredExercises(exercisesData);
-                setCategories(categoriesData);
             } catch (error) {
-                console.error('Error loading data:', error);
-                showError('Error al cargar datos');
+                console.error('Error loading exercises:', error);
             }
         };
         fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const data = await getCategories();
+                setCategories(data);
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        };
+        fetchCategories();
     }, []);
 
     useEffect(() => {
@@ -71,9 +85,9 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
                             setSelectedCategories(data.categories.map((cat: any) => cat.id));
                         }
                     }
+                    setLoading(false);
                 } catch {
                     showError('Error al cargar la guía');
-                } finally {
                     setLoading(false);
                 }
             };
@@ -92,69 +106,122 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
         }
     };
 
+    const handleRemoveFromGuide = (id: number) => {
+        setGuideExercises(guideExercises.filter(ex => ex.id !== id));
+    };
+
     const handleAddToGuide = (exercise: Exercise) => {
-        if (!guideExercises.find(e => e.id === exercise.id)) {
+        if (!guideExercises.some(ex => ex.id === exercise.id)) {
             setGuideExercises([...guideExercises, exercise]);
         }
     };
 
-    const handleRemoveFromGuide = (id: number) => {
-        setGuideExercises(guideExercises.filter(e => e.id !== id));
-    };
-
     const handleDragStart = (e: React.DragEvent, id: number) => {
-        setDraggedExerciseId(id);
-        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData("exerciseId", id.toString());
     };
 
     const handleDrop = (e: React.DragEvent, targetIndex: number) => {
         e.preventDefault();
-        if (draggedExerciseId === null) return;
+        const exerciseId = parseInt(e.dataTransfer.getData("exerciseId"), 10);
+        if (!exerciseId) return;
 
-        const draggedIndex = guideExercises.findIndex(e => e.id === draggedExerciseId);
-        if (draggedIndex === targetIndex) return;
+        const fromLibrary = exercises.find(ex => ex.id === exerciseId);
+        const fromGuide = guideExercises.find(ex => ex.id === exerciseId);
+        if (!fromLibrary && !fromGuide) return;
 
-        const newExercises = [...guideExercises];
-        const [removed] = newExercises.splice(draggedIndex, 1);
-        newExercises.splice(targetIndex, 0, removed);
-        setGuideExercises(newExercises);
-        setDraggedExerciseId(null);
+        let updated = [...guideExercises];
+        if (fromLibrary && !guideExercises.some(ex => ex.id === exerciseId)) {
+            updated.push(fromLibrary);
+        } else if (fromGuide) {
+            const draggedIdx = updated.findIndex(ex => ex.id === exerciseId);
+            if (draggedIdx !== -1 && targetIndex !== draggedIdx) {
+                const [moved] = updated.splice(draggedIdx, 1);
+                updated.splice(targetIndex, 0, moved);
+            }
+        }
+        setGuideExercises(updated);
+    };
+
+    const handleDragOver = (e: React.DragEvent) => { e.preventDefault(); };
+
+    const generateLatex = () => {
+        const imgName = (url: string) => url.split('/').pop() || 'image.png';
+        return `\\documentclass{article}
+\\usepackage{amsmath}
+\\usepackage{graphicx}
+\\usepackage[utf8]{inputenc}
+\\usepackage[T1]{fontenc}
+\\usepackage[spanish]{babel}
+
+\\title{${guideTitle || 'Guía de Ejercicios'}}
+\\author{${guideAuthor || 'Autor'}}
+\\date{\\today}
+
+\\begin{document}
+
+\\maketitle
+
+${guideExercises.map((ex, idx) => {
+    const imgUrl = ex.image_url || ex.imageUrl;
+    return `\\section*{${idx + 1}. ${ex.title}}
+
+${ex.description || ''}
+${imgUrl ? `\n\\begin{figure}[h]\n\\centering\n\\includegraphics[width=0.8\\textwidth]{images/${imgName(imgUrl)}}\n\\end{figure}\n` : ''}
+${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
+}).join('\n\n')}
+
+\\end{document}`;
     };
 
     const saveGuide = async () => {
-        if (!guideTitle.trim()) {
-            showError('El título es obligatorio');
-            return;
-        }
-
+        const guideData = {
+            title: guideTitle,
+            author: guideAuthor,
+            description: generateLatex(),
+            exerciseIds: guideExercises.map(ex => ex.id),
+            categoryIds: selectedCategories,
+        };
         try {
-            const guideData = {
-                title: guideTitle,
-                author: guideAuthor,
-                exerciseIds: guideExercises.map(e => e.id),
-                categoryIds: selectedCategories
-            };
-
-            if (mode === 'create') {
-                await addGuide(guideData);
-                showSuccess('Guía creada exitosamente');
-                navigate('/dashboard', { state: { tab: 'guias' } });
-            } else if (guideId) {
+            if (mode === 'edit' && guideId) {
                 await updateGuide(guideId, guideData);
-                showSuccess('Guía actualizada exitosamente');
-                navigate(-1);
+                showSuccess('Guía actualizada con éxito!');
+            } else {
+                await addGuide(guideData);
+                showSuccess('Guía creada con éxito!');
             }
-        } catch (error) {
+            navigate('/dashboard');
+        } catch {
             showError('Error al guardar la guía');
         }
     };
 
     const handleSave = () => {
+        if (!guideTitle.trim()) {
+            showError('El título de la guía es obligatorio');
+            return;
+        }
         saveGuide();
+    };
+
+    const handleSaveAndExport = () => {
+        if (!guideTitle.trim()) {
+            showError('El título de la guía es obligatorio');
+            return;
+        }
+        setShowExportModal(true);
     };
 
     const handleExportComplete = async () => {
         await saveGuide();
+    };
+
+    const calculateTotalTime = () =>
+        guideExercises.reduce((acc, ex) => acc + (parseInt(ex.duration || '0', 10) || 0), 0);
+
+    const calculateAvgDifficulty = () => {
+        if (guideExercises.length === 0) return 0;
+        const sum = guideExercises.reduce((acc, ex) => acc + (ex.difficulty || 0), 0);
+        return Math.round(sum / guideExercises.length);
     };
 
     if (loading) {
@@ -162,7 +229,10 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
             <div className="min-h-screen bg-white flex flex-col">
                 <Navbar />
                 <div className="flex items-center justify-center h-screen">
-                    <div className="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin" />
+                    <div className="text-center space-y-3">
+                        <div className="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mx-auto" />
+                        <p className="text-slate-400 font-black text-sm">Cargando guía...</p>
+                    </div>
                 </div>
             </div>
         );
@@ -172,33 +242,37 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
         <div className="min-h-screen bg-white flex flex-col">
             <Navbar />
 
-            <div className="w-[90%] lg:w-[70%] mx-auto px-4 py-8 mt-16 flex-grow">
-                <div className="bg-white rounded-2xl border border-slate-200 shadow-lg overflow-hidden flex flex-col min-h-[80vh]">
+            <div className="w-[70%] mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16">
+                <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden flex flex-col min-h-[85vh]">
 
                     {/* Header */}
-                    <div className="px-8 py-6 border-b border-slate-200 flex justify-between items-center">
-                        <h1 className="text-2xl font-black text-slate-900">
-                            {mode === 'edit' ? 'Editar Guía' : 'Nueva Guía'}
-                        </h1>
+                    <div className="px-10 py-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/30">
+                        <div className="flex items-center gap-5">
+                            <div className="w-12 h-12 bg-slate-900 text-white rounded-2xl flex items-center justify-center shadow-lg">
+                                <FileText size={24} />
+                            </div>
+                            <div>
+                                <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+                                    {mode === 'edit' ? 'Editor de Guías' : 'Forjador de Guías'}
+                                </h1>
+                                <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">
+                                    Documento ID: #GU-{guideId || '0042'}
+                                </p>
+                            </div>
+                        </div>
                         <button
-                            onClick={() => {
-                                if (mode === 'edit') {
-                                    navigate(-1);
-                                } else {
-                                    navigate('/dashboard');
-                                }
-                            }}
-                            className="flex items-center gap-2 text-slate-500 hover:text-slate-900"
+                            onClick={() => mode === 'edit' ? navigate(-1) : navigate('/dashboard')}
+                            className="flex items-center gap-2 px-4 py-2 text-slate-400 font-bold hover:text-slate-900 transition-colors"
                         >
-                            <ArrowLeft size={18} /> Volver
+                            <ArrowLeft size={18} strokeWidth={2.5} /> {mode === 'edit' ? 'Volver' : 'Volver al tablero'}
                         </button>
                     </div>
 
-                    {/* Content */}
+                    {/* Body */}
                     <div className="flex flex-col lg:flex-row flex-grow">
 
-                        {/* Left - Edición */}
-                        <div className="lg:w-2/3 p-8 space-y-8 border-r border-slate-200 overflow-y-auto">
+                        {/* Left — Edición */}
+                        <div className="lg:w-2/3 p-10 space-y-12 border-r border-slate-100 overflow-y-auto">
                             <GuideMetadata
                                 title={guideTitle}
                                 onTitleChange={setGuideTitle}
@@ -209,62 +283,110 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
                                 onCategoriesChange={setSelectedCategories}
                             />
 
-                            <div className="h-px bg-slate-200" />
+                            <GuideExercisesList
+                                exercises={guideExercises}
+                                onRemove={handleRemoveFromGuide}
+                                onDragStart={handleDragStart}
+                                onDragOver={handleDragOver}
+                                onDrop={handleDrop}
+                                onPreview={() => {}}
+                            />
+                        </div>
 
-                            <div className="flex-1">
-                                <h3 className="font-bold text-slate-900 mb-4">Buscar Ejercicios</h3>
+                        {/* Right — Biblioteca */}
+                        <div className="lg:w-1/3 bg-slate-50/50 flex flex-col overflow-hidden">
+                            <div className="p-8 flex-grow overflow-y-auto">
                                 <ExerciseSearch
                                     searchQuery={searchQuery}
                                     onSearchChange={handleSearch}
                                     filteredExercises={filteredExercises}
                                     onAddExercise={handleAddToGuide}
+                                    categories={categories}
+                                    selectedCategories={selectedCategories}
+                                    onCategoriesChange={setSelectedCategories}
                                 />
                             </div>
                         </div>
+                    </div>
 
-                        {/* Right - Preview & List */}
-                        <div className="lg:w-1/3 p-8 space-y-6 bg-slate-50 flex flex-col">
-                            <GuideExercisesList
-                                exercises={guideExercises}
-                                onRemove={handleRemoveFromGuide}
-                                onDragStart={handleDragStart}
-                                onDragOver={(e) => e.preventDefault()}
-                                onDrop={handleDrop}
-                                onPreview={(ex) => alert(`Vista previa: ${ex.title}`)}
-                            />
-
-                            {/* Actions */}
-                            <div className="flex gap-2 pt-4">
-                                <button
-                                    onClick={handleSave}
-                                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-rose-500 text-white rounded-lg font-bold hover:bg-rose-600"
-                                >
-                                    <Save size={16} /> Guardar
-                                </button>
-                                <button
-                                    onClick={() => setShowExportModal(true)}
-                                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600"
-                                >
-                                    <Download size={16} /> Exportar
-                                </button>
+                    {/* Footer */}
+                    <div className="px-10 py-8 border-t border-slate-100 bg-slate-50/50 flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div className="flex gap-10">
+                            <div className="flex flex-col">
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tiempo de Resolución</span>
+                                <span className="text-slate-900 font-black">
+                                    {calculateTotalTime() > 0 ? `~ ${calculateTotalTime()} min` : '—'}
+                                </span>
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nivel Promedio</span>
+                                <div className="flex gap-1 mt-1">
+                                    {[...Array(5)].map((_, i) => (
+                                        <div key={i} className={`w-2 h-2 rounded-full ${i < calculateAvgDifficulty() ? 'bg-amber-400' : 'bg-slate-200'}`} />
+                                    ))}
+                                </div>
                             </div>
                         </div>
+
+                        <div className="flex gap-3 w-full md:w-auto">
+                            <button
+                                onClick={() => { setPreviewTab('render'); setShowPreview(true); }}
+                                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-white border border-slate-200 text-slate-600 rounded-2xl font-black hover:bg-slate-50 transition-all shadow-sm text-sm"
+                            >
+                                <Eye size={18} /> Vista Previa
+                            </button>
+                            <button
+                                onClick={handleSave}
+                                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 text-white rounded-2xl font-black hover:bg-blue-700 transition-all active:scale-95 text-sm"
+                            >
+                                <Save size={18} strokeWidth={3} /> {mode === 'edit' ? 'Actualizar' : 'Guardar'}
+                            </button>
+                            <button
+                                onClick={handleSaveAndExport}
+                                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-rose-500 text-white rounded-2xl font-black shadow-xl shadow-rose-200 hover:bg-rose-600 transition-all active:scale-95 text-sm"
+                            >
+                                <Download size={18} strokeWidth={3} /> {'Exportar'}
+                            </button>
+                        </div>
                     </div>
+                </div>
+
+                <div className="mt-8 flex items-center gap-4 text-slate-400 font-bold text-sm bg-white/50 p-6 rounded-3xl border border-slate-100">
+                    <div className="p-2 bg-amber-100 text-amber-600 rounded-lg">
+                        <BookOpen size={16} />
+                    </div>
+                    <p>Puedes reordenar los ejercicios arrastrándolos desde el icono de rejilla lateral.</p>
                 </div>
             </div>
 
             <Footer />
 
-            {showExportModal && (
-                <ExportGuideModal
-                    isOpen={showExportModal}
-                    guideTitle={guideTitle}
-                    guideAuthor={guideAuthor}
-                    exercises={guideExercises}
-                    onClose={() => setShowExportModal(false)}
-                    onExportComplete={handleExportComplete}
-                />
-            )}
+            <ExportGuideModal
+                isOpen={showExportModal}
+                onClose={() => setShowExportModal(false)}
+                onExportComplete={handleExportComplete}
+                guideTitle={guideTitle}
+                guideAuthor={guideAuthor}
+                exercises={guideExercises}
+            />
+
+            <GuidePreviewModal
+                isOpen={showPreview}
+                onClose={() => setShowPreview(false)}
+                previewTab={previewTab}
+                onTabChange={setPreviewTab}
+                guideTitle={guideTitle}
+                guideAuthor={guideAuthor}
+                guideExercises={guideExercises}
+                generateLatex={generateLatex}
+            />
+
+            <style>{`
+                .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+            `}</style>
         </div>
     );
 };
