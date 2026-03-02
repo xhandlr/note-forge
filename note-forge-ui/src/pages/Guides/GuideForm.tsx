@@ -306,6 +306,9 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                                     guideExercises={guideExercises}
                                     onRemoveExercise={handleRemoveFromGuide}
                                     onOpenPicker={() => setShowPicker(true)}
+                                    categories={categories}
+                                    selectedCategories={selectedCategories}
+                                    onCategoriesChange={setSelectedCategories}
                                 />
                             </div>
                         </div>
