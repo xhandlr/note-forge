@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Coffee, BookOpen, Edit3, Plus, Trash2, Calendar } from 'lucide-react';
 import { useCategoryService, useExerciseService } from '../../services/ServiceFactory';
-import { getGuidesByCategory } from '../../services/GuideService';
+import { getGuidesByCategory, getGuideById } from '../../services/GuideService';
+import { renderLatex } from '../../utils/latexRenderer';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
 import DeleteDialog from '../../components/Dashboard/DeleteDialog';
+import GuideCard from '../../components/Dashboard/GuideCard';
 
 const CategoryView: React.FC = () => {
   const { id } = useParams();
@@ -34,7 +36,21 @@ const CategoryView: React.FC = () => {
         setExercises(exercisesData);
 
         const categoryGuides = await getGuidesByCategory(id);
-        setGuides(categoryGuides);
+
+        // Load exercises for each guide
+        const guidesWithExercises = await Promise.all(
+          categoryGuides.map(async (guide: any) => {
+            try {
+              const fullGuide = await getGuideById(guide.id);
+              return fullGuide;
+            } catch (error) {
+              console.error(`Error loading guide ${guide.id}:`, error);
+              return guide;
+            }
+          })
+        );
+
+        setGuides(guidesWithExercises);
       } catch (error) {
         console.error('Error loading category data:', error);
       } finally {
@@ -205,7 +221,7 @@ const CategoryView: React.FC = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 pb-8">
+          <div className={`grid ${tab === 'guias' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-1'} gap-6 pb-8`}>
             {tab === 'ejercicios' ? (
               exercises.length > 0 ? (
                 exercises.map((exercise) => (
@@ -239,9 +255,10 @@ const CategoryView: React.FC = () => {
                       <h3 className="text-lg font-black text-slate-900 group-hover:text-rose-600 transition-colors">
                         {exercise.title}
                       </h3>
-                      <p className="text-slate-500 font-semibold text-sm line-clamp-2">
-                        {exercise.description}
-                      </p>
+                      <div
+                        className="text-slate-500 font-semibold text-sm line-clamp-2 prose prose-sm max-w-none"
+                        dangerouslySetInnerHTML={{ __html: renderLatex(exercise.description) }}
+                      />
                     </div>
                     <div className="p-4 bg-slate-50 rounded-xl text-slate-300 group-hover:text-rose-500 transition-all">
                       <ArrowLeft className="rotate-180" size={20} strokeWidth={3} />
@@ -249,7 +266,7 @@ const CategoryView: React.FC = () => {
                   </Link>
                 ))
               ) : (
-                <div className="py-20 text-center space-y-4 bg-slate-50/50 rounded-[2.5rem] border-4 border-dashed border-slate-200">
+                <div className="col-span-full py-20 text-center space-y-4 bg-slate-50/50 rounded-[2.5rem] border-4 border-dashed border-slate-200">
                   <Coffee size={40} className="mx-auto text-slate-200" strokeWidth={2} />
                   <h3 className="text-xl font-black text-slate-400 tracking-tight">No hay ejercicios aún</h3>
                   <Link
@@ -263,19 +280,17 @@ const CategoryView: React.FC = () => {
             ) : (
               guides.length > 0 ? (
                 guides.map((guide) => (
-                  <div key={guide.id} className="bg-white rounded-[2.5rem] border border-slate-200 p-7 hover:shadow-xl transition-all">
-                    <h3 className="text-lg font-black text-slate-900">{guide.title}</h3>
-                    <p className="text-slate-500 text-sm mt-2">{guide.description}</p>
-                    <div className="mt-4 flex items-center justify-between">
-                      <span className="px-3 py-1 bg-amber-100 text-amber-700 text-[9px] font-black rounded-lg uppercase tracking-wider">
-                        {guide.status}
-                      </span>
-                      <span className="text-slate-400 text-[10px] font-bold">{guide.author}</span>
-                    </div>
-                  </div>
+                  <GuideCard
+                    key={guide.id}
+                    id={guide.id}
+                    title={guide.title}
+                    subject={guide.author}
+                    exerciseCount={guide.exercise_count}
+                    exercises={guide.exercises || []}
+                  />
                 ))
               ) : (
-                <div className="py-20 text-center space-y-4 bg-slate-50/50 rounded-[2.5rem] border-4 border-dashed border-slate-200">
+                <div className="col-span-full py-20 text-center space-y-4 bg-slate-50/50 rounded-[2.5rem] border-4 border-dashed border-slate-200">
                   <BookOpen size={40} className="mx-auto text-slate-200" strokeWidth={2} />
                   <h3 className="text-xl font-black text-slate-400 tracking-tight">No hay guías aún</h3>
                   <Link

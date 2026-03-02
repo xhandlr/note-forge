@@ -12,6 +12,7 @@ import GuideMetadata from '../../components/Guides/GuideMetadata';
 import GuideExercisesList from '../../components/Guides/GuideExercisesList';
 import ExerciseSearch from '../../components/Guides/ExerciseSearch';
 import GuidePreviewModal from '../../components/Guides/GuidePreviewModal';
+import ExercisePicker from '../../components/Guides/ExercisePicker';
 
 interface Exercise {
     id: number;
@@ -46,6 +47,7 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
     const [showExportModal, setShowExportModal] = useState(false);
     const [categories, setCategories] = useState<any[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+    const [showPicker, setShowPicker] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -301,9 +303,9 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                                     onSearchChange={handleSearch}
                                     filteredExercises={filteredExercises}
                                     onAddExercise={handleAddToGuide}
-                                    categories={categories}
-                                    selectedCategories={selectedCategories}
-                                    onCategoriesChange={setSelectedCategories}
+                                    guideExercises={guideExercises}
+                                    onRemoveExercise={handleRemoveFromGuide}
+                                    onOpenPicker={() => setShowPicker(true)}
                                 />
                             </div>
                         </div>
@@ -337,7 +339,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                             </button>
                             <button
                                 onClick={handleSave}
-                                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 text-white rounded-2xl font-black hover:bg-blue-700 transition-all active:scale-95 text-sm"
+                                className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-black text-white rounded-2xl font-black hover:bg-gray-700 transition-all active:scale-95 text-sm"
                             >
                                 <Save size={18} strokeWidth={3} /> {mode === 'edit' ? 'Actualizar' : 'Guardar'}
                             </button>
@@ -379,6 +381,16 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                 guideAuthor={guideAuthor}
                 guideExercises={guideExercises}
                 generateLatex={generateLatex}
+            />
+
+            <ExercisePicker
+                isOpen={showPicker}
+                onClose={() => setShowPicker(false)}
+                exercises={exercises}
+                guideExercises={guideExercises}
+                categories={categories}
+                onAddExercise={handleAddToGuide}
+                onRemoveExercise={handleRemoveFromGuide}
             />
 
             <style>{`
