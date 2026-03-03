@@ -117,7 +117,7 @@ const ExerciseSearch: React.FC<ExerciseSearchProps> = ({
             {categories.length > 0 && (
                 <div className="pt-8 border-t border-slate-200 space-y-3">
                     <h4 className="text-xs font-black uppercase tracking-widest text-slate-500">Asignaturas</h4>
-                    <div className="space-y-2">
+                    <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
                         {categories.map(category => (
                             <label
                                 key={category.id}

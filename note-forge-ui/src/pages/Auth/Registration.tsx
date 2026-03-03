@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNotification } from '../../contexts/NotificationContext';
+import { ArrowLeft } from 'lucide-react';
 
 // Registration service import
 import { validateRegistration } from '../../services/RegistrationService';
@@ -104,7 +105,14 @@ function Registration(): JSX.Element {
     
     return (
         <div className="min-h-screen bg-white flex items-center justify-center p-4">
-            <div className="bg-white w-full max-w-lg p-10 rounded-[2.5rem] shadow-2xl border border-slate-200 flex flex-col items-center">
+            <div className="w-full max-w-lg flex flex-col gap-3">
+            <Link
+                to="/"
+                className="flex items-center gap-2 text-slate-400 hover:text-slate-900 font-bold transition-colors self-start"
+            >
+                <ArrowLeft size={16} strokeWidth={2.5} /> Inicio
+            </Link>
+            <div className="bg-white w-full p-10 rounded-[2.5rem] shadow-2xl border border-slate-200 flex flex-col items-center">
                 <Icon
                     size='w-10 h-10'
                     type='logotype'
@@ -170,6 +178,7 @@ function Registration(): JSX.Element {
                 <p className="mt-8 text-slate-600 font-medium">
                     ¿Ya tienes una cuenta? <Link to="/login" className="text-slate-900 font-black hover:text-rose-500 transition-colors">Iniciar Sesión</Link>
                 </p>
+            </div>
             </div>
         </div>
     );

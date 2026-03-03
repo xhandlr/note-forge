@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Edit3, Eye, Code, Download, FileText, BookOpen, Clock, Package } from 'lucide-react';
+import { ArrowLeft, Edit3, Eye, Code, Download, FileText, BookOpen, Clock, Package, Copy, Check } from 'lucide-react';
 import { getGuideById } from '../../services/GuideService';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
@@ -82,6 +82,13 @@ const GuideView: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'render' | 'latex'>('render');
     const [showExportModal, setShowExportModal] = useState(false);
+    const [copied, setCopied] = useState(false);
+
+    const handleCopyLatex = () => {
+        navigator.clipboard.writeText(generateLatex());
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     useEffect(() => {
         if (!id) return;
@@ -327,8 +334,17 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                         </div>
                     ) : (
                         <div className="w-[70%] mx-auto px-4 sm:px-6 lg:px-8">
-                            <div className="bg-slate-900 rounded-[2rem] p-8 font-mono text-sm text-slate-300 shadow-2xl border border-slate-800 overflow-x-auto">
-                                <pre className="whitespace-pre-wrap leading-relaxed">{generateLatex()}</pre>
+                            <div className="bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-800 overflow-x-auto">
+                                <div className="flex items-center justify-between px-8 pt-6 pb-4 border-b border-slate-800">
+                                    <span className="text-xs font-black uppercase tracking-widest text-slate-500">Código LaTeX</span>
+                                    <button
+                                        onClick={handleCopyLatex}
+                                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-black text-xs transition-all ${copied ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'}`}
+                                    >
+                                        {copied ? <><Check size={13} strokeWidth={3} /> Copiado</> : <><Copy size={13} /> Copiar</>}
+                                    </button>
+                                </div>
+                                <pre className="p-8 font-mono text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">{generateLatex()}</pre>
                             </div>
                         </div>
                     )}

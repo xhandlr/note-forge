@@ -41,7 +41,7 @@ const GuideExercisesList: React.FC<GuideExercisesListProps> = ({
             <div className="space-y-3" onDrop={(e) => onDrop(e, -1)} onDragOver={onDragOver}>
                 {exercises.length === 0 ? (
                     <div className="py-20 text-center border-2 border-dashed border-slate-100 rounded-3xl bg-slate-50/30">
-                        <p className="text-slate-300 font-bold">No hay retos seleccionados aún.</p>
+                        <p className="text-slate-300 font-bold">No hay ejercicios seleccionados aún.</p>
                     </div>
                 ) : (
                     exercises.map((item, idx) => (

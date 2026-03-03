@@ -236,9 +236,9 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
         <div className="bg-white p-7 lg:p-9 rounded-[2.5rem] shadow-xl border border-slate-200 relative">
           <div className="mb-8 border-b border-slate-100 pb-5">
             <h1 className="text-xl font-black text-slate-900 tracking-tight">
-              {step === 1 && "Bases del Reto"}
-              {step === 2 && "Cuerpo del Ejercicio"}
-              {step === 3 && "Detalles de Forja"}
+              {step === 1 && "Descripción Básica"}
+              {step === 2 && "Contenido del Ejercicio"}
+              {step === 3 && "Información Adicional"}
             </h1>
             <p className="text-xs text-slate-500 font-semibold mt-2">
               Paso {step} de 3 — {mode === 'edit' ? 'Actualiza' : 'Construye'} material profesional.
