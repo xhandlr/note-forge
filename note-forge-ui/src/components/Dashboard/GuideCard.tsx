@@ -10,14 +10,15 @@ interface GuideCardProps {
     subject?: string;
     exerciseCount?: number;
     exercises?: any[];
+    navigateState?: Record<string, any>;
 }
 
-const GuideCard: React.FC<GuideCardProps> = ({ id, title, subject, exerciseCount, exercises }) => {
+const GuideCard: React.FC<GuideCardProps> = ({ id, title, subject, exerciseCount, exercises, navigateState }) => {
     const navigate = useNavigate();
 
     return (
         <div
-            onClick={() => navigate(`/guide/${id}`)}
+            onClick={() => navigate(`/guide/${id}`, navigateState ? { state: navigateState } : undefined)}
             className="bg-white rounded-[2rem] p-6 border border-slate-200 shadow-2xl flex flex-col gap-5 group hover:border-rose-300 transition-all cursor-pointer"
         >
             <div className="aspect-[3/4] bg-white rounded-2xl relative overflow-hidden border border-slate-200 shadow-inner">

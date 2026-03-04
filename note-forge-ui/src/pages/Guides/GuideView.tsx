@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Edit3, Eye, Code, Download, FileText, BookOpen, Clock, Copy, Check } from 'lucide-react';
 import { getGuideById } from '../../services/GuideService';
 import Navbar from '../../components/Dashboard/Navbar';
@@ -77,6 +77,8 @@ interface Guide {
 const GuideView: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
+    const backTo = (location.state as any)?.from;
     const { showSuccess, showError } = useNotification();
     const [guide, setGuide] = useState<Guide | null>(null);
     const [loading, setLoading] = useState(true);
@@ -193,7 +195,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                     <div className="w-[70%] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3 min-w-0">
                             <button
-                                onClick={() => navigate('/dashboard')}
+                                onClick={() => backTo ? navigate(backTo) : navigate('/dashboard', { state: { tab: 'guias' } })}
                                 className="flex items-center gap-1.5 text-slate-400 hover:text-slate-900 font-bold text-sm transition-colors shrink-0"
                             >
                                 <ArrowLeft size={16} strokeWidth={2.5} /> Inicio

@@ -227,6 +227,7 @@ const CategoryView: React.FC = () => {
                 exercises.map((exercise) => (
                   <Link
                     to={`/exercise/${exercise.id}`}
+                    state={{ from: `/category/${id}` }}
                     key={exercise.id}
                     className="bg-white rounded-[2.5rem] border border-slate-200 p-7 flex flex-col md:flex-row items-center gap-6 group hover:border-rose-400 hover:shadow-xl transition-all"
                   >
@@ -287,6 +288,7 @@ const CategoryView: React.FC = () => {
                     subject={guide.author}
                     exerciseCount={guide.exercise_count}
                     exercises={guide.exercises || []}
+                    navigateState={{ from: `/category/${id}` }}
                   />
                 ))
               ) : (

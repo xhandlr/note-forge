@@ -24,6 +24,10 @@ body {
   font-family: 'Plus Jakarta Sans', 'Open Sans', sans-serif;
 }
 
+button, [role="button"], a, label[for], select {
+  cursor: pointer;
+}
+
 .logo-font {
   font-family: 'Marhey', cursive;
 }

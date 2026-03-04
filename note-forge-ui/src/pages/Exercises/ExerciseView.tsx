@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { ArrowLeft, Edit3, Book, FileText, CheckCircle, ChevronDown, Layers, Download } from 'lucide-react';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
@@ -64,6 +64,8 @@ function renderLatex(text: string): string {
 const ExerciseView: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const backTo = (location.state as any)?.from;
   const [showResolution, setShowResolution] = useState(false);
   const [exercise, setExercise] = useState<any>(null);
   const [category, setCategory] = useState<any>(null);
@@ -149,7 +151,7 @@ const ExerciseView: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-6">
           <div className="space-y-3">
             <button
-              onClick={() => navigate('/dashboard', { state: { tab: 'ejercicios' } })}
+              onClick={() => backTo ? navigate(backTo) : navigate('/dashboard', { state: { tab: 'ejercicios' } })}
               className="flex items-center gap-2 text-slate-400 font-black hover:text-slate-900 transition-colors text-sm mb-2"
             >
               <ArrowLeft size={16} strokeWidth={3} /> Regresar
