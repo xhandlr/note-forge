@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { BookOpen } from "lucide-react";
+import { BookOpen, Edit3, Trash2 } from "lucide-react";
 import PDFPreview from "../Guides/PDFPreview";
 
 interface GuideCardProps {
@@ -11,9 +11,11 @@ interface GuideCardProps {
     exerciseCount?: number;
     exercises?: any[];
     navigateState?: Record<string, any>;
+    onEdit?: () => void;
+    onDelete?: () => void;
 }
 
-const GuideCard: React.FC<GuideCardProps> = ({ id, title, subject, exerciseCount, exercises, navigateState }) => {
+const GuideCard: React.FC<GuideCardProps> = ({ id, title, subject, exerciseCount, exercises, navigateState, onEdit, onDelete }) => {
     const navigate = useNavigate();
 
     return (
@@ -41,6 +43,28 @@ const GuideCard: React.FC<GuideCardProps> = ({ id, title, subject, exerciseCount
                         <BookOpen size={11} />
                         {exerciseCount ?? 0} ejercicio{(exerciseCount ?? 0) !== 1 ? 's' : ''}
                     </div>
+                    {(onEdit || onDelete) && (
+                        <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            {onEdit && (
+                                <button
+                                    onClick={e => { e.stopPropagation(); onEdit(); }}
+                                    className="p-2 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
+                                    title="Editar"
+                                >
+                                    <Edit3 size={16} />
+                                </button>
+                            )}
+                            {onDelete && (
+                                <button
+                                    onClick={e => { e.stopPropagation(); onDelete(); }}
+                                    className="p-2 rounded-xl hover:bg-rose-50 text-slate-400 hover:text-rose-500 transition-colors"
+                                    title="Eliminar"
+                                >
+                                    <Trash2 size={16} />
+                                </button>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

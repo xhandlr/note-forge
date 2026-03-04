@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Coffee, Plus, Search, Filter, BookOpen, Layers, Eye, EyeOff } from "lucide-react";
 import { useCategoryService, useExerciseService, useGuideService } from "../../services/ServiceFactory";
 
@@ -14,6 +14,7 @@ import DeleteDialog from "../../components/Dashboard/DeleteDialog";
 function Dashboard() {
     const { t } = useTranslation();
     const location = useLocation();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState((location.state as any)?.tab || 'asignaturas');
     const [heroVisible, setHeroVisible] = useState(() => localStorage.getItem('hide_hero') !== 'true');
 
@@ -41,6 +42,8 @@ function Dashboard() {
     const [filterHasImage, setFilterHasImage] = useState<boolean | null>(null);
     const [deletingCategory, setDeletingCategory] = useState<{ id: number; name: string; exercisesCount: number } | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [deletingGuide, setDeletingGuide] = useState<{ id: number; title: string } | null>(null);
+    const [isDeletingGuide, setIsDeletingGuide] = useState(false);
 
     const activeFiltersCount = filterCategories.length + filterDifficulties.length + (filterHasImage !== null ? 1 : 0);
 
@@ -136,6 +139,20 @@ function Dashboard() {
         }
     };
 
+    const handleDeleteGuide = async () => {
+        if (!deletingGuide) return;
+        setIsDeletingGuide(true);
+        try {
+            await guideService.delete(deletingGuide.id);
+            setGuides(prev => prev.filter(g => g.id !== deletingGuide.id));
+            setDeletingGuide(null);
+        } catch (error) {
+            console.error('Error al eliminar guía:', error);
+        } finally {
+            setIsDeletingGuide(false);
+        }
+    };
+
     const q = searchTerm.toLowerCase().trim();
 
     const sortedCategories = [...categories]
@@ -170,6 +187,16 @@ function Dashboard() {
                     onConfirm={handleDeleteCategory}
                     onCancel={() => !isDeleting && setDeletingCategory(null)}
                     deleting={isDeleting}
+                />
+            )}
+
+            {deletingGuide && (
+                <DeleteDialog
+                    categoryName={deletingGuide.title}
+                    exercisesCount={0}
+                    onConfirm={handleDeleteGuide}
+                    onCancel={() => !isDeletingGuide && setDeletingGuide(null)}
+                    deleting={isDeletingGuide}
                 />
             )}
 
@@ -415,6 +442,8 @@ function Dashboard() {
                                             subject={guide.author}
                                             exerciseCount={guide.exercise_count}
                                             exercises={guide.exercises}
+                                            onEdit={() => navigate(`/edit-guide/${guide.id}`)}
+                                            onDelete={() => setDeletingGuide({ id: guide.id, title: guide.title })}
                                         />
                                     ))}
                                     <Link to="/create-guide" className="bg-white border-4 border-dashed border-slate-200 rounded-[2rem] h-full min-h-[300px] flex flex-col items-center justify-center text-slate-300 hover:bg-rose-50 hover:border-rose-400 hover:text-rose-500 transition-all group shadow-2xl">

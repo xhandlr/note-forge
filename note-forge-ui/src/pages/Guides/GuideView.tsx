@@ -1,58 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Edit3, Eye, Code, Download, FileText, BookOpen, Clock, Copy, Check } from 'lucide-react';
-import { getGuideById } from '../../services/GuideService';
+import { ArrowLeft, Edit3, Eye, Code, Download, FileText, BookOpen, Clock, Copy, Check, Trash2 } from 'lucide-react';
+import { getGuideById, deleteGuide } from '../../services/GuideService';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
 import { useNotification } from '../../contexts/NotificationContext';
 import ExportGuideModal from '../../components/Guides/ExportGuideModal';
-import katex from 'katex';
-import 'katex/dist/katex.min.css';
-
-function applyTextCommands(text: string): string {
-    return text
-        .replace(/\\(begin|end)\{document\}/g, '')
-        .replace(/\\documentclass(\[.*?\])?\{.*?\}/g, '')
-        .replace(/\\usepackage(\[.*?\])?\{.*?\}/g, '')
-        .replace(/\\textbf\{([^}]*)\}/g, '<strong>$1</strong>')
-        .replace(/\\textit\{([^}]*)\}/g, '<em>$1</em>')
-        .replace(/\\underline\{([^}]*)\}/g, '<u>$1</u>')
-        .replace(/\\text\{([^}]*)\}/g, '$1')
-        .replace(/\\emph\{([^}]*)\}/g, '<em>$1</em>')
-        .replace(/\\(section|chapter)\*?\{([^}]*)\}/g, '<strong class="text-lg">$2</strong>')
-        .replace(/\\subsection\*?\{([^}]*)\}/g, '<strong>$1</strong>')
-        .replace(/\\\\/g, '<br/>')
-        .replace(/\\newline/g, '<br/>')
-        .replace(/\\par\b/g, '<br/><br/>');
-}
-
-function renderLatex(text: string): string {
-    if (!text) return '';
-    const latexRegex = /(\\(?:\(|\[)[\s\S]*?\\(?:\)|\])|\$\$[\s\S]*?\$\$)/g;
-    const segments = text.split(latexRegex);
-    let processed = '';
-    for (const segment of segments) {
-        if (!segment) continue;
-        if (segment.startsWith('\\(') || segment.startsWith('\\[') || segment.startsWith('$$')) {
-            try {
-                const displayMode = segment.startsWith('\\[') || segment.startsWith('$$');
-                const content = segment
-                    .replace(/^(\\[\(\[]|\$\$)/, '')
-                    .replace(/(\\[\)\]]|\$\$)$/, '');
-                processed += katex.renderToString(content, { displayMode, throwOnError: false });
-            } catch {
-                processed += segment;
-            }
-        } else {
-            const escaped = segment
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;');
-            processed += applyTextCommands(escaped).replace(/\n/g, '<br/>');
-        }
-    }
-    return processed;
-}
+import DeleteDialog from '../../components/Dashboard/DeleteDialog';
+import { renderLatex } from '../../utils/latexRenderer';
 
 interface Exercise {
     id: number;
@@ -84,6 +39,8 @@ const GuideView: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'render' | 'latex'>('render');
     const [showExportModal, setShowExportModal] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const [copied, setCopied] = useState(false);
 
     const handleCopyLatex = () => {
@@ -139,10 +96,21 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
 \\end{document}`;
     };
 
-    const handleExportComplete = async () => {
-        // No need to do anything after export in GuideView
-        // The modal handles everything
+    const handleDeleteGuide = async () => {
+        if (!id) return;
+        setIsDeleting(true);
+        try {
+            await deleteGuide(id);
+            navigate('/dashboard', { state: { tab: 'guias' } });
+        } catch {
+            showError('Error al eliminar la guía');
+        } finally {
+            setIsDeleting(false);
+        }
     };
+
+    const handleExportComplete = async () => {};
+
 
     if (loading) {
         return (
@@ -217,6 +185,13 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                                 className="flex items-center gap-1.5 px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-xs hover:bg-slate-700 transition-all"
                             >
                                 <Edit3 size={13} /> Editar
+                            </button>
+                            <button
+                                onClick={() => setShowDeleteConfirm(true)}
+                                className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
+                                title="Eliminar guía"
+                            >
+                                <Trash2 size={15} />
                             </button>
                         </div>
                     </div>
@@ -353,6 +328,16 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                 </div>
 
             </div>
+
+            {showDeleteConfirm && guide && (
+                <DeleteDialog
+                    categoryName={guide.title}
+                    exercisesCount={0}
+                    onConfirm={handleDeleteGuide}
+                    onCancel={() => !isDeleting && setShowDeleteConfirm(false)}
+                    deleting={isDeleting}
+                />
+            )}
 
             {/* Export Modal */}
             <ExportGuideModal

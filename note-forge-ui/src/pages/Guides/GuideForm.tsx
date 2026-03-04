@@ -191,7 +191,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                 await addGuide(guideData);
                 showSuccess('Guía creada con éxito!');
             }
-            navigate('/dashboard');
+            navigate('/dashboard', { state: { tab: 'guias' } });
         } catch {
             showError('Error al guardar la guía');
         }
@@ -263,7 +263,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                             </div>
                         </div>
                         <button
-                            onClick={() => mode === 'edit' ? navigate(-1) : navigate('/dashboard')}
+                            onClick={() => navigate('/dashboard', { state: { tab: 'guias' } })}
                             className="flex items-center gap-2 px-4 py-2 text-slate-400 font-bold hover:text-slate-900 transition-colors"
                         >
                             <ArrowLeft size={18} strokeWidth={2.5} /> {mode === 'edit' ? 'Volver' : 'Volver al tablero'}

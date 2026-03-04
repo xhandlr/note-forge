@@ -123,7 +123,7 @@ const SearchPage: React.FC = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="¿Qué estás buscando hoy?"
-              className="flex-grow bg-transparent text-xl font-black text-slate-900 outline-none placeholder:text-slate-200"
+              className="flex-grow bg-transparent text-xl font-black text-slate-900 outline-none placeholder:text-slate-300"
               autoFocus
             />
             {query && (
