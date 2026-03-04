@@ -312,6 +312,12 @@ function Dashboard() {
                                     className="bg-white border border-slate-200 pl-10 pr-4 py-3 rounded-xl outline-none focus:ring-4 focus:ring-rose-100 shadow-sm font-bold text-sm w-48 focus:w-64 transition-all"
                                 />
                             </div>
+                            <Link
+                                to={activeTab === 'asignaturas' ? '/create-category' : activeTab === 'ejercicios' ? '/create-exercise' : '/create-guide'}
+                                className="flex items-center gap-2 px-4 py-3 bg-slate-900 text-white rounded-xl font-black text-sm hover:bg-rose-600 transition-all shrink-0"
+                            >
+                                <Plus size={16} strokeWidth={3} /> Agregar
+                            </Link>
                         </div>
                     </div>
                 </div>

@@ -188,10 +188,10 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                             </button>
                             <button
                                 onClick={() => setShowDeleteConfirm(true)}
-                                className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
+                                className="flex items-center gap-1.5 px-4 py-2 text-slate-400 hover:text-rose-500 border border-slate-200 hover:bg-rose-50 hover:border-rose-500 rounded-xl font-black text-xs transition-all"
                                 title="Eliminar guía"
                             >
-                                <Trash2 size={15} />
+                                <Trash2 size={15} /> Eliminar
                             </button>
                         </div>
                     </div>
