@@ -119,7 +119,7 @@ const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject,
                 className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden flex flex-col md:flex-row group hover:border-rose-300 transition-all text-left cursor-pointer"
                 onClick={() => id && navigate(`/exercise/${id}`)}
             >
-                <div className="md:w-1/3 lg:w-1/4 h-48 md:h-auto relative overflow-hidden">
+                <div className="md:w-1/3 lg:w-1/4 h-48 md:h-56 shrink-0 relative overflow-hidden">
                     {img ? (
                         <img src={img} alt={title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     ) : (

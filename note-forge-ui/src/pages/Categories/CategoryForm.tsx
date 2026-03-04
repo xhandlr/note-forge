@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addCategory, updateCategory, getCategoryById } from '../../services/CategoryService';
+import { useCategoryService } from '../../services/ServiceFactory';
 import { ArrowLeft, Camera, Layers, Check, Info } from 'lucide-react';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
@@ -14,6 +14,7 @@ interface CategoryFormProps {
 const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
   const navigate = useNavigate();
   const { showSuccess, showError } = useNotification();
+  const categoryService = useCategoryService();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(mode === 'edit');
   const [categoryData, setCategoryData] = useState({
@@ -30,7 +31,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
     if (mode === 'edit' && categoryId) {
       const fetchCategory = async () => {
         try {
-          const data = await getCategoryById(categoryId);
+          const data = await categoryService.getById(categoryId);
           if (data) {
             setCategoryData({
               name: data.name || '',
@@ -86,11 +87,11 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
 
     try {
       if (mode === 'edit' && categoryId) {
-        await updateCategory(categoryId, formData);
+        await categoryService.update(categoryId, formData);
         showSuccess('Asignatura actualizada con éxito!');
         navigate(`/category/${categoryId}`);
       } else {
-        await addCategory(formData);
+        await categoryService.create(formData);
         showSuccess(`Asignatura ${categoryData.isPinned ? 'fijada y ' : ''}creada con éxito!`);
         navigate('/dashboard');
       }

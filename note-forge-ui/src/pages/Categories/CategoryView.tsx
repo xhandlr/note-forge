@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Coffee, BookOpen, Edit3, Plus, Trash2, Calendar } from 'lucide-react';
-import { useCategoryService, useExerciseService } from '../../services/ServiceFactory';
-import { getGuidesByCategory, getGuideById } from '../../services/GuideService';
+import { useCategoryService, useExerciseService, useGuideService } from '../../services/ServiceFactory';
 import { renderLatex } from '../../utils/latexRenderer';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
@@ -22,6 +21,7 @@ const CategoryView: React.FC = () => {
 
   const categoryService = useCategoryService();
   const exerciseService = useExerciseService();
+  const guideService = useGuideService();
 
   useEffect(() => {
     const loadData = async () => {
@@ -29,28 +29,14 @@ const CategoryView: React.FC = () => {
 
       try {
         setLoading(true);
-        const categoryData = await categoryService.getById(id);
+        const [categoryData, exercisesData, guidesData] = await Promise.all([
+          categoryService.getById(id),
+          exerciseService.getByCategoryId(id),
+          guideService.getByCategoryId(id),
+        ]);
         setCategory(categoryData);
-
-        const exercisesData = await exerciseService.getByCategoryId(id);
         setExercises(exercisesData);
-
-        const categoryGuides = await getGuidesByCategory(id);
-
-        // Load exercises for each guide
-        const guidesWithExercises = await Promise.all(
-          categoryGuides.map(async (guide: any) => {
-            try {
-              const fullGuide = await getGuideById(guide.id);
-              return fullGuide;
-            } catch (error) {
-              console.error(`Error loading guide ${guide.id}:`, error);
-              return guide;
-            }
-          })
-        );
-
-        setGuides(guidesWithExercises);
+        setGuides(guidesData);
       } catch (error) {
         console.error('Error loading category data:', error);
       } finally {

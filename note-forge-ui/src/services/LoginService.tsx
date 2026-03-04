@@ -102,6 +102,10 @@ const checkAuth = async () => {
 
         return data.authenticated;
     } catch (error) {
+        // TypeError = error de red (backend no disponible) → mantener sesión activa
+        if (error instanceof TypeError) {
+            return true;
+        }
         console.error("Error verificando autenticación", error);
         return false;
     }

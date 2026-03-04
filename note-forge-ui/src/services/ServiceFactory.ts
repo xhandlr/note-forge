@@ -85,6 +85,7 @@ export const useGuideService = () => {
     return {
       getAll: mockGuideService.getAll,
       getById: mockGuideService.getById,
+      getByCategoryId: mockGuideService.getByCategoryId,
       create: mockGuideService.create,
       update: mockGuideService.update,
       delete: mockGuideService.delete
@@ -94,6 +95,10 @@ export const useGuideService = () => {
   return {
     getAll: getGuides,
     getById: getGuideById,
+    getByCategoryId: async (categoryId: string | number) => {
+      const { getGuidesByCategory } = await import('./GuideService');
+      return getGuidesByCategory(categoryId);
+    },
     create: addGuide,
     update: updateGuide,
     delete: deleteGuide

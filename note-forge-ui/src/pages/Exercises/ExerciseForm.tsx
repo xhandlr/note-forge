@@ -7,8 +7,7 @@ import LatexEditor from '../../components/Exercises/LatexEditor';
 import DurationInput from '../../components/Exercises/DurationInput';
 import TagsInput from '../../components/Exercises/TagsInput';
 import { Book, Link as LinkIcon, FileText, Camera, ChevronLeft, ChevronRight, Check, X } from 'lucide-react';
-import { getExerciseById, updateExercise, addExercise } from '../../services/ExerciseService';
-import { getCategories } from '../../services/CategoryService';
+import { useExerciseService, useCategoryService } from '../../services/ServiceFactory';
 import { useNotification } from '../../contexts/NotificationContext';
 
 interface Tag {
@@ -32,6 +31,8 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { showSuccess, showError } = useNotification();
+  const exerciseService = useExerciseService();
+  const categoryService = useCategoryService();
 
   const [loading, setLoading] = useState(mode === 'edit');
   const [step, setStep] = useState(1);
@@ -57,7 +58,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
 
   // Cargar categorías disponibles
   useEffect(() => {
-    getCategories()
+    categoryService.getAll()
       .then((data) => setCategories(data))
       .catch(() => setCategories([]));
   }, []);
@@ -67,7 +68,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
     if (mode === 'edit' && exerciseId) {
       const fetchExercise = async () => {
         try {
-          const data = await getExerciseById(exerciseId);
+          const data = await exerciseService.getById(exerciseId);
           if (data) {
             setTitle(data.title || '');
             setDifficulty(Number(data.difficulty) || 1);
@@ -137,7 +138,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
           tags: JSON.stringify(tags),
           details,
         };
-        await updateExercise(exerciseId, exerciseData);
+        await exerciseService.update(exerciseId, exerciseData);
         showSuccess('Ejercicio actualizado con éxito');
       } else {
         // Modo create: usar FormData para soportar imagen
@@ -156,7 +157,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
           formData.append('image', image);
         }
 
-        await addExercise(formData);
+        await exerciseService.create(formData);
         showSuccess('Ejercicio creado con éxito');
       }
       navigate('/dashboard');

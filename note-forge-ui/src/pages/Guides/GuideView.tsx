@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Edit3, Eye, Code, Download, FileText, BookOpen, Clock, Copy, Check, Trash2 } from 'lucide-react';
-import { getGuideById, deleteGuide } from '../../services/GuideService';
+import { useGuideService } from '../../services/ServiceFactory';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
 import { useNotification } from '../../contexts/NotificationContext';
@@ -35,6 +35,7 @@ const GuideView: React.FC = () => {
     const location = useLocation();
     const backTo = (location.state as any)?.from;
     const { showSuccess, showError } = useNotification();
+    const guideService = useGuideService();
     const [guide, setGuide] = useState<Guide | null>(null);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'render' | 'latex'>('render');
@@ -51,7 +52,7 @@ const GuideView: React.FC = () => {
 
     useEffect(() => {
         if (!id) return;
-        getGuideById(id)
+        guideService.getById(id)
             .then((data: Guide) => setGuide(data))
             .catch(() => { showError('Error al cargar la guía'); setGuide(null); })
             .finally(() => setLoading(false));
@@ -100,7 +101,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
         if (!id) return;
         setIsDeleting(true);
         try {
-            await deleteGuide(id);
+            await guideService.delete(id);
             navigate('/dashboard', { state: { tab: 'guias' } });
         } catch {
             showError('Error al eliminar la guía');

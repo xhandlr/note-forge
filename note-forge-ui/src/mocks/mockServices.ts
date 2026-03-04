@@ -3,6 +3,16 @@ import { mockCategories, mockExercises, mockGuides, mockUser } from './mockData'
 // Simulate network delay
 const delay = (ms: number = 300) => new Promise(resolve => setTimeout(resolve, ms));
 
+// Extract plain object from FormData or return as-is
+const toFields = (data: any): any => {
+  if (data instanceof FormData) {
+    const obj: any = {};
+    data.forEach((value, key) => { obj[key] = value; });
+    return obj;
+  }
+  return data;
+};
+
 // Category Services
 export const mockCategoryService = {
   async getAll() {
@@ -21,9 +31,15 @@ export const mockCategoryService = {
 
   async create(data: any) {
     await delay();
+    const f = toFields(data);
     const newCategory = {
       id: Math.max(...mockCategories.map(c => c.id)) + 1,
-      ...data,
+      name: f.name || '',
+      description: f.description || '',
+      image_url: f.image_url || null,
+      is_pinned: f.isPinned === '1' || f.isPinned === true || f.is_pinned === 1,
+      exercise_count: 0,
+      guide_count: 0,
       created_at: new Date().toISOString().split('T')[0]
     };
     mockCategories.push(newCategory);
@@ -36,7 +52,13 @@ export const mockCategoryService = {
     if (index === -1) {
       throw new Error('Categoría no encontrada');
     }
-    mockCategories[index] = { ...mockCategories[index], ...data };
+    const f = toFields(data);
+    mockCategories[index] = {
+      ...mockCategories[index],
+      name: f.name ?? mockCategories[index].name,
+      description: f.description ?? mockCategories[index].description,
+      is_pinned: f.isPinned !== undefined ? (f.isPinned === '1' || f.isPinned === true) : mockCategories[index].is_pinned,
+    };
     return mockCategories[index];
   },
 
@@ -69,14 +91,23 @@ export const mockExerciseService = {
 
   async getByCategoryId(categoryId: string | number) {
     await delay();
-    return mockExercises.filter(e => e.categoryId === Number(categoryId));
+    return mockExercises.filter(e => e.category_id === Number(categoryId));
   },
 
   async create(data: any) {
     await delay();
+    const f = toFields(data);
     const newExercise = {
       id: Math.max(...mockExercises.map(e => e.id)) + 1,
-      ...data,
+      title: f.title || '',
+      description: f.description || '',
+      answer: f.answer || '',
+      difficulty: Number(f.difficulty) || 1,
+      duration: f.duration || '',
+      category_id: Number(f.categoryId || f.category_id) || 0,
+      image_url: null,
+      tags: f.tags || '[]',
+      details: f.details || '',
       created_at: new Date().toISOString().split('T')[0]
     };
     mockExercises.push(newExercise);
@@ -89,7 +120,17 @@ export const mockExerciseService = {
     if (index === -1) {
       throw new Error('Ejercicio no encontrado');
     }
-    mockExercises[index] = { ...mockExercises[index], ...data };
+    const f = toFields(data);
+    mockExercises[index] = {
+      ...mockExercises[index],
+      title: f.title ?? mockExercises[index].title,
+      description: f.description ?? mockExercises[index].description,
+      answer: f.answer ?? mockExercises[index].answer,
+      difficulty: f.difficulty !== undefined ? Number(f.difficulty) : mockExercises[index].difficulty,
+      duration: f.duration ?? mockExercises[index].duration,
+      category_id: f.categoryId ? Number(f.categoryId) : (f.category_id ? Number(f.category_id) : mockExercises[index].category_id),
+      tags: f.tags ?? mockExercises[index].tags,
+    };
     return mockExercises[index];
   },
 
@@ -104,11 +145,29 @@ export const mockExerciseService = {
   }
 };
 
+const enrichGuide = (guide: any) => {
+  const exercises = (guide.exerciseIds || []).map((eid: number) =>
+    mockExercises.find(e => e.id === eid)
+  ).filter(Boolean);
+  return {
+    ...guide,
+    exercises,
+    exercise_count: exercises.length,
+  };
+};
+
 // Guide Services
 export const mockGuideService = {
   async getAll() {
     await delay();
-    return mockGuides;
+    return mockGuides.map(enrichGuide);
+  },
+
+  async getByCategoryId(categoryId: string | number) {
+    await delay();
+    return mockGuides
+      .map(enrichGuide)
+      .filter((g: any) => g.exercises.some((e: any) => e.category_id === Number(categoryId)));
   },
 
   async getById(id: string | number) {
@@ -117,7 +176,7 @@ export const mockGuideService = {
     if (!guide) {
       throw new Error('Guía no encontrada');
     }
-    return guide;
+    return enrichGuide(guide);
   },
 
   async create(data: any) {

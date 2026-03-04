@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
-import { useExerciseService } from '../../services/ServiceFactory';
-import { addGuide, updateGuide, getGuideById } from "../../services/GuideService";
-import { getCategories } from "../../services/CategoryService";
+import { useExerciseService, useGuideService, useCategoryService } from '../../services/ServiceFactory';
 import { FileText, ArrowLeft, Eye, Save, Download, BookOpen } from 'lucide-react';
 import { useNotification } from '../../contexts/NotificationContext';
 import ExportGuideModal from '../../components/Guides/ExportGuideModal';
@@ -35,6 +33,8 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
     const navigate = useNavigate();
     const { showSuccess, showError } = useNotification();
     const exerciseService = useExerciseService();
+    const guideService = useGuideService();
+    const categoryService = useCategoryService();
     const [loading, setLoading] = useState(mode === 'edit');
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([]);
@@ -65,7 +65,7 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const data = await getCategories();
+                const data = await categoryService.getAll();
                 setCategories(data);
             } catch (error) {
                 console.error('Error loading categories:', error);
@@ -78,7 +78,7 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
         if (mode === 'edit' && guideId) {
             const fetchGuide = async () => {
                 try {
-                    const data = await getGuideById(guideId);
+                    const data = await guideService.getById(guideId);
                     if (data) {
                         setGuideTitle(data.title || '');
                         setGuideAuthor(data.author || '');
@@ -185,10 +185,10 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
         };
         try {
             if (mode === 'edit' && guideId) {
-                await updateGuide(guideId, guideData);
+                await guideService.update(guideId, guideData);
                 showSuccess('Guía actualizada con éxito!');
             } else {
-                await addGuide(guideData);
+                await guideService.create(guideData);
                 showSuccess('Guía creada con éxito!');
             }
             navigate('/dashboard', { state: { tab: 'guias' } });
