@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Edit3, Eye, Code, Download, FileText, BookOpen, Clock, Package, Copy, Check } from 'lucide-react';
+import { ArrowLeft, Edit3, Eye, Code, Download, FileText, BookOpen, Clock, Copy, Check } from 'lucide-react';
 import { getGuideById } from '../../services/GuideService';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
@@ -205,14 +205,14 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                         <div className="flex items-center gap-2 shrink-0">
                             <button
                                 onClick={() => setShowExportModal(true)}
-                                className="flex items-center gap-1.5 px-4 py-2 bg-amber-500 text-white rounded-xl font-black text-xs hover:bg-amber-600 transition-all"
+                                className="flex items-center gap-1.5 px-4 py-2 bg-rose-500 text-white rounded-xl font-black text-xs hover:bg-rose-600 transition-all"
                             >
-                                <Package size={13} />
-                                Exportar ZIP
+                                <Download size={13} />
+                                Exportar
                             </button>
                             <button
                                 onClick={() => navigate(`/edit-guide/${id}`)}
-                                className="flex items-center gap-1.5 px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-xs hover:bg-rose-500 transition-all"
+                                className="flex items-center gap-1.5 px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-xs hover:bg-slate-700 transition-all"
                             >
                                 <Edit3 size={13} /> Editar
                             </button>

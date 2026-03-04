@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
-import { Coffee, Plus, Search, Filter, BookOpen, Layers } from "lucide-react";
+import { Coffee, Plus, Search, Filter, BookOpen, Layers, Eye, EyeOff } from "lucide-react";
 import { useCategoryService, useExerciseService, useGuideService } from "../../services/ServiceFactory";
 
 import Navbar from "../../components/Dashboard/Navbar";
@@ -15,6 +15,13 @@ function Dashboard() {
     const { t } = useTranslation();
     const location = useLocation();
     const [activeTab, setActiveTab] = useState((location.state as any)?.tab || 'asignaturas');
+    const [heroVisible, setHeroVisible] = useState(() => localStorage.getItem('hide_hero') !== 'true');
+
+    useEffect(() => {
+        const handler = (e: Event) => setHeroVisible((e as CustomEvent).detail);
+        window.addEventListener('hero-preference-change', handler);
+        return () => window.removeEventListener('hero-preference-change', handler);
+    }, []);
 
     useEffect(() => {
         if ((location.state as any)?.tab) {
@@ -169,7 +176,7 @@ function Dashboard() {
             <div className="w-[70%] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 mt-16">
 
                 {/* Banner */}
-                <div className="relative overflow-hidden bg-slate-900 p-8 lg:p-12 rounded-[3rem] shadow-2xl text-white">
+                {heroVisible && <div className="relative overflow-hidden bg-slate-900 p-8 lg:p-12 rounded-[3rem] shadow-2xl text-white">
                     <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-500/20 blur-[150px] rounded-full -translate-y-1/2 translate-x-1/2" />
                     <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-rose-500/20 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/4" />
 
@@ -207,24 +214,41 @@ function Dashboard() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>}
 
                 {/* Tabs */}
                 <div id="tabs-section" className="flex flex-col items-center gap-8">
-                    <div className="bg-slate-100/80 p-2 rounded-[2rem] flex items-center gap-2 border border-slate-200">
-                        {tabs.map((tab) => (
+                    <div className="grid grid-cols-[1fr_auto_1fr] items-center w-full">
+                        <div />
+                        <div className="bg-slate-100/80 p-2 rounded-[2rem] flex items-center gap-2 border border-slate-200">
+                            {tabs.map((tab) => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`px-6 py-3 rounded-[1.5rem] font-black text-sm transition-all duration-300 flex items-center gap-2 ${
+                                        activeTab === tab.id
+                                            ? 'bg-rose-500 text-white shadow-xl shadow-rose-200 scale-105'
+                                            : 'text-slate-500 hover:text-rose-500 hover:bg-white'
+                                    }`}
+                                >
+                                    {tab.icon} {tab.label}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="flex justify-end">
                             <button
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
-                                className={`px-6 py-3 rounded-[1.5rem] font-black text-sm transition-all duration-300 flex items-center gap-2 ${
-                                    activeTab === tab.id
-                                        ? 'bg-rose-500 text-white shadow-xl shadow-rose-200 scale-105'
-                                        : 'text-slate-500 hover:text-rose-500 hover:bg-white'
-                                }`}
+                                onClick={() => {
+                                    const next = !heroVisible;
+                                    setHeroVisible(next);
+                                    localStorage.setItem('hide_hero', String(!next));
+                                    window.dispatchEvent(new CustomEvent('hero-preference-change', { detail: next }));
+                                }}
+                                title={heroVisible ? 'Ocultar banner' : 'Mostrar banner'}
+                                className="p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all"
                             >
-                                {tab.icon} {tab.label}
+                                {heroVisible ? <EyeOff size={16} /> : <Eye size={16} />}
                             </button>
-                        ))}
+                        </div>
                     </div>
 
                     <div className="w-full flex justify-between items-center">

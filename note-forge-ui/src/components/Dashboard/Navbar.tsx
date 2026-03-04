@@ -49,8 +49,9 @@ function Navbar() {
     return (
         <nav className="w-full fixed top-0 left-0 bg-white/90 backdrop-blur-md text-slate-800 border-b border-slate-100 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16 lg:h-20">
+                <div className="grid grid-cols-3 items-center h-16 lg:h-20">
                     {/* Logo - left side */}
+                    <div className="flex items-center">
                     <Link to="/">
                         <Icon
                             size="w-8 h-8"
@@ -58,9 +59,10 @@ function Navbar() {
                             fontSize="text-xl"
                         />
                     </Link>
+                    </div>
 
                     {/* Navigation links - center (desktop only) */}
-                    <div className="hidden md:flex items-center gap-8">
+                    <div className="hidden md:flex items-center justify-center gap-8">
                         {isAuthenticated && (
                             <>
                                 <Link
@@ -98,7 +100,7 @@ function Navbar() {
                     </div>
 
                     {/* Right side buttons */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center justify-end gap-4">
                         {isAuthenticated ? (
                             <button
                                 onClick={handleLogout}

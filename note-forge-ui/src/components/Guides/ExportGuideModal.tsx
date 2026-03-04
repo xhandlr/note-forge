@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { Download, X } from 'lucide-react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { Download, X, FileText, Package } from 'lucide-react';
 import JSZip from 'jszip';
 import { useNotification } from '../../contexts/NotificationContext';
+import PDFPreview from './PDFPreview';
+import { renderLatex } from '../../utils/latexRenderer';
 
 interface Exercise {
     id: number;
@@ -41,6 +44,8 @@ const ExportGuideModal: React.FC<ExportGuideModalProps> = ({
 }) => {
     const { showSuccess, showError } = useNotification();
     const [exporting, setExporting] = useState(false);
+    const [exportFormat, setExportFormat] = useState<'zip' | 'pdf'>('zip');
+    const [pdfPageBreak, setPdfPageBreak] = useState(true);
     const [exportOptions, setExportOptions] = useState<ExportOptions>({
         includeAnswers: true,
         answerPlacement: 'inline',
@@ -128,8 +133,7 @@ ${ex.description || ''}`;
         return content;
     };
 
-    const handleExport = async () => {
-
+    const handleExportZip = async () => {
         try {
             setExporting(true);
             const zip = new JSZip();
@@ -174,6 +178,95 @@ ${ex.description || ''}`;
         }
     };
 
+    const handleExportPDF = () => {
+        try {
+            setExporting(true);
+
+            // Find KaTeX CSS (absolute URL so it works from blob: origin)
+            const katexCssHref = Array.from(
+                document.querySelectorAll('link[rel="stylesheet"]') as NodeListOf<HTMLLinkElement>
+            ).find(l => l.href?.includes('katex'))?.href
+                || 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css';
+
+            // Main exercises (answers inline or hidden)
+            const mainHtml = renderToStaticMarkup(
+                React.createElement(PDFPreview, {
+                    title: guideTitle,
+                    author: guideAuthor,
+                    exercises,
+                    showAnswers: exportOptions.includeAnswers && exportOptions.answerPlacement === 'inline',
+                    showDifficulty: exportOptions.includeDifficulty,
+                    showDuration: exportOptions.includeDuration,
+                    showImages: exportOptions.includeImages,
+                    pageBreak: pdfPageBreak,
+                })
+            );
+
+            // Answers-at-end section
+            let answersHtml = '';
+            if (exportOptions.includeAnswers && exportOptions.answerPlacement === 'end') {
+                const withAnswers = exercises.filter(e => e.answer);
+                if (withAnswers.length > 0) {
+                    answersHtml = `<div style="page-break-before:always;padding:48px;font-family:system-ui,sans-serif;color:#1e293b">
+                        <h2 style="font-size:24px;font-weight:900;margin:0 0 32px 0;color:#0f172a;border-bottom:1px solid #e2e8f0;padding-bottom:16px">Resoluciones</h2>
+                        ${withAnswers.map((ex, idx) => `
+                            <div style="margin-bottom:32px">
+                                <h3 style="font-size:16px;font-weight:700;margin:0 0 10px 0;color:#1e293b">${idx + 1}. ${ex.title}</h3>
+                                <div style="font-size:13px;color:#475569;line-height:1.6">${renderLatex(ex.answer || '')}</div>
+                            </div>
+                        `).join('')}
+                    </div>`;
+                }
+            }
+
+            const html = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>${guideTitle}</title>
+    <link rel="stylesheet" href="${katexCssHref}">
+    <style>
+        @page { size: A4 portrait; margin: 0; }
+        body { margin: 0; background: white; }
+        * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    </style>
+</head>
+<body>${mainHtml}${answersHtml}</body>
+</html>`;
+
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const w = window.open(url, '_blank');
+            if (w) {
+                w.addEventListener('load', () => {
+                    setTimeout(() => {
+                        w.print();
+                        URL.revokeObjectURL(url);
+                    }, 500);
+                });
+            } else {
+                URL.revokeObjectURL(url);
+                showError('El navegador bloqueó la ventana emergente. Permite popups para esta página.');
+            }
+
+            showSuccess('PDF listo — usa "Guardar como PDF" en el diálogo de impresión');
+            onClose();
+        } catch (error) {
+            console.error('Error al generar PDF:', error);
+            showError('Error al generar el PDF');
+        } finally {
+            setExporting(false);
+        }
+    };
+
+    const handleExport = () => {
+        if (exportFormat === 'pdf') {
+            handleExportPDF();
+        } else {
+            handleExportZip();
+        }
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -200,6 +293,33 @@ ${ex.description || ''}`;
 
                 {/* Content */}
                 <div className="p-8 space-y-8">
+
+                    {/* Format selector */}
+                    <div className="space-y-3">
+                        <label className="text-sm font-black text-slate-900 uppercase tracking-widest">Formato</label>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setExportFormat('zip')}
+                                className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 font-black text-sm transition-all ${
+                                    exportFormat === 'zip'
+                                        ? 'bg-blue-500 border-blue-500 text-white shadow-lg shadow-blue-100'
+                                        : 'bg-white border-slate-200 text-slate-500 hover:border-blue-300'
+                                }`}
+                            >
+                                <Package size={16} /> LaTeX + ZIP
+                            </button>
+                            <button
+                                onClick={() => setExportFormat('pdf')}
+                                className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 font-black text-sm transition-all ${
+                                    exportFormat === 'pdf'
+                                        ? 'bg-rose-500 border-rose-500 text-white shadow-lg shadow-rose-100'
+                                        : 'bg-white border-slate-200 text-slate-500 hover:border-rose-300'
+                                }`}
+                            >
+                                <FileText size={16} /> PDF
+                            </button>
+                        </div>
+                    </div>
 
                     {/* Respuestas */}
                     <div className="space-y-4">
@@ -289,12 +409,42 @@ ${ex.description || ''}`;
                         </div>
                     </div>
 
+                    {/* PDF-only: page break option */}
+                    {exportFormat === 'pdf' && (
+                        <div className="space-y-4">
+                            <label className="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-2">
+                                <div className="w-4 h-4 bg-violet-500 rounded" />
+                                Opciones PDF
+                            </label>
+                            <label className="flex items-center gap-3 px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl cursor-pointer hover:border-violet-300 transition-all">
+                                <input
+                                    type="checkbox"
+                                    checked={pdfPageBreak}
+                                    onChange={(e) => setPdfPageBreak(e.target.checked)}
+                                    className="w-5 h-5 cursor-pointer accent-violet-500"
+                                />
+                                <div>
+                                    <span className="font-bold text-slate-700">1 ejercicio por página</span>
+                                    <p className="text-xs text-slate-400 mt-0.5">Cada ejercicio comienza en una página nueva</p>
+                                </div>
+                            </label>
+                        </div>
+                    )}
+
                     {/* Info */}
-                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                        <p className="text-xs font-bold text-blue-700 leading-relaxed">
-                            Se generará un archivo <strong>.zip</strong> con el documento LaTeX (.tex) e imágenes en una carpeta <strong>/images</strong>. Puedes compilarlo en cualquier editor LaTeX.
-                        </p>
-                    </div>
+                    {exportFormat === 'zip' ? (
+                        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                            <p className="text-xs font-bold text-blue-700 leading-relaxed">
+                                Se generará un archivo <strong>.zip</strong> con el documento LaTeX (.tex) e imágenes en una carpeta <strong>/images</strong>. Puedes compilarlo en cualquier editor LaTeX.
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="bg-rose-50 border border-rose-200 rounded-xl p-4">
+                            <p className="text-xs font-bold text-rose-700 leading-relaxed">
+                                Se abrirá una ventana con el PDF listo para imprimir. En el diálogo de impresión elige <strong>"Guardar como PDF"</strong> para descargarlo. La orientación será siempre vertical (A4).
+                            </p>
+                        </div>
+                    )}
                 </div>
 
                 {/* Footer */}
@@ -309,14 +459,20 @@ ${ex.description || ''}`;
                     <button
                         onClick={handleExport}
                         disabled={exporting}
-                        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-rose-500 text-white rounded-xl font-black text-sm hover:bg-rose-600 transition-all shadow-lg shadow-rose-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                        className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 text-white rounded-xl font-black text-sm transition-all shadow-lg disabled:opacity-60 disabled:cursor-not-allowed ${
+                            exportFormat === 'pdf'
+                                ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-200'
+                                : 'bg-blue-500 hover:bg-blue-600 shadow-blue-200'
+                        }`}
                     >
                         {exporting ? (
                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        ) : exportFormat === 'pdf' ? (
+                            <FileText size={18} />
                         ) : (
                             <Download size={18} />
                         )}
-                        {exporting ? 'Exportando...' : 'Exportar'}
+                        {exporting ? 'Exportando...' : exportFormat === 'pdf' ? 'Exportar PDF' : 'Exportar ZIP'}
                     </button>
                 </div>
             </div>

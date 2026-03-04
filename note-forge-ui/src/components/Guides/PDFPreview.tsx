@@ -21,6 +21,7 @@ interface PDFPreviewProps {
     showDifficulty: boolean;
     showDuration: boolean;
     showImages: boolean;
+    pageBreak?: boolean;
 }
 
 function applyTextCommands(text: string): string {
@@ -76,6 +77,7 @@ const PDFPreview: React.FC<PDFPreviewProps> = ({
     showDifficulty,
     showDuration,
     showImages,
+    pageBreak = false,
 }) => {
     return (
         <div
@@ -98,7 +100,7 @@ const PDFPreview: React.FC<PDFPreviewProps> = ({
                 }}
             >
                 <div style={{ color: '#ec4899', fontSize: '10px', fontWeight: 'bold', letterSpacing: '0.2em' }}>
-                    NOTE FORGE
+                    MATERIAL DE ESTUDIO
                 </div>
                 <h1
                     style={{
@@ -121,11 +123,11 @@ const PDFPreview: React.FC<PDFPreviewProps> = ({
             </div>
 
             {/* Exercises */}
-            <div style={{ space: '48px' }}>
+            <div>
                 {exercises.map((ex, idx) => {
                     const imgUrl = ex.image_url || ex.imageUrl;
                     return (
-                        <div key={ex.id} style={{ marginBottom: '48px' }}>
+                        <div key={ex.id} style={{ marginBottom: '48px', ...(pageBreak && idx < exercises.length - 1 ? { pageBreakAfter: 'always' } : {}), ...(pageBreak && idx > 0 ? { paddingTop: '48px' } : {}) }}>
                             {/* Exercise Header */}
                             <div style={{ display: 'flex', gap: '16px', marginBottom: '16px', alignItems: 'flex-start' }}>
                                 <div
@@ -145,7 +147,7 @@ const PDFPreview: React.FC<PDFPreviewProps> = ({
                                 >
                                     {idx + 1}
                                 </div>
-                                <h2 style={{ fontSize: '18px', fontWeight: 'black', margin: 0, marginTop: '6px' }}>
+                                <h2 style={{ fontSize: '18px', fontWeight: 900, margin: 0, marginTop: '6px' }}>
                                     {ex.title}
                                 </h2>
                             </div>
