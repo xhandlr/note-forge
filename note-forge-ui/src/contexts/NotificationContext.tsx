@@ -38,13 +38,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
             id,
             duration: notification.duration || 4000,
         };
-
         setNotifications(prev => [...prev, newNotification]);
-
-        // Auto remove after duration
-        setTimeout(() => {
-            removeNotification(id);
-        }, newNotification.duration);
     };
 
     const removeNotification = (id: string) => {

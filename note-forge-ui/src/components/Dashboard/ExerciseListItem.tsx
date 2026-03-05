@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Coffee, MoreVertical, Layers, Edit3, Eye } from "lucide-react";
 import { renderLatex } from '../../utils/latexRenderer';
 
@@ -22,6 +23,7 @@ interface ExerciseListItemProps {
 
 const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject, difficulty, desc, img, duration, tags = [], onDelete }) => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [showMenu, setShowMenu] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const [showAllTags, setShowAllTags] = useState(false);
@@ -126,7 +128,7 @@ const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject,
                                             onClick={() => setShowAllTags(true)}
                                             className="text-xs font-black text-slate-400 hover:text-slate-600 transition-colors px-2 py-1"
                                         >
-                                            +{tags.length - 2} más
+                                            {t('exercise.tags-more', { count: tags.length - 2 })}
                                         </button>
                                     )}
                                     {showAllTags && hasMoreTags && (
@@ -134,7 +136,7 @@ const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject,
                                             onClick={() => setShowAllTags(false)}
                                             className="text-xs font-black text-slate-400 hover:text-slate-600 transition-colors px-2 py-1"
                                         >
-                                            Ver menos
+                                            {t('common.show-less')}
                                         </button>
                                     )}
                                 </div>
@@ -147,14 +149,14 @@ const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject,
                                 onClick={e => e.stopPropagation()}
                                 className="flex items-center gap-1.5 px-4 py-2 bg-slate-50 text-slate-500 rounded-xl font-black text-xs hover:bg-slate-900 hover:text-white transition-all"
                             >
-                                <Eye size={14} /> Ver
+                                <Eye size={14} /> {t('common.view')}
                             </Link>
                             <Link
                                 to={id ? `/edit-exercise/${id}` : '#'}
                                 onClick={e => e.stopPropagation()}
                                 className="flex items-center gap-1.5 px-4 py-2 bg-rose-50 text-rose-600 rounded-xl font-black text-xs hover:bg-rose-500 hover:text-white transition-all"
                             >
-                                <Edit3 size={14} /> Editar
+                                <Edit3 size={14} /> {t('common.edit')}
                             </Link>
                             {/* 3-dots + dropdown */}
                             <div className="relative" ref={menuRef}>
@@ -170,7 +172,7 @@ const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject,
                                             className="w-full text-left px-4 py-2.5 text-sm text-rose-600 hover:bg-rose-50 font-black transition-colors"
                                             onClick={e => { e.stopPropagation(); setShowMenu(false); setShowConfirm(true); }}
                                         >
-                                            Eliminar
+                                            {t('common.delete')}
                                         </button>
                                     </div>
                                 )}
@@ -189,20 +191,20 @@ const ExerciseListItem: React.FC<ExerciseListItemProps> = ({ id, title, subject,
                         className="bg-white rounded-[2rem] p-8 max-w-sm w-full mx-4 shadow-2xl"
                         onClick={e => e.stopPropagation()}
                     >
-                        <h2 className="text-xl font-black text-slate-900 mb-2">¿Estás seguro?</h2>
-                        <p className="text-slate-500 text-sm font-medium mb-8">Esta acción eliminará el ejercicio permanentemente.</p>
+                        <h2 className="text-xl font-black text-slate-900 mb-2">{t('delete-dialog.title')}</h2>
+                        <p className="text-slate-500 text-sm font-medium mb-8">{t('exercise.delete-confirm')}</p>
                         <div className="flex gap-3">
                             <button
                                 onClick={() => setShowConfirm(false)}
                                 className="flex-1 py-3 rounded-[1.5rem] border-2 border-slate-200 text-slate-600 font-black text-sm hover:bg-slate-50 transition-all"
                             >
-                                Cancelar
+                                {t('common.cancel')}
                             </button>
                             <button
                                 onClick={() => { setShowConfirm(false); onDelete?.(); }}
                                 className="flex-1 py-3 rounded-[1.5rem] bg-rose-500 text-white font-black text-sm hover:bg-rose-600 transition-all shadow-xl shadow-rose-200"
                             >
-                                Eliminar
+                                {t('common.delete')}
                             </button>
                         </div>
                     </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNotification } from '../../contexts/NotificationContext';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft } from 'lucide-react';
 
 // Registration service import
@@ -41,6 +42,7 @@ interface RegistrationErrors {
 
 function Registration(): JSX.Element {
 
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { register } = useAuth();
     const { showSuccess, showError } = useNotification();
@@ -92,10 +94,10 @@ function Registration(): JSX.Element {
 
         try {
             await register(formData);
-            showSuccess('Registro exitoso. Por favor inicia sesión.');
+            showSuccess(t('messages.registerSuccess'));
             navigate('/login');
         } catch (error) {
-            showError('Error al registrar usuario');
+            showError(t('messages.registerError'));
             if (error && typeof error === 'object') {
                 setErrors(error as RegistrationErrors);
             }
@@ -110,7 +112,7 @@ function Registration(): JSX.Element {
                 to="/"
                 className="flex items-center gap-2 text-slate-400 hover:text-slate-900 font-bold transition-colors self-start"
             >
-                <ArrowLeft size={16} strokeWidth={2.5} /> Inicio
+                <ArrowLeft size={16} strokeWidth={2.5} /> {t('auth.back-home')}
             </Link>
             <div className="bg-white w-full p-10 rounded-[2.5rem] shadow-2xl border border-slate-200 flex flex-col items-center">
                 <Icon
@@ -118,13 +120,13 @@ function Registration(): JSX.Element {
                     type='logotype'
                     fontSize='text-2xl'
                 />
-                <h2 className="text-3xl font-black text-slate-900 mt-8 mb-10 tracking-tight">Crear cuenta</h2>
+                <h2 className="text-3xl font-black text-slate-900 mt-8 mb-10 tracking-tight">{t('auth.register-title')}</h2>
 
                 <form onSubmit={handleSubmit} className="w-full space-y-5">
                     <TextField
                         type="text"
                         name="username"
-                        placeholder="Nombre de usuario"
+                        placeholder={t('auth.username')}
                         required
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -133,7 +135,7 @@ function Registration(): JSX.Element {
                     <TextField
                         type="email"
                         name="email"
-                        placeholder="Correo electrónico"
+                        placeholder={t('auth.email')}
                         required
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -142,7 +144,7 @@ function Registration(): JSX.Element {
                     <TextField
                         type="password"
                         name="password"
-                        placeholder="Contraseña"
+                        placeholder={t('auth.password')}
                         required
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -151,7 +153,7 @@ function Registration(): JSX.Element {
                     <TextField
                         type="text"
                         name="country"
-                        placeholder="País"
+                        placeholder={t('auth.country')}
                         required
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -163,20 +165,20 @@ function Registration(): JSX.Element {
                         onChange={handleChange}
                         value={formData.role}
                         options={[
-                            { value: 'student', label: 'Estudiante' },
-                            { value: 'teacher', label: 'Profesor' },
-                            { value: 'assistant', label: 'Ayudante' },
+                            { value: 'student', label: t('roles.student') },
+                            { value: 'teacher', label: t('roles.teacher') },
+                            { value: 'assistant', label: t('roles.assistant') },
                         ]}
                         error={errors.role}
                     />
                     <Button
-                        children={'Crear cuenta'}
+                        children={t('auth.register-btn')}
                         type='submit'
                     />
                 </form>
 
                 <p className="mt-8 text-slate-600 font-medium">
-                    ¿Ya tienes una cuenta? <Link to="/login" className="text-slate-900 font-black hover:text-rose-500 transition-colors">Iniciar Sesión</Link>
+                    {t('auth.have-account')} <Link to="/login" className="text-slate-900 font-black hover:text-rose-500 transition-colors">{t('auth.login-btn')}</Link>
                 </p>
             </div>
             </div>

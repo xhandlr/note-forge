@@ -210,10 +210,10 @@ function Dashboard() {
                     <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                         <div className="space-y-6 md:w-3/5 text-center md:text-left">
                             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-amber-300 text-xs font-black uppercase tracking-widest border border-white/10">
-                                <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" /> Panel de Control
+                                <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" /> {t('dashboard.panel-title')}
                             </div>
                             <h1 className="text-4xl lg:text-5xl font-black leading-tight tracking-tight">
-                                Forja tu <br/> <span className="text-amber-400">Aprendizaje</span>
+                                {t('dashboard.hero-title')}
                             </h1>
                             <p className="text-base text-slate-300 font-medium max-w-lg leading-relaxed">
                                 {t('dashboard.description')}
@@ -223,7 +223,7 @@ function Dashboard() {
                                     {t('dashboard.create-exercise')}
                                 </Link>
                                 <Link to="/create-guide" className="bg-white text-slate-900 px-8 py-4 rounded-[2rem] font-black text-base hover:bg-amber-50 transition-all shadow-xl">
-                                    Crear Guía
+                                    {t('dashboard.new-guide')}
                                 </Link>
                             </div>
                         </div>
@@ -232,12 +232,12 @@ function Dashboard() {
                             <div className="bg-white/10 backdrop-blur-xl p-6 rounded-[3rem] border border-white/20 flex flex-col items-center text-center">
                                 <BookOpen size={32} className="text-amber-400 mb-3" />
                                 <span className="text-3xl font-black">{guides.length}</span>
-                                <p className="text-[10px] font-black uppercase text-slate-400 mt-2 tracking-widest">Guías</p>
+                                <p className="text-[10px] font-black uppercase text-slate-400 mt-2 tracking-widest">{t('labels.guides')}</p>
                             </div>
                             <div className="bg-white/10 backdrop-blur-xl p-6 rounded-[3rem] border border-white/20 flex flex-col items-center text-center">
                                 <Coffee size={32} className="text-rose-400 mb-3" />
                                 <span className="text-3xl font-black">{exercises.length}</span>
-                                <p className="text-[10px] font-black uppercase text-slate-400 mt-2 tracking-widest">Ejercicios</p>
+                                <p className="text-[10px] font-black uppercase text-slate-400 mt-2 tracking-widest">{t('labels.exercises')}</p>
                             </div>
                         </div>
                     </div>
@@ -270,7 +270,7 @@ function Dashboard() {
                                     localStorage.setItem('hide_hero', String(!next));
                                     window.dispatchEvent(new CustomEvent('hero-preference-change', { detail: next }));
                                 }}
-                                title={heroVisible ? 'Ocultar banner' : 'Mostrar banner'}
+                                title={heroVisible ? t('dashboard.hide-banner') : t('dashboard.show-banner')}
                                 className="p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all"
                             >
                                 {heroVisible ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -281,8 +281,8 @@ function Dashboard() {
                     <div className="w-full flex justify-between items-center">
                         <h2 className="text-2xl font-black text-slate-900 tracking-tight">
                             {activeTab === 'asignaturas' && t('dashboard.my-subjects')}
-                            {activeTab === 'ejercicios' && 'Banco de Ejercicios'}
-                            {activeTab === 'guias' && 'Gestión de Guías'}
+                            {activeTab === 'ejercicios' && t('dashboard.exercises-title')}
+                            {activeTab === 'guias' && t('dashboard.guides-title')}
                         </h2>
                         <div className="flex gap-3">
                             {activeTab === 'ejercicios' && (
@@ -306,7 +306,7 @@ function Dashboard() {
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-rose-500 transition-colors" size={18} />
                                 <input
                                     type="text"
-                                    placeholder="Buscar..."
+                                    placeholder={t('dashboard.search-placeholder')}
                                     value={searchTerm}
                                     onChange={e => setSearchTerm(e.target.value)}
                                     className="bg-white border border-slate-200 pl-10 pr-4 py-3 rounded-xl outline-none focus:ring-4 focus:ring-rose-100 shadow-sm font-bold text-sm w-48 focus:w-64 transition-all"
@@ -316,7 +316,7 @@ function Dashboard() {
                                 to={activeTab === 'asignaturas' ? '/create-category' : activeTab === 'ejercicios' ? '/create-exercise' : '/create-guide'}
                                 className="flex items-center gap-2 px-4 py-3 bg-slate-900 text-white rounded-xl font-black text-sm hover:bg-rose-600 transition-all shrink-0"
                             >
-                                <Plus size={16} strokeWidth={3} /> Agregar
+                                <Plus size={16} strokeWidth={3} /> {t('common.add')}
                             </Link>
                         </div>
                     </div>
@@ -327,7 +327,7 @@ function Dashboard() {
                     <div className="bg-white border border-slate-200 rounded-[2rem] p-6 shadow-xl space-y-5 -mt-2">
                         {/* Asignatura */}
                         <div className="space-y-3">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Asignatura</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('labels.category')}</span>
                             <div className="flex flex-wrap gap-2">
                                 {categories.map(cat => (
                                     <button
@@ -347,11 +347,11 @@ function Dashboard() {
 
                         {/* Dificultad */}
                         <div className="space-y-3">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Dificultad</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('labels.difficulty')}</span>
                             <div className="flex flex-wrap gap-2">
                                 {[1,2,3,4,5].map(d => {
                                     const active = filterDifficulties.includes(d);
-                                    const label = ['Introductorio','Elemental','Intermedio','Avanzado','Especializado'][d-1];
+                                    const label = (t('exercise.levels', { returnObjects: true }) as string[])[d-1];
                                     return (
                                         <button
                                             key={d}
@@ -374,9 +374,9 @@ function Dashboard() {
 
                         {/* Imagen */}
                         <div className="space-y-3">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Imagen</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('dashboard.filter-image-label')}</span>
                             <div className="flex gap-2">
-                                {[{ label: 'Con imagen', val: true }, { label: 'Sin imagen', val: false }].map(({ label, val }) => (
+                                {[{ label: t('dashboard.filter-with-image'), val: true }, { label: t('dashboard.filter-without-image'), val: false }].map(({ label, val }) => (
                                     <button
                                         key={label}
                                         onClick={() => setFilterHasImage(prev => prev === val ? null : val)}
@@ -392,7 +392,7 @@ function Dashboard() {
 
                         {activeFiltersCount > 0 && (
                             <button onClick={clearFilters} className="text-xs font-black text-slate-400 hover:text-rose-500 transition-colors">
-                                Limpiar filtros
+                                {t('dashboard.clear-filters')}
                             </button>
                         )}
                     </div>
@@ -404,7 +404,7 @@ function Dashboard() {
                         <div className="flex items-center justify-center h-[500px]">
                             <div className="text-center space-y-3">
                                 <div className="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mx-auto" />
-                                <p className="text-slate-400 font-black text-sm">Cargando datos...</p>
+                                <p className="text-slate-400 font-black text-sm">{t('common.loading')}</p>
                             </div>
                         </div>
                     ) : (
@@ -433,7 +433,7 @@ function Dashboard() {
                                         <div className="bg-slate-50 p-5 rounded-full group-hover:bg-white group-hover:scale-110 transition-all mb-3">
                                             <Plus size={40} strokeWidth={3} className="text-slate-200 group-hover:text-amber-500" />
                                         </div>
-                                        <span className="font-black text-lg">Nueva Asignatura</span>
+                                        <span className="font-black text-lg">{t('dashboard.new-subject')}</span>
                                     </Link>
                                 </div>
                             )}
@@ -456,7 +456,7 @@ function Dashboard() {
                                         <div className="bg-slate-50 p-5 rounded-full group-hover:bg-white group-hover:scale-110 transition-all mb-3">
                                             <Plus size={40} strokeWidth={3} className="text-slate-200 group-hover:text-rose-500" />
                                         </div>
-                                        <span className="font-black text-lg">Nueva Guía</span>
+                                        <span className="font-black text-lg">{t('dashboard.new-guide')}</span>
                                     </Link>
                                 </div>
                             )}
@@ -479,7 +479,7 @@ function Dashboard() {
                                                 key={exercise.id}
                                                 id={exercise.id}
                                                 title={exercise.title}
-                                                subject={categories.find(c => c.id === exercise.category_id)?.name || 'Sin categoría'}
+                                                subject={categories.find(c => c.id === exercise.category_id)?.name || t('labels.no-category')}
                                                 difficulty={exercise.difficulty}
                                                 desc={exercise.description}
                                                 img={exercise.image_url}
@@ -494,7 +494,7 @@ function Dashboard() {
                                         <div className="p-3 bg-slate-50 rounded-xl group-hover:bg-rose-500 group-hover:text-white transition-all">
                                             <Plus size={24} strokeWidth={3} />
                                         </div>
-                                        <span className="font-black text-base tracking-tight">Forjar Nuevo Ejercicio</span>
+                                        <span className="font-black text-base tracking-tight">{t('dashboard.forge-exercise')}</span>
                                     </Link>
                                 </div>
                             )}

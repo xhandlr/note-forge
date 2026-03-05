@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MoreVertical, Pin, Edit3 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export interface SubjectCardProps {
     id?: number;
@@ -16,6 +17,7 @@ export interface SubjectCardProps {
 
 const SubjectCard: React.FC<SubjectCardProps> = ({ id, title, exercises, guides, icon, pinned, imageSrc, onTogglePin, onDelete }) => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const isPinned = !!pinned;
     const [showMenu, setShowMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -52,7 +54,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ id, title, exercises, guides,
                                 ? 'bg-amber-500 text-white hover:bg-amber-600'
                                 : 'bg-white/20 backdrop-blur-md text-white hover:bg-amber-500'
                         }`}
-                        title={isPinned ? 'Desfijar asignatura' : 'Fijar asignatura'}
+                        title={isPinned ? t('subject-card.unpin') : t('subject-card.pin')}
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onTogglePin?.(e); }}
                     >
                         <Pin size={14} fill={isPinned ? 'white' : 'none'} />
@@ -61,7 +63,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ id, title, exercises, guides,
                     <div className="absolute top-3 right-3 z-20 flex gap-2">
                         <button
                             className="bg-white/20 backdrop-blur-md text-white p-2 hover:bg-rose-500 rounded-xl transition-all opacity-0 group-hover:opacity-100"
-                            title="Editar Asignatura"
+                            title={t('subject-card.edit')}
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate(id ? `/edit-category/${id}` : '#'); }}
                         >
                             <Edit3 size={16} />
@@ -79,10 +81,10 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ id, title, exercises, guides,
                 </div>
                 <div className="p-6 flex items-center justify-between">
                     <div className="flex flex-col gap-1">
-                        <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Contenido disponible</span>
+                        <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest">{t('subject-card.available-content')}</span>
                         <div className="flex gap-3">
-                            <span className="text-amber-600 font-bold text-sm">{exercises} Ejercicios</span>
-                            <span className="text-rose-600 font-bold text-sm">{guides} Guías</span>
+                            <span className="text-amber-600 font-bold text-sm">{exercises} {t('subject-card.exercises')}</span>
+                            <span className="text-rose-600 font-bold text-sm">{guides} {t('subject-card.guides')}</span>
                         </div>
                     </div>
                 </div>
@@ -98,7 +100,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ id, title, exercises, guides,
                         className="w-full text-left px-4 py-2.5 text-sm text-rose-600 hover:bg-rose-50 font-black transition-colors"
                         onClick={(e) => { e.stopPropagation(); setShowMenu(false); onDelete?.(); }}
                     >
-                        Eliminar
+                        {t('subject-card.delete')}
                     </button>
                 </div>
             )}

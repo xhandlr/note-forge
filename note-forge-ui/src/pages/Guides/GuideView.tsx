@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Edit3, Eye, Code, Download, FileText, BookOpen, Clock, Copy, Check, Trash2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useGuideService } from '../../services/ServiceFactory';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
@@ -34,6 +35,7 @@ const GuideView: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const backTo = (location.state as any)?.from;
+    const { t } = useTranslation();
     const { showSuccess, showError } = useNotification();
     const guideService = useGuideService();
     const [guide, setGuide] = useState<Guide | null>(null);
@@ -54,7 +56,7 @@ const GuideView: React.FC = () => {
         if (!id) return;
         guideService.getById(id)
             .then((data: Guide) => setGuide(data))
-            .catch(() => { showError('Error al cargar la guía'); setGuide(null); })
+            .catch(() => { showError(t('guide.error-load')); setGuide(null); })
             .finally(() => setLoading(false));
     }, [id]);
 
@@ -104,7 +106,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
             await guideService.delete(id);
             navigate('/dashboard', { state: { tab: 'guias' } });
         } catch {
-            showError('Error al eliminar la guía');
+            showError(t('guide.error-delete'));
         } finally {
             setIsDeleting(false);
         }
@@ -120,7 +122,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                 <div className="flex items-center justify-center flex-1 mt-16 lg:mt-20">
                     <div className="text-center space-y-3">
                         <div className="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mx-auto" />
-                        <p className="text-slate-400 font-black text-sm">Cargando guía...</p>
+                        <p className="text-slate-400 font-black text-sm">{t('guide.loading')}</p>
                     </div>
                 </div>
             </div>
@@ -136,12 +138,12 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                         <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto">
                             <FileText size={28} className="text-slate-200" />
                         </div>
-                        <p className="text-slate-400 font-black">Guía no encontrada</p>
+                        <p className="text-slate-400 font-black">{t('guide.not-found')}</p>
                         <button
                             onClick={() => navigate('/dashboard')}
                             className="px-5 py-2.5 bg-slate-900 text-white rounded-xl font-black text-sm hover:bg-rose-500 transition-all"
                         >
-                            Volver al inicio
+                            {t('common.back-home')}
                         </button>
                     </div>
                 </div>
@@ -179,20 +181,19 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                                 className="flex items-center gap-1.5 px-4 py-2 bg-rose-500 text-white rounded-xl font-black text-xs hover:bg-rose-600 transition-all"
                             >
                                 <Download size={13} />
-                                Exportar
+                                {t('guide.export')}
                             </button>
                             <button
                                 onClick={() => navigate(`/edit-guide/${id}`)}
                                 className="flex items-center gap-1.5 px-4 py-2 bg-slate-900 text-white rounded-xl font-black text-xs hover:bg-slate-700 transition-all"
                             >
-                                <Edit3 size={13} /> Editar
+                                <Edit3 size={13} /> {t('common.edit')}
                             </button>
                             <button
                                 onClick={() => setShowDeleteConfirm(true)}
                                 className="flex items-center gap-1.5 px-4 py-2 text-slate-400 hover:text-rose-500 border border-slate-200 hover:bg-rose-50 hover:border-rose-500 rounded-xl font-black text-xs transition-all"
-                                title="Eliminar guía"
                             >
-                                <Trash2 size={15} /> Eliminar
+                                <Trash2 size={15} /> {t('common.delete')}
                             </button>
                         </div>
                     </div>
@@ -237,13 +238,13 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                                 onClick={() => setActiveTab('render')}
                                 className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-black text-xs transition-all ${activeTab === 'render' ? 'bg-white text-slate-900 shadow-sm border border-slate-100' : 'text-slate-400 hover:text-slate-700'}`}
                             >
-                                <Eye size={13} /> Previsualización
+                                <Eye size={13} /> {t('guide.preview')}
                             </button>
                             <button
                                 onClick={() => setActiveTab('latex')}
                                 className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-black text-xs transition-all ${activeTab === 'latex' ? 'bg-white text-slate-900 shadow-sm border border-slate-100' : 'text-slate-400 hover:text-slate-700'}`}
                             >
-                                <Code size={13} /> Código LaTeX
+                                <Code size={13} /> {t('guide.latex-code')}
                             </button>
                         </div>
                     </div>
@@ -269,7 +270,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
 
                                 {exercises.length === 0 ? (
                                     <p className="text-center text-slate-300 font-semibold italic py-12">
-                                        Esta guía no tiene ejercicios aún.
+                                        {t('guide.no-exercises')}
                                     </p>
                                 ) : (
                                     <div className="space-y-12">
@@ -296,7 +297,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                                                     )}
                                                     {ex.answer && (
                                                         <div className="ml-14 bg-slate-50 rounded-xl p-5 border-l-4 border-amber-400">
-                                                            <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 mb-3">Resolución</p>
+                                                            <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 mb-3">{t('labels.resolution')}</p>
                                                             <div
                                                                 className="text-slate-600 text-sm leading-relaxed"
                                                                 dangerouslySetInnerHTML={{ __html: renderLatex(ex.answer) }}
@@ -314,7 +315,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                         <div className="w-[70%] mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-800 overflow-x-auto">
                                 <div className="flex items-center justify-between px-8 pt-6 pb-4 border-b border-slate-800">
-                                    <span className="text-xs font-black uppercase tracking-widest text-slate-500">Código LaTeX</span>
+                                    <span className="text-xs font-black uppercase tracking-widest text-slate-500">{t('guide.latex-code')}</span>
                                     <button
                                         onClick={handleCopyLatex}
                                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-black text-xs transition-all ${copied ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'}`}

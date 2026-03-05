@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Navbar from '../../components/Dashboard/Navbar';
 import BgDecoration from '../../components/UI/BgDecoration';
 import Footer from '../../components/UI/Footer';
@@ -29,6 +30,7 @@ interface ExerciseFormProps {
 
 const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { showSuccess, showError } = useNotification();
   const exerciseService = useExerciseService();
@@ -85,7 +87,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
           setLoading(false);
         } catch (error) {
           console.error('Error al cargar ejercicio:', error);
-          showError('Error al cargar el ejercicio');
+          showError(t('exercise.error-load'));
           setLoading(false);
         }
       };
@@ -139,7 +141,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
           details,
         };
         await exerciseService.update(exerciseId, exerciseData);
-        showSuccess('Ejercicio actualizado con éxito');
+        showSuccess(t('exercise.success-update'));
       } else {
         // Modo create: usar FormData para soportar imagen
         const formData = new FormData();
@@ -158,7 +160,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
         }
 
         await exerciseService.create(formData);
-        showSuccess('Ejercicio creado con éxito');
+        showSuccess(t('exercise.success-create'));
       }
       navigate('/dashboard');
     } catch (error: any) {
@@ -169,15 +171,15 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
       if (errorMessage.includes('Data too long') || errorMessage.includes('tags')) {
         showError('⚠️ Las etiquetas son muy largas. Intenta reducir la cantidad o la longitud de los tags');
       } else {
-        showError('Error al guardar el ejercicio');
+        showError(t('exercise.error-save'));
       }
     }
   };
 
   const steps = [
-    { num: 1, label: 'Fundamentos' },
-    { num: 2, label: 'Contenido' },
-    { num: 3, label: 'Finalizar' }
+    { num: 1, label: t('exercise.step-fundamentals') },
+    { num: 2, label: t('exercise.step-content') },
+    { num: 3, label: t('exercise.step-finalize') }
   ];
 
   const getRefIcon = (type: string) => {
@@ -194,7 +196,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-500 mx-auto mb-4"></div>
-          <p className="text-slate-600 font-semibold">Cargando ejercicio...</p>
+          <p className="text-slate-600 font-semibold">{t('exercise.loading')}</p>
         </div>
       </div>
     );
@@ -237,9 +239,9 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
         <div className="bg-white p-7 lg:p-9 rounded-[2.5rem] shadow-xl border border-slate-200 relative">
           <div className="mb-8 border-b border-slate-100 pb-5">
             <h1 className="text-xl font-black text-slate-900 tracking-tight">
-              {step === 1 && "Descripción Básica"}
-              {step === 2 && "Contenido del Ejercicio"}
-              {step === 3 && "Información Adicional"}
+              {step === 1 && t('exercise.step-title-1')}
+              {step === 2 && t('exercise.step-title-2')}
+              {step === 3 && t('exercise.step-title-3')}
             </h1>
             <p className="text-xs text-slate-500 font-semibold mt-2">
               Paso {step} de 3 — {mode === 'edit' ? 'Actualiza' : 'Construye'} material profesional.
@@ -251,7 +253,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
             {step === 1 && (
               <div className="space-y-8 animate-in fade-in slide-in-from-left-4 duration-500 w-full">
                 <div className="w-full">
-                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">Título descriptivo *</label>
+                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">{t('exercise.title-label')} *</label>
                   <input
                     type="text"
                     value={title}
@@ -263,7 +265,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <label className="text-slate-900 font-black text-base ml-1 block mb-4">Nivel de Forja (1-5)</label>
+                    <label className="text-slate-900 font-black text-base ml-1 block mb-4">{t('exercise.difficulty-forge')}</label>
                     <div className="flex gap-4">
                       {[1, 2, 3, 4, 5].map((num) => (
                         <button
@@ -283,13 +285,13 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
                   </div>
 
                   <div>
-                    <label className="text-slate-900 font-black text-base ml-1 block mb-4">Asignatura destino</label>
+                    <label className="text-slate-900 font-black text-base ml-1 block mb-4">{t('exercise.category-label')}</label>
                     <select
                       value={categoryId}
                       onChange={(e) => setCategoryId(e.target.value)}
                       className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-rose-100 transition-all cursor-pointer font-black text-slate-700 text-base appearance-none"
                     >
-                      <option value="">Selecciona asignatura...</option>
+                      <option value="">{t('exercise.category-placeholder')}</option>
                       {categories.map((cat) => (
                         <option key={cat.id} value={String(cat.id)}>{cat.name}</option>
                       ))}
@@ -305,8 +307,8 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
               <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500 w-full">
                 <div className="w-full">
                   <div className="flex justify-between items-center px-1 mb-4">
-                     <label className="text-slate-900 font-black text-base">Enunciado del problema</label>
-                     <span className="text-[10px] bg-slate-900 text-white px-5 py-2 rounded-full font-black uppercase tracking-widest shadow-md">LaTeX Activo</span>
+                     <label className="text-slate-900 font-black text-base">{t('exercise.description-label')}</label>
+                     <span className="text-[10px] bg-slate-900 text-white px-5 py-2 rounded-full font-black uppercase tracking-widest shadow-md">{t('exercise.latex-active')}</span>
                   </div>
                   <LatexEditor
                     name="enunciado"
@@ -333,8 +335,8 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
                       <Camera size={36} strokeWidth={2.5} />
                     </div>
                     <div className="text-center">
-                      <p className="font-black text-slate-900 text-base">Adjuntar soporte visual</p>
-                      <p className="text-xs text-slate-500 font-semibold mt-1">Diagramas, PDF o Capturas</p>
+                      <p className="font-black text-slate-900 text-base">{t('exercise.attach-visual')}</p>
+                      <p className="text-xs text-slate-500 font-semibold mt-1">{t('exercise.attach-visual-hint')}</p>
                     </div>
                   </button>
                 ) : (
@@ -364,7 +366,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
 
                 {/* Referencias Adicionales */}
                 <div className="w-full">
-                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">Referencias adicionales</label>
+                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">{t('exercise.additional-references')}</label>
 
                   <div className="flex gap-4 w-full">
                     {[
@@ -399,7 +401,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
                       </div>
                     )) : (
                       <div className="p-6 text-center bg-slate-50/50 rounded-[1.5rem] border-2 border-dashed border-slate-100 w-full">
-                        <p className="text-slate-300 font-semibold text-sm italic">No has añadido referencias aún.</p>
+                        <p className="text-slate-300 font-semibold text-sm italic">{t('exercise.no-references')}</p>
                       </div>
                     )}
                   </div>
@@ -407,7 +409,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
 
                 {/* Guía de Resolución */}
                 <div className="w-full">
-                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">Guía de Resolución</label>
+                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">{t('exercise.resolution-label')}</label>
                   <LatexEditor
                     name="resolucion"
                     value={resolucion}
@@ -417,7 +419,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
 
                 {/* Duración estimada */}
                 <div className="w-full">
-                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">Duración estimada</label>
+                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">{t('exercise.duration-label')}</label>
                   <DurationInput
                     value={duration}
                     onChange={(e) => setDuration(e.target.value)}
@@ -426,11 +428,11 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
 
                 {/* Detalles opcionales */}
                 <div className="w-full">
-                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">Detalles opcionales</label>
+                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">{t('exercise.optional-details')}</label>
                   <textarea
                     value={details}
                     onChange={(e) => setDetails(e.target.value)}
-                    placeholder="Notas extra, contexto o aclaraciones..."
+                    placeholder={t('exercise.optional-details-placeholder')}
                     rows={3}
                     className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-400 transition-all font-semibold text-slate-700 text-sm resize-none"
                   />
@@ -438,7 +440,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
 
                 {/* Etiquetas */}
                 <div className="w-full">
-                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">Etiquetas</label>
+                  <label className="text-slate-900 font-black text-base ml-1 block mb-4">{t('labels.tags')}</label>
                   <TagsInput value={tags} onChange={setTags} />
                 </div>
               </div>
@@ -453,7 +455,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
             onClick={step === 1 ? () => navigate('/dashboard') : prevStep}
             className="flex items-center gap-2 px-6 py-3 bg-slate-100 text-slate-600 rounded-[1.5rem] font-black text-sm hover:bg-slate-200 transition-all"
           >
-            <ChevronLeft size={18} strokeWidth={3} /> {step === 1 ? 'Cancelar' : 'Anterior'}
+            <ChevronLeft size={18} strokeWidth={3} /> {step === 1 ? t('common.cancel') : t('common.previous')}
           </button>
 
           {step < 3 ? (
@@ -462,7 +464,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
               onClick={nextStep}
               className="flex items-center gap-2 px-8 py-3 bg-rose-500 text-white rounded-[1.5rem] font-black text-sm hover:bg-rose-600 transition-all shadow-lg shadow-rose-200"
             >
-              Siguiente <ChevronRight size={18} strokeWidth={3} />
+              {t('common.next')} <ChevronRight size={18} strokeWidth={3} />
             </button>
           ) : (
             <button
@@ -470,7 +472,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
               onClick={handleSubmit}
               className="flex items-center gap-2 px-8 py-3 bg-slate-900 text-white rounded-[1.5rem] font-black text-sm hover:bg-rose-500 transition-all shadow-lg"
             >
-              <Check size={18} strokeWidth={3} /> {mode === 'edit' ? 'Actualizar' : 'Crear'} Ejercicio
+              <Check size={18} strokeWidth={3} /> {mode === 'edit' ? t('exercise.update') : t('exercise.create-btn')}
             </button>
           )}
         </div>
@@ -483,7 +485,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
                 <div className="p-2.5 bg-slate-50 text-rose-500 rounded-xl shadow-inner">
                   {getRefIcon(currentRefType)}
                 </div>
-                <h3 className="text-base font-black text-slate-900 tracking-tight">Agregar {currentRefType}</h3>
+                <h3 className="text-base font-black text-slate-900 tracking-tight">{t('common.add')} {currentRefType}</h3>
               </div>
 
               <div className="space-y-5">
@@ -515,14 +517,14 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ mode, exerciseId }) => {
                   onClick={() => { setShowModal(false); setNewRef({ title: '', description: '' }); }}
                   className="flex-1 px-5 py-3 bg-slate-100 text-slate-600 rounded-xl font-black text-sm hover:bg-slate-200 transition-all"
                 >
-                  Cancelar
+                  {t('common.cancel')}
                 </button>
                 <button
                   type="button"
                   onClick={addReference}
                   className="flex-1 px-5 py-3 bg-rose-500 text-white rounded-xl font-black text-sm hover:bg-rose-600 transition-all shadow-lg shadow-rose-200"
                 >
-                  Agregar
+                  {t('common.add')}
                 </button>
               </div>
             </div>

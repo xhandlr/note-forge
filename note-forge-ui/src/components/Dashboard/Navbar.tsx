@@ -27,7 +27,7 @@ function Navbar() {
         // If in demo mode, just disable it and go home
         if (isDemoMode) {
             disableDemoMode();
-            showSuccess('Saliste del modo demo');
+            showSuccess(t('navbar.demo-exit'));
             navigate("/");
             return;
         }
@@ -106,7 +106,7 @@ function Navbar() {
                                 onClick={handleLogout}
                                 className="flex items-center gap-2 bg-slate-900 text-white px-5 py-2 rounded-xl text-sm font-black hover:bg-rose-600 transition-all shadow-sm"
                             >
-                                {isDemoMode ? 'Salir del Demo' : t('navbar.logout')} <LogOut size={16} />
+                                {isDemoMode ? t('navbar.demo-logout') : t('navbar.logout')} <LogOut size={16} />
                             </button>
                         ) : (
                             <div className="flex items-center gap-4">
@@ -120,7 +120,7 @@ function Navbar() {
                                     to="/register"
                                     className="bg-rose-500 text-white px-6 py-2.5 rounded-xl text-sm font-black hover:bg-rose-600 transition-all shadow-md"
                                 >
-                                    Registrarse
+                                    {t('auth.register-btn')}
                                 </Link>
                             </div>
                         )}
@@ -174,7 +174,7 @@ function Navbar() {
                                 onClick={handleLogout}
                                 className="w-full bg-slate-100 text-slate-700 text-base px-6 py-3 rounded-[2rem] font-black hover:bg-rose-500 hover:text-white transition-all shadow-lg transform active:scale-95"
                             >
-                                {isDemoMode ? 'Salir del Demo' : t('navbar.logout')}
+                                {isDemoMode ? t('navbar.demo-logout') : t('navbar.logout')}
                             </button>
                         </div>
                     </div>

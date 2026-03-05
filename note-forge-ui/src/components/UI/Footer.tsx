@@ -43,13 +43,13 @@ function Footer() {
                     </h4>
                     <ul className="space-y-4 text-slate-500 font-bold text-sm">
                         <li>
-                            <a
-                                href="https://www.flaticon.com/free-icons/online-class"
+                            <a href="https://www.flaticon.com/free-icons/anvil" 
                                 className="hover:text-slate-900 transition-colors"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                title="anvil icons"
                             >
-                                Flaticon
+                                Anvil icons created by Freepik - Flaticon
                             </a>
                         </li>
                     </ul>

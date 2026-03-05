@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { CheckCircle, XCircle, AlertTriangle, Info, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Notification } from '../../contexts/NotificationContext';
 
 interface ToastProps {
@@ -8,39 +9,17 @@ interface ToastProps {
 }
 
 const configs = {
-    success: {
-        Icon: CheckCircle,
-        accent: 'border-l-emerald-500',
-        bar: 'bg-emerald-500',
-        iconClass: 'text-emerald-500',
-        label: 'Listo',
-    },
-    error: {
-        Icon: XCircle,
-        accent: 'border-l-rose-500',
-        bar: 'bg-rose-500',
-        iconClass: 'text-rose-500',
-        label: 'Error',
-    },
-    warning: {
-        Icon: AlertTriangle,
-        accent: 'border-l-amber-400',
-        bar: 'bg-amber-400',
-        iconClass: 'text-amber-500',
-        label: 'Atención',
-    },
-    info: {
-        Icon: Info,
-        accent: 'border-l-slate-900',
-        bar: 'bg-slate-900',
-        iconClass: 'text-slate-500',
-        label: 'Info',
-    },
+    success: { Icon: CheckCircle, accent: 'border-l-emerald-500', bar: 'bg-emerald-500', iconClass: 'text-emerald-500' },
+    error:   { Icon: XCircle,    accent: 'border-l-rose-500',    bar: 'bg-rose-500',    iconClass: 'text-rose-500'    },
+    warning: { Icon: AlertTriangle, accent: 'border-l-amber-400', bar: 'bg-amber-400',  iconClass: 'text-amber-500'   },
+    info:    { Icon: Info,        accent: 'border-l-slate-900',   bar: 'bg-slate-900',   iconClass: 'text-slate-500'   },
 } as const;
 
 const Toast = ({ notification, onClose }: ToastProps) => {
     const { id, type, title, message, duration = 4000 } = notification;
-    const { Icon, accent, bar, iconClass, label } = configs[type] ?? configs.info;
+    const { t } = useTranslation();
+    const { Icon, accent, bar, iconClass } = configs[type] ?? configs.info;
+    const label = title || t(`toast.${type}` as const, t('toast.info'));
 
     useEffect(() => {
         const timer = setTimeout(() => onClose(id), duration);
@@ -55,7 +34,7 @@ const Toast = ({ notification, onClose }: ToastProps) => {
                 </div>
                 <div className="flex-1 min-w-0">
                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-0.5">
-                        {title || label}
+                        {label}
                     </p>
                     <p className="text-sm font-bold text-slate-900 leading-snug">
                         {message}

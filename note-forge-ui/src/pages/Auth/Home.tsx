@@ -69,7 +69,7 @@ function Home() {
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 flex flex-col lg:flex-row items-center gap-16 mt-16">
                 <div className="lg:w-1/2 space-y-8 text-center lg:text-left">
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 rounded-full text-amber-600 text-xs font-black uppercase tracking-wide border border-amber-200">
-                        Forja tu futuro educativo
+                        {t('home.forge-future')}
                     </div>
                     <h1 className="text-5xl lg:text-7xl font-black text-slate-900 leading-tight tracking-tight">
                         Note <br/>Forge<span className="text-rose-500">.</span>
@@ -88,7 +88,7 @@ function Home() {
                             onClick={handleDemoMode}
                             className="text-base font-black text-slate-500 hover:text-rose-600 transition-colors flex items-center gap-2 group"
                         >
-                            Probar sin registrarse <span className="group-hover:translate-x-2 transition-transform text-rose-500">→</span>
+                            {t('home.try-demo')} <span className="group-hover:translate-x-2 transition-transform text-rose-500">→</span>
                         </button>
                     </div>
                 </div>
@@ -110,7 +110,7 @@ function Home() {
                             {t('home.made-for-you')}
                         </h2>
                         <p className="text-slate-400 text-sm lg:text-base font-medium max-w-2xl mx-auto leading-relaxed">
-                            Una forja diseñada para estudiantes y educadores que no se conforman con lo básico.
+                            {t('home.platform-desc')}
                         </p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

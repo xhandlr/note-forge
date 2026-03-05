@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { ArrowLeft, Edit3, Book, FileText, CheckCircle, ChevronDown, Layers, Download } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useExerciseService, useCategoryService } from '../../services/ServiceFactory';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
@@ -16,6 +17,7 @@ const ExerciseView: React.FC = () => {
   const [category, setCategory] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  const { t } = useTranslation();
   const exerciseService = useExerciseService();
   const categoryService = useCategoryService();
 
@@ -49,7 +51,7 @@ const ExerciseView: React.FC = () => {
         <div className="flex items-center justify-center h-screen">
           <div className="text-center space-y-3">
             <div className="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-slate-400 font-black text-sm">Cargando ejercicio...</p>
+            <p className="text-slate-400 font-black text-sm">{t('exercise.loading')}</p>
           </div>
         </div>
       </div>
@@ -62,12 +64,12 @@ const ExerciseView: React.FC = () => {
         <Navbar />
         <div className="flex items-center justify-center h-screen">
           <div className="text-center space-y-3">
-            <p className="text-slate-400 font-black text-lg">Ejercicio no encontrado</p>
+            <p className="text-slate-400 font-black text-lg">{t('exercise.not-found')}</p>
             <button
               onClick={() => navigate('/dashboard')}
               className="text-rose-500 font-black hover:underline"
             >
-              Volver al dashboard
+              {t('common.back-dashboard')}
             </button>
           </div>
         </div>
@@ -99,11 +101,11 @@ const ExerciseView: React.FC = () => {
               onClick={() => backTo ? navigate(backTo) : navigate('/dashboard', { state: { tab: 'ejercicios' } })}
               className="flex items-center gap-2 text-slate-400 font-black hover:text-slate-900 transition-colors text-sm mb-2"
             >
-              <ArrowLeft size={16} strokeWidth={3} /> Regresar
+              <ArrowLeft size={16} strokeWidth={3} /> {t('common.back')}
             </button>
             <div className="flex items-center gap-3">
               <span className="px-3 py-1 bg-rose-50 text-rose-600 text-[9px] font-black uppercase tracking-wider rounded-lg border border-rose-100">
-                {category?.name || 'Sin categoría'}
+                {category?.name || t('labels.no-category')}
               </span>
               <div className="flex gap-1">
                 {[...Array(5)].map((_, i) => (
@@ -122,7 +124,7 @@ const ExerciseView: React.FC = () => {
               to={`/edit-exercise/${id}`}
               className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl font-black text-sm shadow-lg hover:bg-rose-600 transition-all"
             >
-              <Edit3 size={18} /> Editar Ejercicio
+              <Edit3 size={18} /> {t('exercise.edit')}
             </Link>
           </div>
         </div>
@@ -137,7 +139,7 @@ const ExerciseView: React.FC = () => {
             <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden">
               <div className="px-8 py-5 border-b border-slate-100 flex items-center gap-2">
                 <FileText size={18} className="text-rose-500" strokeWidth={2} />
-                <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Enunciado del Problema</h2>
+                <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">{t('exercise.description-label')}</h2>
               </div>
               <div className="p-7 lg:p-9 space-y-8">
                 <div
@@ -157,7 +159,7 @@ const ExerciseView: React.FC = () => {
               <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden">
                 <div className="px-8 py-5 border-b border-slate-100 flex items-center gap-2">
                   <FileText size={18} className="text-slate-400" strokeWidth={2} />
-                  <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">Detalles</h2>
+                  <h2 className="text-sm font-black uppercase tracking-widest text-slate-900">{t('exercise.details-label')}</h2>
                 </div>
                 <div className="p-7 lg:p-9 text-sm text-slate-600 font-semibold leading-relaxed whitespace-pre-wrap">
                   {exercise.details}
@@ -176,9 +178,9 @@ const ExerciseView: React.FC = () => {
                         <CheckCircle size={24} strokeWidth={2} />
                      </div>
                      <div className="text-left">
-                        <h3 className="text-lg font-black uppercase tracking-tight">Guía de Resolución</h3>
+                        <h3 className="text-lg font-black uppercase tracking-tight">{t('exercise.resolution-label')}</h3>
                         <p className={`text-xs font-black opacity-60 ${showResolution ? 'text-slate-400' : 'text-slate-400'}`}>
-                          Clic para ver el proceso paso a paso
+                          {t('exercise.resolution-placeholder')}
                         </p>
                      </div>
                   </div>
@@ -212,7 +214,7 @@ const ExerciseView: React.FC = () => {
               <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden">
                  <div className="px-6 py-4 border-b border-slate-100 bg-slate-50 flex items-center gap-2">
                     <Book size={16} className="text-amber-500" strokeWidth={2} />
-                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-900">Etiquetas</h3>
+                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-900">{t('labels.tags')}</h3>
                  </div>
                  <div className="p-4 space-y-3">
                     <div className="flex flex-wrap gap-2">
@@ -232,17 +234,17 @@ const ExerciseView: React.FC = () => {
                   <Layers size={80} strokeWidth={2} />
                </div>
                <div className="relative z-10 space-y-4">
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rose-400">Información del ejercicio</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rose-400">{t('exercise.info-label')}</p>
                   <div className="space-y-3">
                      <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                        <span className="text-slate-400 text-xs font-black">Dificultad</span>
+                        <span className="text-slate-400 text-xs font-black">{t('labels.difficulty')}</span>
                         <span className="text-amber-400 font-black text-xs">
-                          {['Introductorio','Elemental','Intermedio','Avanzado','Especializado'][exercise.difficulty - 1] ?? exercise.difficulty}
+                          {(t('exercise.levels', { returnObjects: true }) as string[])[exercise.difficulty - 1] ?? exercise.difficulty}
                         </span>
                      </div>
                      {exercise.duration && (
                        <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                          <span className="text-slate-400 text-xs font-black">Tiempo Est.</span>
+                          <span className="text-slate-400 text-xs font-black">{t('labels.duration')}</span>
                           <span className="text-white font-black text-xs">{exercise.duration}</span>
                        </div>
                      )}

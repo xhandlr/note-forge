@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BookOpen, Edit3, Trash2 } from "lucide-react";
 import PDFPreview from "../Guides/PDFPreview";
+import { useTranslation } from "react-i18next";
 
 interface GuideCardProps {
     id: number;
@@ -17,6 +18,7 @@ interface GuideCardProps {
 
 const GuideCard: React.FC<GuideCardProps> = ({ id, title, subject, exerciseCount, exercises, navigateState, onEdit, onDelete }) => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     return (
         <div
@@ -41,7 +43,7 @@ const GuideCard: React.FC<GuideCardProps> = ({ id, title, subject, exerciseCount
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5 text-slate-400 text-sm font-bold">
                         <BookOpen size={11} />
-                        {exerciseCount ?? 0} ejercicio{(exerciseCount ?? 0) !== 1 ? 's' : ''}
+                        {exerciseCount ?? 0} {t('guide-card.exercise', { count: exerciseCount ?? 0 })}
                     </div>
                     {(onEdit || onDelete) && (
                         <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -49,7 +51,7 @@ const GuideCard: React.FC<GuideCardProps> = ({ id, title, subject, exerciseCount
                                 <button
                                     onClick={e => { e.stopPropagation(); onEdit(); }}
                                     className="p-2 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
-                                    title="Editar"
+                                    title={t('common.edit')}
                                 >
                                     <Edit3 size={16} />
                                 </button>
@@ -58,7 +60,7 @@ const GuideCard: React.FC<GuideCardProps> = ({ id, title, subject, exerciseCount
                                 <button
                                     onClick={e => { e.stopPropagation(); onDelete(); }}
                                     className="p-2 rounded-xl hover:bg-rose-50 text-slate-400 hover:text-rose-500 transition-colors"
-                                    title="Eliminar"
+                                    title={t('common.delete')}
                                 >
                                     <Trash2 size={16} />
                                 </button>

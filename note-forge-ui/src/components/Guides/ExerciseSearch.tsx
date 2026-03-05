@@ -1,5 +1,6 @@
 import React from 'react';
 import { Plus, BookOpen, Check, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface Exercise {
     id: number;
@@ -40,6 +41,7 @@ const ExerciseSearch: React.FC<ExerciseSearchProps> = ({
     selectedCategories = [],
     onCategoriesChange = () => {}
 }) => {
+    const { t } = useTranslation();
     const selectedExerciseIds = new Set(guideExercises.map(ex => ex.id));
 
     // Obtener últimos 4 ejercicios creados
@@ -56,17 +58,17 @@ const ExerciseSearch: React.FC<ExerciseSearchProps> = ({
 
     return (
         <div className="flex-shrink-0">
-            {/* Últimos Ejercicios */}
+            {/* Recent Exercises */}
             <div className="mb-8">
                 <div className="flex items-center gap-2 text-slate-900 mb-6">
                     <BookOpen size={18} strokeWidth={2.5} />
-                    <h3 className="text-sm font-black uppercase tracking-widest">Últimos Ejercicios</h3>
+                    <h3 className="text-sm font-black uppercase tracking-widest">{t('exercise-picker.recent')}</h3>
                 </div>
 
                 <div className="space-y-3 mb-6">
                     {lastFourExercises.length === 0 ? (
                         <div className="py-6 text-center">
-                            <p className="text-slate-400 font-semibold text-xs">No hay ejercicios disponibles</p>
+                            <p className="text-slate-400 font-semibold text-xs">{t('exercise-picker.no-results')}</p>
                         </div>
                     ) : (
                         lastFourExercises.map(exercise => {
@@ -80,7 +82,7 @@ const ExerciseSearch: React.FC<ExerciseSearchProps> = ({
                                     <div className="min-w-0 flex-grow">
                                         <p className="font-bold text-slate-900 text-xs truncate">{exercise.title}</p>
                                         <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
-                                            Nivel {exercise.difficulty || 'N/A'}
+                                            {t('labels.level')} {exercise.difficulty || 'N/A'}
                                             {exercise.duration ? ` · ${exercise.duration} min` : ''}
                                         </p>
                                     </div>
@@ -108,15 +110,15 @@ const ExerciseSearch: React.FC<ExerciseSearchProps> = ({
                     onClick={onOpenPicker}
                     className="w-full py-3 px-4 rounded-xl font-black text-sm bg-slate-100 text-slate-900 hover:bg-slate-200 transition-all flex items-center justify-center gap-2"
                 >
-                    Explorar Todos los Ejercicios
+                    {t('exercise-picker.explore')}
                     <ChevronRight size={16} strokeWidth={3} />
                 </button>
             </div>
 
-            {/* Asignaturas */}
+            {/* Subjects filter */}
             {categories.length > 0 && (
                 <div className="pt-8 border-t border-slate-200 space-y-3">
-                    <h4 className="text-xs font-black uppercase tracking-widest text-slate-500">Asignaturas</h4>
+                    <h4 className="text-xs font-black uppercase tracking-widest text-slate-500">{t('labels.categories')}</h4>
                     <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
                         {categories.map(category => (
                             <label

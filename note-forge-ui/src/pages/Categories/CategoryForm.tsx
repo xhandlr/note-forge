@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useCategoryService } from '../../services/ServiceFactory';
 import { ArrowLeft, Camera, Layers, Check, Info } from 'lucide-react';
 import Navbar from '../../components/Dashboard/Navbar';
@@ -13,6 +14,7 @@ interface CategoryFormProps {
 
 const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { showSuccess, showError } = useNotification();
   const categoryService = useCategoryService();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -45,7 +47,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
           }
           setLoading(false);
         } catch (error) {
-          showError('Error al cargar la categoría');
+          showError(t('subject.error-load'));
           setLoading(false);
         }
       };
@@ -88,16 +90,16 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
     try {
       if (mode === 'edit' && categoryId) {
         await categoryService.update(categoryId, formData);
-        showSuccess('Asignatura actualizada con éxito!');
+        showSuccess(t('subject.success-update'));
         navigate(`/category/${categoryId}`);
       } else {
         await categoryService.create(formData);
-        showSuccess(`Asignatura ${categoryData.isPinned ? 'fijada y ' : ''}creada con éxito!`);
+        showSuccess(t('subject.success-create'));
         navigate('/dashboard');
       }
     } catch (error) {
       setErrors(error as {[key: string]: string});
-      showError('Error al guardar la asignatura');
+      showError(t('subject.error-save'));
       console.error('Error al guardar categoría:', error);
     }
   };
@@ -107,7 +109,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-500 mx-auto mb-4"></div>
-          <p className="text-slate-600 font-semibold">Cargando asignatura...</p>
+          <p className="text-slate-600 font-semibold">{t('subject.loading')}</p>
         </div>
       </div>
     );
@@ -127,10 +129,10 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
             </div>
             <div>
               <h1 className="text-xl font-black text-slate-900 tracking-tight">
-                {mode === 'edit' ? 'Editar Asignatura' : 'Nueva Asignatura'}
+                {t(mode === 'edit' ? 'subject.edit' : 'subject.new')}
               </h1>
               <p className="text-slate-500 font-semibold text-xs">
-                {mode === 'edit' ? 'Actualiza la información de esta asignatura.' : 'Define un nuevo espacio de aprendizaje.'}
+                {t(mode === 'edit' ? 'subject.subtitle-edit' : 'subject.subtitle-create')}
               </p>
             </div>
           </div>
@@ -148,7 +150,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
           {/* Título */}
           <div className="space-y-3">
             <label className="text-slate-900 font-black text-base ml-1 flex items-center gap-2">
-              Nombre de la asignatura *
+              {t('subject.name-label')} *
             </label>
             <input
               required
@@ -157,7 +159,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
               maxLength={120}
               value={categoryData.name}
               onChange={handleChange}
-              placeholder="Ej: Física Mecánica"
+              placeholder={t('subject.name-placeholder')}
               className="w-full px-5 py-3.5 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-400 transition-all font-bold text-slate-800 text-base"
             />
             {errors.name && <p className="text-red-500 text-xs font-bold pl-2">{errors.name}</p>}
@@ -166,7 +168,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
           {/* Imagen de Portada */}
           <div className="space-y-3">
             <label className="text-slate-900 font-black text-base ml-1 flex items-center gap-2">
-              Imagen de portada
+              {t('subject.image-label')}
               <Info size={14} className="text-slate-300" />
             </label>
 
@@ -188,8 +190,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
                   <Camera size={30} className="text-slate-400 group-hover:text-rose-500 transition-colors" strokeWidth={2} />
                 </div>
                 <div className="text-center">
-                  <p className="text-slate-900 font-black text-base">Subir Imagen</p>
-                  <p className="text-slate-400 font-medium text-sm mt-1">Haz clic para seleccionar una imagen</p>
+                  <p className="text-slate-900 font-black text-base">{t('subject.upload-image')}</p>
+                  <p className="text-slate-400 font-medium text-sm mt-1">{t('subject.upload-image-hint')}</p>
                 </div>
               </button>
             ) : (
@@ -215,14 +217,14 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
 
           {/* Descripción */}
           <div className="space-y-6">
-            <label className="text-slate-900 font-black text-base ml-1">Descripción de la asignatura</label>
+            <label className="text-slate-900 font-black text-base ml-1">{t('subject.description-label')}</label>
             <textarea
               rows={3}
               name="description"
               maxLength={255}
               value={categoryData.description}
               onChange={handleChange}
-              placeholder="¿De qué trata esta asignatura? Define objetivos o temas principales..."
+              placeholder={t('subject.description-placeholder')}
               className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-400 transition-all resize-none font-bold text-sm leading-relaxed text-slate-800 mt-3"
               required
             />
@@ -240,7 +242,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
               className="w-4 h-4 rounded accent-amber-500 cursor-pointer"
             />
             <label htmlFor="isPinned" className="text-slate-900 font-bold text-sm cursor-pointer flex-1">
-              Fijar esta asignatura en la pantalla de Inicio
+              {t('subject.pin-label')}
             </label>
           </div>
 
@@ -250,14 +252,14 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ mode, categoryId }) => {
               type="submit"
               className="flex-1 bg-rose-500 text-white py-3.5 rounded-[1.5rem] font-black text-base flex items-center justify-center gap-2 shadow-xl shadow-rose-900/20 hover:bg-rose-600 transition-all active:scale-95"
             >
-              <Check size={20} strokeWidth={3} /> {mode === 'edit' ? 'Actualizar' : 'Guardar'} Asignatura
+              <Check size={20} strokeWidth={3} /> {t(mode === 'edit' ? 'subject.update' : 'subject.save')}
             </button>
             <button
               type="button"
               onClick={() => navigate(-1)}
               className="flex-1 bg-slate-100 text-slate-500 py-3.5 rounded-[1.5rem] font-black text-base hover:bg-slate-200 transition-all"
             >
-              Cancelar
+              {t('common.cancel')}
             </button>
           </div>
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Navbar from '../../components/Dashboard/Navbar';
 import Footer from '../../components/UI/Footer';
 import { useExerciseService, useGuideService, useCategoryService } from '../../services/ServiceFactory';
@@ -31,6 +32,7 @@ interface GuideFormProps {
 
 const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const { showSuccess, showError } = useNotification();
     const exerciseService = useExerciseService();
     const guideService = useGuideService();
@@ -89,7 +91,7 @@ const GuideForm: React.FC<GuideFormProps> = ({ mode, guideId }) => {
                     }
                     setLoading(false);
                 } catch {
-                    showError('Error al cargar la guía');
+                    showError(t('guide.error-load'));
                     setLoading(false);
                 }
             };
@@ -186,20 +188,20 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
         try {
             if (mode === 'edit' && guideId) {
                 await guideService.update(guideId, guideData);
-                showSuccess('Guía actualizada con éxito!');
+                showSuccess(t('guide.success-update'));
             } else {
                 await guideService.create(guideData);
-                showSuccess('Guía creada con éxito!');
+                showSuccess(t('guide.success-create'));
             }
             navigate('/dashboard', { state: { tab: 'guias' } });
         } catch {
-            showError('Error al guardar la guía');
+            showError(t('guide.error-save'));
         }
     };
 
     const handleSave = () => {
         if (!guideTitle.trim()) {
-            showError('El título de la guía es obligatorio');
+            showError(t('guide.title-required'));
             return;
         }
         saveGuide();
@@ -207,7 +209,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
 
     const handleSaveAndExport = () => {
         if (!guideTitle.trim()) {
-            showError('El título de la guía es obligatorio');
+            showError(t('guide.title-required'));
             return;
         }
         setShowExportModal(true);
@@ -233,7 +235,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                 <div className="flex items-center justify-center h-screen">
                     <div className="text-center space-y-3">
                         <div className="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mx-auto" />
-                        <p className="text-slate-400 font-black text-sm">Cargando guía...</p>
+                        <p className="text-slate-400 font-black text-sm">{t('guide.loading')}</p>
                     </div>
                 </div>
             </div>
@@ -255,7 +257,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                             </div>
                             <div>
                                 <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-                                    {mode === 'edit' ? 'Editor de Guías' : 'Forjador de Guías'}
+                                    {t(mode === 'edit' ? 'guide.title-edit' : 'guide.title-create')}
                                 </h1>
                                 <p className="text-slate-400 font-bold text-xs uppercase tracking-widest">
                                     Documento ID: #GU-{guideId || '0042'}
@@ -266,7 +268,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                             onClick={() => navigate('/dashboard', { state: { tab: 'guias' } })}
                             className="flex items-center gap-2 px-4 py-2 text-slate-400 font-bold hover:text-slate-900 transition-colors"
                         >
-                            <ArrowLeft size={18} strokeWidth={2.5} /> {mode === 'edit' ? 'Volver' : 'Volver al tablero'}
+                            <ArrowLeft size={18} strokeWidth={2.5} /> {t(mode === 'edit' ? 'common.back' : 'guide.back')}
                         </button>
                     </div>
 
@@ -318,13 +320,13 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                     <div className="px-10 py-8 border-t border-slate-100 bg-slate-50/50 flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="flex gap-10">
                             <div className="flex flex-col">
-                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tiempo de Resolución</span>
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('guide.resolution-time')}</span>
                                 <span className="text-slate-900 font-black">
                                     {calculateTotalTime() > 0 ? `~ ${calculateTotalTime()} min` : '—'}
                                 </span>
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nivel Promedio</span>
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('guide.avg-difficulty')}</span>
                                 <div className="flex gap-1 mt-1">
                                     {[...Array(5)].map((_, i) => (
                                         <div key={i} className={`w-2 h-2 rounded-full ${i < calculateAvgDifficulty() ? 'bg-amber-400' : 'bg-slate-200'}`} />
@@ -338,19 +340,19 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                                 onClick={() => { setPreviewTab('render'); setShowPreview(true); }}
                                 className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-white border border-slate-200 text-slate-600 rounded-2xl font-black hover:bg-slate-50 transition-all shadow-sm text-sm"
                             >
-                                <Eye size={18} /> Vista Previa
+                                <Eye size={18} /> {t('guide.preview')}
                             </button>
                             <button
                                 onClick={handleSave}
                                 className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-black text-white rounded-2xl font-black hover:bg-gray-700 transition-all active:scale-95 text-sm"
                             >
-                                <Save size={18} strokeWidth={3} /> {mode === 'edit' ? 'Actualizar' : 'Guardar'}
+                                <Save size={18} strokeWidth={3} /> {t(mode === 'edit' ? 'common.update' : 'common.save')}
                             </button>
                             <button
                                 onClick={handleSaveAndExport}
                                 className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-4 bg-rose-500 text-white rounded-2xl font-black shadow-xl shadow-rose-200 hover:bg-rose-600 transition-all active:scale-95 text-sm"
                             >
-                                <Download size={18} strokeWidth={3} /> {'Exportar'}
+                                <Download size={18} strokeWidth={3} /> {t('guide.export')}
                             </button>
                         </div>
                     </div>
@@ -360,7 +362,7 @@ ${ex.answer ? `\n\\subsection*{Resolución}\n\n${ex.answer}` : ''}`;
                     <div className="p-2 bg-amber-100 text-amber-600 rounded-lg">
                         <BookOpen size={16} />
                     </div>
-                    <p>Puedes reordenar los ejercicios arrastrándolos desde el icono de rejilla lateral.</p>
+                    <p>{t('guide.drag-hint')}</p>
                 </div>
             </div>
 

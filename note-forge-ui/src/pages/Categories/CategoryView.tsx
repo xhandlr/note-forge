@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Coffee, BookOpen, Edit3, Plus, Trash2, Calendar } from 'lucide-react';
 import { useCategoryService, useExerciseService, useGuideService } from '../../services/ServiceFactory';
 import { renderLatex } from '../../utils/latexRenderer';
@@ -19,6 +20,7 @@ const CategoryView: React.FC = () => {
   const [deletingCategory, setDeletingCategory] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const { t } = useTranslation();
   const categoryService = useCategoryService();
   const exerciseService = useExerciseService();
   const guideService = useGuideService();
@@ -71,7 +73,7 @@ const CategoryView: React.FC = () => {
         <div className="flex items-center justify-center h-screen">
           <div className="text-center space-y-3">
             <div className="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-slate-400 font-black text-sm">Cargando categoría...</p>
+            <p className="text-slate-400 font-black text-sm">{t('subject.loading')}</p>
           </div>
         </div>
       </div>
@@ -84,12 +86,12 @@ const CategoryView: React.FC = () => {
         <Navbar />
         <div className="flex items-center justify-center h-screen">
           <div className="text-center space-y-3">
-            <p className="text-slate-400 font-black text-lg">Categoría no encontrada</p>
+            <p className="text-slate-400 font-black text-lg">{t('subject.not-found')}</p>
             <button
               onClick={() => navigate('/dashboard')}
               className="text-rose-500 font-black hover:underline"
             >
-              Volver al dashboard
+              {t('common.back-dashboard')}
             </button>
           </div>
         </div>
@@ -119,7 +121,7 @@ const CategoryView: React.FC = () => {
             onClick={() => navigate('/dashboard', { state: { tab: 'asignaturas' } })}
             className="flex items-center gap-2 text-slate-500 font-black text-sm hover:text-slate-900 transition-colors"
           >
-            <ArrowLeft size={20} strokeWidth={2.5} /> Volver al Tablero
+            <ArrowLeft size={20} strokeWidth={2.5} /> {t('subject.back')}
           </button>
           <div className="flex gap-3">
             <button
@@ -133,7 +135,7 @@ const CategoryView: React.FC = () => {
               to={`/edit-category/${id}`}
               className="flex items-center gap-2 px-5 py-3 bg-slate-900 text-white rounded-xl font-black text-sm shadow-lg hover:bg-rose-600 transition-all"
             >
-              <Edit3 size={18} /> Editar Asignatura
+              <Edit3 size={18} /> {t('subject.edit')}
             </Link>
           </div>
         </div>
@@ -151,7 +153,7 @@ const CategoryView: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent" />
             <div className="absolute bottom-8 left-8 right-8">
               <span className="px-3 py-1 bg-amber-500 text-white text-[10px] font-black uppercase tracking-wider rounded-lg mb-3 inline-block">
-                Asignatura Activa
+                {t('subject.active-badge')}
               </span>
               <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">{category.name}</h1>
             </div>
@@ -164,11 +166,11 @@ const CategoryView: React.FC = () => {
             <div className="flex gap-4 justify-start md:justify-end">
                <div className="text-center px-6 border-r border-slate-100">
                   <span className="block text-2xl font-black text-slate-900">{exercises.length}</span>
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Ejercicios</span>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('labels.exercises')}</span>
                </div>
                <div className="text-center px-6">
                   <span className="block text-2xl font-black text-slate-900">{guides.length}</span>
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Guías</span>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('labels.guides')}</span>
                </div>
             </div>
           </div>
@@ -186,7 +188,7 @@ const CategoryView: React.FC = () => {
                     : 'text-slate-400 hover:text-slate-600'
                 }`}
               >
-                <Coffee size={16} /> Ejercicios
+                <Coffee size={16} /> {t('labels.exercises')}
               </button>
               <button
                 onClick={() => setTab('guias')}
@@ -196,14 +198,14 @@ const CategoryView: React.FC = () => {
                     : 'text-slate-400 hover:text-slate-600'
                 }`}
               >
-                <BookOpen size={16} /> Guías
+                <BookOpen size={16} /> {t('labels.guides')}
               </button>
             </div>
             <Link
               to={tab === 'ejercicios' ? "/create-exercise" : "/create-guide"}
               className="flex items-center gap-2 bg-rose-500 text-white px-6 py-3 rounded-xl font-black text-sm hover:bg-rose-600 transition-all shadow-xl shadow-rose-900/20"
             >
-              <Plus size={18} strokeWidth={2.5} /> {tab === 'ejercicios' ? "Nuevo Ejercicio" : "Nueva Guía"}
+              <Plus size={18} strokeWidth={2.5} /> {tab === 'ejercicios' ? t('dashboard.new-exercise') : t('dashboard.new-guide')}
             </Link>
           </div>
 
@@ -233,7 +235,7 @@ const CategoryView: React.FC = () => {
                     <div className="flex-grow space-y-3 text-center md:text-left">
                       <div className="flex items-center justify-center md:justify-start gap-3">
                         <span className="text-[9px] font-black bg-slate-900 text-white px-3 py-1 rounded-lg uppercase tracking-widest">
-                          Nivel {exercise.difficulty}
+                          {t('labels.level')} {exercise.difficulty}
                         </span>
                         <span className="text-slate-400 font-black text-[10px] uppercase tracking-widest flex items-center gap-1">
                           <Calendar size={10}/> {exercise.created_at}
@@ -255,12 +257,12 @@ const CategoryView: React.FC = () => {
               ) : (
                 <div className="col-span-full py-20 text-center space-y-4 bg-slate-50/50 rounded-[2.5rem] border-4 border-dashed border-slate-200">
                   <Coffee size={40} className="mx-auto text-slate-200" strokeWidth={2} />
-                  <h3 className="text-xl font-black text-slate-400 tracking-tight">No hay ejercicios aún</h3>
+                  <h3 className="text-xl font-black text-slate-400 tracking-tight">{t('dashboard.empty-exercises')}</h3>
                   <Link
                     to="/create-exercise"
                     className="inline-block bg-slate-900 text-white px-8 py-3 rounded-xl font-black text-sm hover:bg-rose-500 transition-all shadow-lg"
                   >
-                    Crear Ejercicio
+                    {t('exercise.new')}
                   </Link>
                 </div>
               )
@@ -280,12 +282,12 @@ const CategoryView: React.FC = () => {
               ) : (
                 <div className="col-span-full py-20 text-center space-y-4 bg-slate-50/50 rounded-[2.5rem] border-4 border-dashed border-slate-200">
                   <BookOpen size={40} className="mx-auto text-slate-200" strokeWidth={2} />
-                  <h3 className="text-xl font-black text-slate-400 tracking-tight">No hay guías aún</h3>
+                  <h3 className="text-xl font-black text-slate-400 tracking-tight">{t('dashboard.empty-guides')}</h3>
                   <Link
                     to="/create-guide"
                     className="inline-block bg-slate-900 text-white px-8 py-3 rounded-xl font-black text-sm hover:bg-rose-500 transition-all shadow-lg"
                   >
-                    Empezar Forja
+                    {t('guide.new')}
                   </Link>
                 </div>
               )
