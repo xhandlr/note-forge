@@ -1,126 +1,126 @@
 /**
- * Tests for Exercise Controller
+ * Tests for Guide Controller
  */
 
 const request = require('supertest');
 const app = require('../../app');
 const pool = require('../../config/db');
-const { createTestUserAndLogin, createTestCategory, createTestExercise, cleanupTestData } = require('../utils/testHelpers');
+const { createTestUserAndLogin, createTestCategory, createTestExercise, createTestGuide, cleanupTestData } = require('../utils/testHelpers');
 
 afterAll(async () => {
     await cleanupTestData();
     await pool.end();
 });
 
-describe('Exercise Controller', () => {
+describe('Guide Controller', () => {
 
     /**
-     * POST /create-exercise
+     * POST /create-guide
      */
-    describe('POST /create-exercise', () => {
+    describe('POST /create-guide', () => {
         let token;
-        let categoryId;
+        let exerciseId;
 
         beforeAll(async () => {
             token = await createTestUserAndLogin();
-            categoryId = await createTestCategory(token);
+            const categoryId = await createTestCategory(token);
+            exerciseId = await createTestExercise(token, categoryId);
         });
 
-        it('should create a new exercise', async () => {
+        it('should create a new guide', async () => {
             const res = await request(app)
-                .post('/create-exercise')
+                .post('/create-guide')
                 .set('Authorization', `Bearer ${token}`)
                 .send({
-                    title: 'Test Exercise',
-                    description: 'This is a test exercise',
-                    difficulty: 3,
-                    answer: 'This is a test answer',
-                    duration: 60,
-                    categoryId
+                    title: 'Test Guide',
+                    author: 'Test Author',
+                    description: 'This is a test guide',
+                    exerciseIds: [exerciseId],
+                    categoryIds: []
                 });
             expect(res.statusCode).toBe(201);
-            expect(res.body).toHaveProperty('message', 'Ejercicio creado con éxito');
-            expect(res.body).toHaveProperty('exerciseId');
+            expect(res.body).toHaveProperty('guideId');
         });
 
         it('should return 401 without token', async () => {
             const res = await request(app)
-                .post('/create-exercise')
+                .post('/create-guide')
                 .send({ title: 'No auth' });
             expect(res.statusCode).toBe(401);
         });
     });
 
     /**
-     * GET /exercise/:id
+     * GET /guide/:id
      */
-    describe('GET /exercise/:id', () => {
+    describe('GET /guide/:id', () => {
         let token;
-        let exerciseId;
+        let guideId;
 
         beforeAll(async () => {
             token = await createTestUserAndLogin();
             const categoryId = await createTestCategory(token);
-            exerciseId = await createTestExercise(token, categoryId);
+            const exerciseId = await createTestExercise(token, categoryId);
+            guideId = await createTestGuide(token, [exerciseId]);
         });
 
-        it('should return the exercise by id', async () => {
+        it('should return the guide by id', async () => {
             const res = await request(app)
-                .get(`/exercise/${exerciseId}`)
+                .get(`/guide/${guideId}`)
                 .set('Authorization', `Bearer ${token}`);
             expect(res.statusCode).toBe(200);
             expect(res.body).toHaveProperty('title');
-            expect(res.body).toHaveProperty('description');
         });
 
-        it('should return 404 for non-existent exercise', async () => {
+        it('should return 404 for non-existent guide', async () => {
             const res = await request(app)
-                .get('/exercise/999999')
+                .get('/guide/999999')
                 .set('Authorization', `Bearer ${token}`);
             expect(res.statusCode).toBe(404);
         });
     });
 
     /**
-     * GET /exercises
+     * GET /guides
      */
-    describe('GET /exercises', () => {
+    describe('GET /guides', () => {
         let token;
 
         beforeAll(async () => {
             token = await createTestUserAndLogin();
         });
 
-        it('should return all exercises', async () => {
+        it('should return all guides for the user', async () => {
             const res = await request(app)
-                .get('/exercises')
+                .get('/guides')
                 .set('Authorization', `Bearer ${token}`);
             expect(res.statusCode).toBe(200);
             expect(Array.isArray(res.body)).toBe(true);
         });
 
         it('should return 401 without token', async () => {
-            const res = await request(app).get('/exercises');
+            const res = await request(app).get('/guides');
             expect(res.statusCode).toBe(401);
         });
     });
 
     /**
-     * GET /exercises/category/:categoryId
+     * GET /guides/category/:categoryId
      */
-    describe('GET /exercises/category/:categoryId', () => {
+    describe('GET /guides/category/:categoryId', () => {
         let token;
         let categoryId;
 
         beforeAll(async () => {
             token = await createTestUserAndLogin();
             categoryId = await createTestCategory(token);
-            await createTestExercise(token, categoryId);
+            const exerciseId = await createTestExercise(token, categoryId);
+            await createTestGuide(token, [exerciseId], { categoryIds: [categoryId] });
         });
 
-        it('should return exercises filtered by category', async () => {
+        it('should return guides filtered by category', async () => {
             const res = await request(app)
-                .get(`/exercises/category/${categoryId}`)
+                .get(`/guides/category/${categoryId}`)
                 .set('Authorization', `Bearer ${token}`);
             expect(res.statusCode).toBe(200);
             expect(Array.isArray(res.body)).toBe(true);
@@ -128,57 +128,59 @@ describe('Exercise Controller', () => {
     });
 
     /**
-     * PUT /update-exercise/:id
+     * PUT /update-guide/:id
      */
-    describe('PUT /update-exercise/:id', () => {
+    describe('PUT /update-guide/:id', () => {
         let token;
-        let exerciseId;
+        let guideId;
 
         beforeAll(async () => {
             token = await createTestUserAndLogin();
             const categoryId = await createTestCategory(token);
-            exerciseId = await createTestExercise(token, categoryId);
+            const exerciseId = await createTestExercise(token, categoryId);
+            guideId = await createTestGuide(token, [exerciseId]);
         });
 
-        it('should update the exercise', async () => {
+        it('should update the guide', async () => {
             const res = await request(app)
-                .put(`/update-exercise/${exerciseId}`)
+                .put(`/update-guide/${guideId}`)
                 .set('Authorization', `Bearer ${token}`)
                 .send({
-                    title: 'Updated Exercise',
+                    title: 'Updated Guide',
+                    author: 'Updated Author',
                     description: 'Updated description',
-                    difficulty: 5,
-                    answer: 'Updated answer',
-                    duration: 45
+                    exerciseIds: [],
+                    categoryIds: []
                 });
             expect(res.statusCode).toBe(200);
         });
     });
 
     /**
-     * DELETE /delete-exercise/:id
+     * DELETE /delete-guide/:id
      */
-    describe('DELETE /delete-exercise/:id', () => {
+    describe('DELETE /delete-guide/:id', () => {
         let token;
-        let exerciseId;
+        let guideId;
 
         beforeAll(async () => {
             token = await createTestUserAndLogin();
             const categoryId = await createTestCategory(token);
-            exerciseId = await createTestExercise(token, categoryId);
+            const exerciseId = await createTestExercise(token, categoryId);
+            guideId = await createTestGuide(token, [exerciseId]);
         });
 
-        it('should delete the exercise', async () => {
+        it('should delete the guide', async () => {
             const res = await request(app)
-                .delete(`/delete-exercise/${exerciseId}`)
+                .delete(`/delete-guide/${guideId}`)
                 .set('Authorization', `Bearer ${token}`);
             expect(res.statusCode).toBe(200);
-            expect(res.body).toHaveProperty('message', 'Ejercicio eliminado con éxito');
+            expect(res.body).toHaveProperty('message', 'Guía eliminada con éxito');
         });
 
-        it('should return 404 for already deleted exercise', async () => {
+        it('should return 404 for already deleted guide', async () => {
             const res = await request(app)
-                .delete(`/delete-exercise/${exerciseId}`)
+                .delete(`/delete-guide/${guideId}`)
                 .set('Authorization', `Bearer ${token}`);
             expect(res.statusCode).toBe(404);
         });

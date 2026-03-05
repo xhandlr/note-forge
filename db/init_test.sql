@@ -147,6 +147,27 @@ DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 
+-- -----------------------------------------------------
+-- Table `note_forge`.`guides_categories`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `note_forge`.`guides_categories` (
+  `guide_id` INT NOT NULL,
+  `category_id` INT NOT NULL,
+  PRIMARY KEY (`guide_id`, `category_id`),
+  INDEX `category_id` (`category_id` ASC) VISIBLE,
+  CONSTRAINT `guides_categories_ibfk_1`
+    FOREIGN KEY (`guide_id`)
+    REFERENCES `note_forge`.`guides` (`id`)
+    ON DELETE CASCADE,
+  CONSTRAINT `guides_categories_ibfk_2`
+    FOREIGN KEY (`category_id`)
+    REFERENCES `note_forge`.`categories` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
