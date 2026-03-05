@@ -2,7 +2,7 @@
 
 # 📚 Note Forge
 
-> 🌍 [Read in English](./README.md)
+🌍 [Read in English](./README.md)
 
 **Aumenta la productividad de estudiantes y educadores con material de estudio centralizado**
 
@@ -21,7 +21,7 @@ Note Forge es una app web donde puedes almacenar ejercicios, etiquetarlos por as
 
 ## 🎯 Descripción general
 
-Note Forge nació de una necesidad real: como tutora en mi universidad, perdía demasiado tiempo buscando ejercicios, imágenes y referencias para armar guías de estudio para mis estudiantes. Con material de distinta dificultad, formato y procedencia, el proceso era ineficiente. Note Forge resuelve eso.
+Como tutora en mi universidad, perdía demasiado tiempo buscando ejercicios, imágenes y referencias para armar guías de estudio para mis tutorados. Ante esa necesidad de orden y rapidez, nació este proyecto.
 
 ### Ideal para
 
