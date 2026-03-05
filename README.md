@@ -2,6 +2,8 @@
 
 # 📚 Note Forge
 
+🌍 [Leer en Español](./README_ES.md)
+
 **Boost productivity for students and educators with centralized study material**
 
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react)](https://reactjs.org/)
@@ -9,7 +11,7 @@
 [![Node.js](https://img.shields.io/badge/Node.js-22+-339933?logo=node.js)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-Welcome! Note Forge is a full-stack application focused on organizing your study material — with LaTeX support for math formulas, drag-and-drop `.tex` export, and an interactive demo that requires no setup.
+Note Forge is a web app where you store exercises, tag them by subject and difficulty, and drag them into exportable LaTeX study guides.
 
 [🎮 Live Demo](https://xhandlr.github.io/note-forge) · [✨ Features](#-key-features) · [📖 Docs](#-getting-started) · [🐛 Issues](https://github.com/xhandlr/note-forge/issues)
 
@@ -62,7 +64,21 @@ Note Forge was born out of a real need: as a tutor at my university, I found mys
 
 ## 🎨 Screenshots
 
-> 📸 Coming soon — screenshots showcasing the platform's interface, drag-and-drop functionality, and LaTeX editor.
+<div align="center">
+
+**Dashboard**
+![Dashboard](./note-forge-ui/src/assets/dashboard.png)
+
+**Categories**
+![Categories](./note-forge-ui/src/assets/categories.png)
+
+**Guides**
+![Guides](./note-forge-ui/src/assets/guides.png)
+
+**Export**
+![Export](./note-forge-ui/src/assets/export.png)
+
+</div>
 
 ---
 
@@ -227,31 +243,9 @@ note-forge/
 │
 ├── docker-compose.yml
 ├── README.md
+├── README_ES.md
 └── LICENSE
 ```
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Bug fixes, new features, documentation improvements, or ideas — all help is appreciated.
-
-```bash
-# 1. Fork and clone
-git clone https://github.com/xhandlr/note-forge.git
-
-# 2. Create a feature branch
-git checkout -b feature/amazing-feature
-
-# 3. Make your changes, then commit
-git add .
-git commit -m "feat: add amazing feature"
-
-# 4. Push and open a Pull Request
-git push origin feature/amazing-feature
-```
-
-Please follow existing TypeScript/React patterns and add types for any new code.
 
 ---
 
